@@ -10,4 +10,6 @@ Fading in and out exterior, revealing interior
 
 ![sow grow demo2](https://github.com/ThimbleFire/SpaceSim/assets/14812476/58a231de-b5c4-4968-9adb-ba6ac6d0697e)
 
-Going to add loading bars for performing tasks next
+![sow grow demo2](https://github.com/ThimbleFire/SpaceSim/assets/14812476/05fcc560-a942-42ba-867a-2164fb1df297)
+
+Need to think about what's next...
