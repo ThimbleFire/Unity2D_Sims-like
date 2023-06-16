@@ -19,6 +19,7 @@ public class Entity : MonoBehaviour
     public Vector3Int Coordinates { get; set; }
 
     public BoardManager boardManager;
+    public ImpulseMeter impulseMeter;
     
     public CurrentBehaviour currentBehaviour = CurrentBehaviour.Idling;
     
@@ -35,13 +36,35 @@ public class Entity : MonoBehaviour
 
     private void GameTime_OnTck() {
 
-        impulses[( int )Impulses.Bladder] -= 1;
-        impulses[( int )Impulses.Hunger] -= 1;
-        impulses[( int )Impulses.Water] -= 1;
+        impulses[( int )Impulses.Bladder] -= (byte)(impulses[(int)Impulses.Bladder] > 5 ? 1 : 0);
+        impulses[( int )Impulses.Hunger] -= ( byte )( impulses[( int )Impulses.Hunger] > 5 ? 1 : 0 );
+        impulses[( int )Impulses.Water] -= ( byte )( impulses[( int )Impulses.Water] > 5 ? 1 : 0 );
 
-        if( currentBehaviour == CurrentBehaviour.Idling )
-            Action();
+        switch( currentBehaviour ) {
+            case CurrentBehaviour.Eating:
+            case CurrentBehaviour.Drinking:
+            case CurrentBehaviour.Playing:
+            case CurrentBehaviour.Defecating:
+                impulses[(byte)currentBehaviour] += 35;
+                impulseMeter.SetMeter( impulses[( byte )currentBehaviour] );
+                IdleReadyCheck();
+                break;
+            case CurrentBehaviour.Working:
+                break;
+            case CurrentBehaviour.Idling:
+                impulseMeter.HideMeter();
+                Action();
+                break;
+            default:
+                break;
+        }
+    }
 
+    /// <summary> If the NPC has filled its impulse, it'll return to a state where it can recieve a new behaviour. </summary>
+    private void IdleReadyCheck() {
+        if( impulses[( byte )currentBehaviour] >= 220 ) {
+            currentBehaviour = CurrentBehaviour.Idling;
+        }
     }
 
     protected void UpdateAnimator(Vector3Int dir) {
@@ -75,8 +98,7 @@ public class Entity : MonoBehaviour
                     case Pathfind.Report.NO_ADJACENT_NEIGHBOURS_TO_START_NODE:
                         break;
                     case Pathfind.Report.DESTINATION_IS_OCCUPIED_AND_IS_ADJACENT_TO_PLAYER_CHARACTER:
-                        impulses[i] = 255;
-                        currentBehaviour = CurrentBehaviour.Idling;
+                        currentBehaviour = (CurrentBehaviour)i;
                         UpdateAnimator( Coordinates - facilityPosition );
                         break;
                 }

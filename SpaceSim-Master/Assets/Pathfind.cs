@@ -201,6 +201,7 @@ namespace AlwaysEast
         }
 
         private static List<Node> GetNeighbours( Node node, bool diagonal ) {
+
             List<Node> neighbours = new List<Node>();
             Vector3Int[] offset;
 
