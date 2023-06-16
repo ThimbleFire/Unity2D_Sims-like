@@ -16,7 +16,7 @@ public class Entities : MonoBehaviour
     public static List<Vector3Int> GetOccupied() {
         List<Vector3Int> occupied = new List<Vector3Int>();
         foreach( CrewBehaviour item in crewMember ) {
-            occupied.Add( item.cellPosition );
+            occupied.Add( item.Coordinates );
         }
         return occupied;
     }

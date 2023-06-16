@@ -9,7 +9,7 @@ public class GameTime : MonoBehaviour
     public float timer = 0.0f;
     
     // interval in seconds
-    private readonly float interval = /*60.0f*/ 5.0f;
+    private readonly float interval = /*60.0f*/ 1.0f;
 
     private static bool active = false;
 

@@ -20,6 +20,11 @@ namespace AlwaysEast
 
     public class Pathfind
     {
+        public enum Report
+        {
+            OK, ATTEMPTING_TO_MOVE_ON_SELF, DESTINATION_IS_OCCUPIED_AND_IS_ADJACENT_TO_PLAYER_CHARACTER, NO_ADJACENT_NEIGHBOURS_TO_START_NODE
+        };
+
         private static Node[,] s_nodes;
 
         public static void Occupy( Vector3Int coordinates ) {
@@ -31,8 +36,6 @@ namespace AlwaysEast
         }
 
         public static void Setup( Tilemap floorTileMap, Tilemap wallTileMap ) {
-
-            floorTileMap.CompressBounds();
 
             s_nodes = new Node[floorTileMap.size.x, floorTileMap.size.y];
 
@@ -57,16 +60,15 @@ namespace AlwaysEast
 
             List<Node> neighbours = GetNeighbours(startNode, false);
 
-            return GetPath( coordinates, neighbours[Random.Range( 0, neighbours.Count )].coordinate, false );
+            return GetPath( coordinates, neighbours[Random.Range( 0, neighbours.Count )].coordinate, false, out Report report );
         }
-
-        public static List<Node> GetPath( Vector3Int start, Vector3Int destination, bool includeUnwalkable ) {
+        public static List<Node> GetPath( Vector3Int start, Vector3Int destination, bool includeUnwalkable, out Report report) {
             Node startNode = s_nodes[start.x, start.y];
             Node endNode = s_nodes[destination.x, destination.y];
 
             // If destination is equal to start position, forfeit turn
             if( start == destination ) {
-                Debug.LogWarning( "Attemping to move onto self" );
+                report = Report.ATTEMPTING_TO_MOVE_ON_SELF;
                 return null;
             }
 
@@ -76,7 +78,7 @@ namespace AlwaysEast
 
             // If destination is occupied and distance is one tile away, forfeit turn
             if( endNode.walkable == false && distance == 1 ) {
-                Debug.LogWarning( "Destination is occupied and is adjacent to player character" );
+                report = Report.DESTINATION_IS_OCCUPIED_AND_IS_ADJACENT_TO_PLAYER_CHARACTER;
                 return null;
             }
             // Now it's established we're moving tiles, establish can we move
@@ -84,37 +86,41 @@ namespace AlwaysEast
 
             // If we can't move because there are no unoccupied neighbours, forfeit turn
             if( startNodeNeighbours.Count == 0 ) {
-                Debug.LogWarning( "No adjacent neighbours to StartNode" );
+                report = Report.NO_ADJACENT_NEIGHBOURS_TO_START_NODE;
                 return null;
             }
 
             // If the end node is occupied, move it to an adjacent tile
-            if( endNode.walkable == false ) {
+            if( endNode.walkable == false ) 
+            {
                 List<Node> endNodeNeighbours = GetNeighbours(endNode, false);
+
                 if( endNodeNeighbours.Count > 0 ) {
                     List<Node> neighboursSortedByDistance = SortNearest(startNode, endNodeNeighbours); // new code
                     Node pathToNeighbour = GetPathToNeighbour(startNode, neighboursSortedByDistance);
 
-                    if( pathToNeighbour != null )
+                    if( pathToNeighbour != null ) {
+                        report = Report.OK;
                         return GetPath( startNode, pathToNeighbour, includeUnwalkable );
+                    }
                 }
 
                 //SpeechBubble.Show( Entities.GetTurnTaker.transform, SpeechBubble.Type.Attention );
 
-                endNodeNeighbours = GetNeighbours( endNode, true );
-                if( endNodeNeighbours.Count > 0 ) {
-                    List<Node> neighboursSortedByDistance = SortNearest(startNode, endNodeNeighbours); // new code
-                    Node pathToNeighbour = GetPathToNeighbour(startNode, neighboursSortedByDistance);
-
-                    if( pathToNeighbour != null )
-                        return GetPath( startNode, pathToNeighbour, includeUnwalkable );
-                    else {
-                        Debug.LogWarning( "No adjacent or diagonal neighbours to move to" );
-                        return null;
-                    }
-                }
+                //endNodeNeighbours = GetNeighbours( endNode, true );
+                //if( endNodeNeighbours.Count > 0 ) {
+                //    List<Node> neighboursSortedByDistance = SortNearest(startNode, endNodeNeighbours); // new code
+                //    Node pathToNeighbour = GetPathToNeighbour(startNode, neighboursSortedByDistance);
+                //    if( pathToNeighbour != null )
+                //        return GetPath( startNode, pathToNeighbour, includeUnwalkable );
+                //    else {
+                //        Debug.LogWarning( "No adjacent or diagonal neighbours to move to" );
+                //        return null;
+                //    }
+                //}
             }
 
+            report = Report.OK;
             return GetPath( startNode, endNode, includeUnwalkable );
         }
 
@@ -217,20 +223,20 @@ namespace AlwaysEast
                 int checkX = node.coordinate.x + offset[i].x;
                 int checkY = node.coordinate.y + offset[i].y;
 
+                bool checkXInBounds = checkX >= 0 && checkX < s_nodes.GetLength(0);
+                bool checkYInBounds = checkY >= 0 && checkY < s_nodes.GetLength(1);
+
+                if( !checkXInBounds || !checkYInBounds ) {
+                    continue;
+                }
+
                 if( s_nodes[checkX, checkY] == null )
                     continue;
 
                 if( s_nodes[checkX, checkY].walkable == false )
                     continue;
 
-                bool checkXInBounds = checkX >= 0 && checkX < s_nodes.GetLength(0);
-                bool checkYInBounds = checkY >= 0 && checkY < s_nodes.GetLength(1);
-
-                if( checkXInBounds && checkYInBounds ) {
-                    if( s_nodes[checkX, checkY] != null ) {
-                        neighbours.Add( s_nodes[checkX, checkY] );
-                    }
-                }
+                neighbours.Add( s_nodes[checkX, checkY] );
             }
 
             return neighbours;
