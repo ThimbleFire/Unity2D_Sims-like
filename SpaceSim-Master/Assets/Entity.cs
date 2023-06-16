@@ -12,7 +12,7 @@ public class Entity : MonoBehaviour
     public BoardManager boardManager;
     public ImpulseMeter impulseMeter;
     
-    public CurrentBehaviour currentBehaviour = CurrentBehaviour.Idling;
+    public Core.CurrentBehaviour currentBehaviour = Core.CurrentBehaviour.Idling;
     
     protected List<Node> _chain = new List<Node>();
 
@@ -31,17 +31,17 @@ public class Entity : MonoBehaviour
         impulses[( int )Impulses.Water] -= ( byte )( impulses[( int )Impulses.Water] > 5 ? 1 : 0 );
 
         switch( currentBehaviour ) {
-            case CurrentBehaviour.Eating:
-            case CurrentBehaviour.Drinking:
-            case CurrentBehaviour.Playing:
-            case CurrentBehaviour.Defecating:
+            case Core.CurrentBehaviour.Eating:
+            case Core.CurrentBehaviour.Drinking:
+            case Core.CurrentBehaviour.Playing:
+            case Core.CurrentBehaviour.Defecating:
                 impulses[(byte)currentBehaviour] += 35;
                 impulseMeter.SetMeter( impulses[( byte )currentBehaviour] );
                 IdleReadyCheck();
                 break;
-            case CurrentBehaviour.Working:
+            case Core.CurrentBehaviour.Working:
                 break;
-            case CurrentBehaviour.Idling:
+            case Core.CurrentBehaviour.Idling:
                 impulseMeter.HideMeter();
                 Action();
                 break;
@@ -53,7 +53,7 @@ public class Entity : MonoBehaviour
     /// <summary> If the NPC has filled its impulse, it'll return to a state where it can recieve a new behaviour. </summary>
     private void IdleReadyCheck() {
         if( impulses[( byte )currentBehaviour] >= 220 ) {
-            currentBehaviour = CurrentBehaviour.Idling;
+            currentBehaviour = Core.CurrentBehaviour.Idling;
         }
     }
 
@@ -63,7 +63,7 @@ public class Entity : MonoBehaviour
             
         animator.SetFloat("x", dir.x);
         animator.SetFloat("y", dir.y);
-        animator.SetBool("Moving", currentBehaviour == CurrentBehaviour.Walking);
+        animator.SetBool("Moving", currentBehaviour == Core.CurrentBehaviour.Walking);
     }
     
     protected virtual void Action() {
@@ -88,7 +88,7 @@ public class Entity : MonoBehaviour
                     case Pathfind.Report.NO_ADJACENT_NEIGHBOURS_TO_START_NODE:
                         break;
                     case Pathfind.Report.DESTINATION_IS_OCCUPIED_AND_IS_ADJACENT_TO_PLAYER_CHARACTER:
-                        currentBehaviour = (CurrentBehaviour)i;
+                        currentBehaviour = (Core.CurrentBehaviour)i;
                         UpdateAnimator( Coordinates - facilityPosition );
                         break;
                 }
