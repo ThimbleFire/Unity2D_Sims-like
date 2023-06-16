@@ -9,4 +9,7 @@ Fading in and out exterior, revealing interior
 added pathfinding
 ![sow grow demo2](https://github.com/ThimbleFire/SpaceSim/assets/14812476/8ac402af-234b-45e0-a87d-ac2f76d405fe)
 
-just need to get impulses working so NPCs behave autonomously
+added NPC autonomy
+![sow grow demo2](https://github.com/ThimbleFire/SpaceSim/assets/14812476/58a231de-b5c4-4968-9adb-ba6ac6d0697e)
+
+Going to add loading bars for performing tasks next
