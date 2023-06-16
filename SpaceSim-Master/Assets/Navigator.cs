@@ -57,8 +57,9 @@ public class Navigator : Entity
         Idle = true;
     }
 
-    protected void MoveUnitTo(Vector3Int coordinates) {
-        transform.position = coordinates + offset;
-        _coordinates = coordinates;
-    }
+    // primarily used for spawning entities
+    //protected void MoveUnitTo(Vector3Int coordinates) {
+    //    transform.position = coordinates + offset;
+    //    _coordinates = coordinates;
+    //}
 }
