@@ -22,7 +22,6 @@ public class Entity : MonoBehaviour
         animator.SetInt("y", dir.y);
         animator.SetBool("Moving", Moving);
     }
-    protected virtual void Move() { }
     protected virtual void Interact() { }
     protected virtual void Action() {
         
