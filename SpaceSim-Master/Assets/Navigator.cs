@@ -54,7 +54,7 @@ public class Navigator : Entity
     protected virtual void OnArrival() {
         _chain.Clear();
         _animator.SetBool("Moving", false);
-        Idle = true;
+        currentBehaviour = CurrentBehaviour.Idle; // unless we're interacting
     }
 
     // primarily used for spawning entities
