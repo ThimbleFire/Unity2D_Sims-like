@@ -10,6 +10,8 @@ public class BoardManager : MonoBehaviour
 
     public Tilemap floor;
     public Tilemap walls;
+    
+    public static bool Progressing { get; set; } = false;
 
     private void Awake() {
         floor.CompressBounds();
@@ -21,6 +23,8 @@ public class BoardManager : MonoBehaviour
         actionLibrary.Add( Entity.Solutions.Toilet, "spritesheet_195" );
         actionLibrary.Add( Entity.Solutions.Fridge, "spritesheet_196" );
         actionLibrary.Add( Entity.Solutions.Sink, "spritesheet_197" );
+        
+        GameTime.OnTck += GameTime_OnTck;
     }
 
     public Vector3Int FindFacility( Entity.Solutions solution ) {
@@ -41,5 +45,11 @@ public class BoardManager : MonoBehaviour
             Debug.Log( $"no key exists for {solution}" );
             return string.Empty;
         }
+    }
+    
+    public void GameTime_OnTck()
+    {
+        if(Progressing == false)
+            return;
     }
 }
