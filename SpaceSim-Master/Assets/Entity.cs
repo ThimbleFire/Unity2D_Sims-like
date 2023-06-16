@@ -5,6 +5,7 @@ public class Entity : MonoBehaviour
     protected byte Happiness { get; set; } = 255;
     protected byte Bladder { get; set; } = 255;
     protected byte Oxygen { get; set; } = 255;
+    
     // Chain is the list of tiles returned by the pathfinder
     protected List<Node> _chain = new List<Node>();
     protected Vector3Int Coordinates { get; set; }
@@ -23,6 +24,13 @@ public class Entity : MonoBehaviour
     protected virtual void Move() { }
     protected virtual void Interact() { }
     protected virtual void Action() {
-        // AI stuff goes here    
+        
+        /*
+        
+            CrewBehaviour calls Action
+            Action calculates what the unit will do and assigns a chain
+            Navigate then performs that chain
+        
+        */
     }      
 }
