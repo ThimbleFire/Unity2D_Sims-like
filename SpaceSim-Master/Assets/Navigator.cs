@@ -6,8 +6,6 @@ public class Navigator : Entity
 {
     private readonly Vector3 offset = new Vector3(0.04f, 0.04f);
     
-    private int stepsTaken = 0;
-
     private void Update() {
     
         if (_chain == null)
@@ -21,15 +19,16 @@ public class Navigator : Entity
     
     private void StepFrame()
     {
-        //calculate position after moving
+        // Calculate position after moving
         int moveAcrossBoardSpeed = 4;
         Vector3 _stepDestination = _chain[0].worldPosition + offset;
         Vector3 positionAfterMoving = Vector3.MoveTowards(transform.position, _stepDestination, moveAcrossBoardSpeed * Time.deltaTime);
+        
+        // Move the gameobject
         transform.position = positionAfterMoving;
-
         UpdateAnimator(_coordinates - _chain[0].coordinate);
 
-        // If the distance between the unit and the destination is less than or equal to zero, we have arrived
+        // If the distance between the unit and the stepDestination is less than or equal to zero, we have arrived
         bool unitHasArrivedAtDestination = Vector2.Distance(transform.position, _stepDestination) <= 0.0f;
         if (unitHasArrivedAtDestination) {
             OnTileChanged();
@@ -50,15 +49,12 @@ public class Navigator : Entity
             OnArrival();
             return;
         }
-        // Once it's moved its all the tiles it can, it calls on arrival.
-        if (stepsTaken++ == TotalSpeed)
-            OnArrival();
     }
 
     protected virtual void OnArrival() {
         _chain.Clear();
-        stepsTaken = 0;
         _animator.SetBool("Moving", false);
+        Idle = true;
     }
 
     protected void MoveUnitTo(Vector3Int coordinates) {
