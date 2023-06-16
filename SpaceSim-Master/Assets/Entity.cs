@@ -4,18 +4,9 @@ using UnityEngine;
 
 public class Entity : MonoBehaviour
 {
-    public enum CurrentBehaviour {
-        Eating, Drinking, Playing, Defecating, Working, Walking, Idling
-    }
-    public enum Impulses {
-        Hunger, Water, Happiness, Bladder, Oxygen
-    }
-    public enum Solutions {
-        Fridge, Sink, Play, Toilet, LifeSupport, Chair
-    }
-    
-    public List<byte> impulses = new List<byte>(new byte[5] { 255, 255, 255, 255, 255 });
-
+    public string Name { get; set; }
+    public List<Core.Responsibility> Jobs { get; set: }
+    private List<byte> impulses = new List<byte>(new byte[5] { 255, 255, 255, 255, 255 });
     public Vector3Int Coordinates { get; set; }
 
     public BoardManager boardManager;
@@ -23,7 +14,6 @@ public class Entity : MonoBehaviour
     
     public CurrentBehaviour currentBehaviour = CurrentBehaviour.Idling;
     
-    // Chain is the list of tiles returned by the pathfinder
     protected List<Node> _chain = new List<Node>();
 
     protected Animator animator;
