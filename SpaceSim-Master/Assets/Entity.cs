@@ -5,6 +5,7 @@ public class Entity : MonoBehaviour
     protected byte Happiness { get; set; } = 255;
     protected byte Bladder { get; set; } = 255;
     protected byte Oxygen { get; set; } = 255;
+    protected bool Idle { get; set; } = true;
     
     // Chain is the list of tiles returned by the pathfinder
     protected List<Node> _chain = new List<Node>();
@@ -27,7 +28,7 @@ public class Entity : MonoBehaviour
         
         /*
         
-            CrewBehaviour calls Action
+            BoardManager calls Action the entity is  idle
             Action calculates what the unit will do and assigns a chain
             Navigate then performs that chain
         
