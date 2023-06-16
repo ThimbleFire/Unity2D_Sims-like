@@ -16,8 +16,8 @@ public class Entity : MonoBehaviour
         if(dir == Vector3Int.zero)
             return;
             
-        animator.SetInt("x", _chain.x - Coordinates.x);
-        animator.SetInt("y", _chain.y - Coordinates.y);
+        animator.SetInt("x", dir.x);
+        animator.SetInt("y", dir.y);
         animator.SetBool("Moving", Moving);
     }
     protected virtual void Move() { }
