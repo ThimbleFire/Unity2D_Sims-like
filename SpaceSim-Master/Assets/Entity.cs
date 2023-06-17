@@ -12,6 +12,9 @@ public class Entity : MonoBehaviour
     public BoardManager boardManager;
     public ImpulseMeter impulseMeter;
     
+    public delegate void OnBehaviourChangeHandler(Core.CurrentBehaviour currentBehaviour, Core.LastBehaviour lastBehaviour);
+    public static event OnBehaviourChangeHandler OnBehaviourChange;
+    
     public Core.CurrentBehaviour lastBehaviour = Core.CurrentBehaviour.Idling;
     public Core.CurrentBehaviour currentBehaviour = Core.CurrentBehaviour.Idling;
     
@@ -53,7 +56,7 @@ public class Entity : MonoBehaviour
         
         if(lastBehaviour != currentBehaviour) {
 
-            //BehaviourChange?.Invoke(currentBehaviour, lastBehaviour)
+            OnBehaviourChange?.Invoke(currentBehaviour, lastBehaviour)
             lastBehaviour = currentBehaviour;
         }
     }
