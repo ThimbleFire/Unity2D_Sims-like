@@ -30,13 +30,11 @@ public class BoardManager : MonoBehaviour
     }
 
     public Vector3Int FindFacility( Entity.Solutions solution ) {
-
         foreach( Vector3Int cellPosition in walls.cellBounds.allPositionsWithin ) {
             if( walls.GetTile( cellPosition ) != null )
                 if( walls.GetTile( cellPosition ).name == GetFacilityName( solution ) )
                     return cellPosition;
         }
-
         return Vector3Int.zero;
     }
 
@@ -56,17 +54,14 @@ public class BoardManager : MonoBehaviour
         //every X minute an Event will occur
     }
     
-    public void Entity_OnBehaviourChange(Core.CurrentBehaviour currentBehaviour, Core.CurrentBehaviour lastBehaviour)
-    {
-        switch(lastBehaviour)
-        {
+    public void Entity_OnBehaviourChange(Core.CurrentBehaviour currentBehaviour, Core.CurrentBehaviour lastBehaviour) {
+        switch(lastBehaviour) {
             case Core.CurrentBehaviour.Captaining:
                 Progressing = false;
             break;
         }
         
-        switch(currentBehaviour)
-        {
+        switch(currentBehaviour) {
             case Core.CurrentBehaviour.Captaining:
                 Progressing = true;
             break;
