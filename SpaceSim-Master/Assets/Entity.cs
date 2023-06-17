@@ -12,6 +12,7 @@ public class Entity : MonoBehaviour
     public BoardManager boardManager;
     public ImpulseMeter impulseMeter;
     
+    public Core.CurrentBehaviour lastBehaviour = Core.CurrentBehaviour.Idling;
     public Core.CurrentBehaviour currentBehaviour = Core.CurrentBehaviour.Idling;
     
     protected List<Node> _chain = new List<Node>();
@@ -40,6 +41,7 @@ public class Entity : MonoBehaviour
                 IdleReadyCheck();
                 break;
             case Core.CurrentBehaviour.Working:
+                
                 break;
             case Core.CurrentBehaviour.Idling:
                 impulseMeter.HideMeter();
@@ -47,6 +49,12 @@ public class Entity : MonoBehaviour
                 break;
             default:
                 break;
+        }
+        
+        if(lastBehaviour != currentBehaviour) {
+
+            //BehaviourChange?.Invoke(currentBehaviour, lastBehaviour)
+            lastBehaviour = currentBehaviour;
         }
     }
 
