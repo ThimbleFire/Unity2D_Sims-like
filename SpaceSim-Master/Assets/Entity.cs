@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class Entity : MonoBehaviour
 {
+    private const float ImpulseMax = 1800.0f
     public string Name { get; set; }
     public List<Core.Responsibility> Jobs { get; set: }
-    private List<byte> impulses = new List<byte>(new byte[5] { 255, 255, 255, 255, 255 });
+    private List<byte> impulses = new List<float>(new float[5] { ImpulseMax, ImpulseMax, ImpulseMax, ImpulseMax, ImpulseMax });
+    protected byte BodyHeat { get; set; } = 21;
     public Vector3Int Coordinates { get; set; }
 
     public BoardManager boardManager;
@@ -30,16 +32,18 @@ public class Entity : MonoBehaviour
 
     private void GameTime_OnTck() {
 
-        impulses[( int )Impulses.Bladder] -= (byte)(impulses[(int)Impulses.Bladder] > 5 ? 1 : 0);
-        impulses[( int )Impulses.Hunger] -= ( byte )( impulses[( int )Impulses.Hunger] > 5 ? 1 : 0 );
-        impulses[( int )Impulses.Water] -= ( byte )( impulses[( int )Impulses.Water] > 5 ? 1 : 0 );
+        impulses[( int )Impulses.Bladder] -= (byte)(impulses[(int)Impulses.Bladder] > 5 ? 1 + impulses[(int)Impulses.Water]/ImpulseMax : 0);
+
+        impulses[( int )Impulses.Hunger] -= ( byte )( impulses[( int )Impulses.Hunger] > 5 ? 2 - impulses[( int )Impulses.Hunger] / ImpulseMax : 0 );
+
+        impulses[( int )Impulses.Water] -= ( byte )( impulses[( int )Impulses.Water] > 5 ? 1 + (BodyHeat-21)/10.0f: 0 );
 
         switch( currentBehaviour ) {
             case Core.CurrentBehaviour.Eating:
             case Core.CurrentBehaviour.Drinking:
             case Core.CurrentBehaviour.Playing:
             case Core.CurrentBehaviour.Defecating:
-                impulses[(byte)currentBehaviour] += 35;
+                impulses[(byte)currentBehaviour] += ImpulseMax / 7;
                 impulseMeter.SetMeter( impulses[( byte )currentBehaviour] );
                 IdleReadyCheck();
                 break;
@@ -63,7 +67,7 @@ public class Entity : MonoBehaviour
 
     /// <summary> If the NPC has filled its impulse, it'll return to a state where it can recieve a new behaviour. </summary>
     private void IdleReadyCheck() {
-        if( impulses[( byte )currentBehaviour] >= 220 ) {
+        if( impulses[( byte )currentBehaviour] >= ImpulseMax * 0.75f) {
             currentBehaviour = Core.CurrentBehaviour.Idling;
         }
     }
@@ -89,7 +93,7 @@ public class Entity : MonoBehaviour
 
         for(int i = 0; i < impulses.Count; i++) {
 
-            if(impulses[i] <= 30) {
+            if(impulses[i] <= ImpulseMax / 7) {
 
                 facilityPosition = boardManager.FindFacility((Solutions)i);
                 _chain = Pathfind.GetPath(Coordinates, facilityPosition, false, out report);
