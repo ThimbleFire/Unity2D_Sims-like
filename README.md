@@ -22,3 +22,6 @@ Fading in and out exterior, revealing interior
 * [ ] Amend the pathfinding so NPCs can go up and downstairs
 * [ ] Add a UI panel that shows metal (currency) which will be used when building and repairing facilities and walls
 * [ ] Add a build interface for constructing facilities
+* [ ] Add a life-support point of interest
+* [ ] Add a gunnery point of interest
+* [ ] Add a UI panel for ship diagnostics
