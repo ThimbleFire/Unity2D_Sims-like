@@ -25,6 +25,6 @@ Fading in and out exterior, revealing interior
 * [ ] Add a life-support point of interest
 * [ ] Add a gunnery point of interest
 * [ ] Add a UI panel for ship diagnostics
-* [ ] Add NPC awareness of other crew's departments
+* [ ] Give NPCs a record of interactions with their teammates so they're aware of what's going on
 * [ ] Add more NPCs
 * [ ] Have NPCs share information, making them aware of things like where the captain is taking them, who on board is sick, why Phoe keeps turning off life support
