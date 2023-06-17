@@ -11,15 +11,15 @@ public class ImpulseMeter : MonoBehaviour
 
     public Sprite[] meterFrames;
 
-    public void SetMeter(byte meter) {
+    public void SetMeter(float meter) {
         spriteRenderer.enabled = true;
         int index =
-              meter <= 36  ? 0
-            : meter <= 72  ? 1
-            : meter <= 108 ? 2
-            : meter <= 144 ? 3
-            : meter <= 180 ? 4
-            : meter <= 216 ? 5
+              meter <= 257  ? 0
+            : meter <= 514  ? 1
+            : meter <= 771  ? 2
+            : meter <= 1028 ? 3
+            : meter <= 1285 ? 4
+            : meter <= 1542 ? 5
             : 6;
         spriteRenderer.sprite = meterFrames[index];
     }

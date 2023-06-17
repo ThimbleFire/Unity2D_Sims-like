@@ -27,7 +27,7 @@ public class Navigator : Entity
         
         // Move the gameobject
         transform.position = positionAfterMoving;
-        currentBehaviour = Core.CurrentBehaviour.Walking; // unless we're interacting
+        //currentBehaviour = CurrentBehaviour.Walking; // unless we're interacting
         UpdateAnimator( Coordinates - _chain[0].coordinate );
 
         // If the distance between the unit and the stepDestination is less than or equal to zero, we have arrived
@@ -56,9 +56,9 @@ public class Navigator : Entity
     protected virtual void OnArrival() {
         _chain.Clear();
         animator.SetBool("Moving", false);
-        currentBehaviour = Core.CurrentBehaviour.Idling; // unless we're interacting
+        //currentBehaviour = CurrentBehaviour.Idle;
 
-        Action();
+        //do something
     }
 
     // primarily used for spawning entities
