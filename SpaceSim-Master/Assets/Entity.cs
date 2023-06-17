@@ -12,7 +12,7 @@ public class Entity : MonoBehaviour
     public BoardManager boardManager;
     public ImpulseMeter impulseMeter;
     
-    public delegate void OnBehaviourChangeHandler(Core.CurrentBehaviour currentBehaviour, Core.LastBehaviour lastBehaviour);
+    public delegate void OnBehaviourChangeHandler(Core.CurrentBehaviour currentBehaviour, Core.CurrentBehaviour lastBehaviour);
     public static event OnBehaviourChangeHandler OnBehaviourChange;
     
     public Core.CurrentBehaviour lastBehaviour = Core.CurrentBehaviour.Idling;
