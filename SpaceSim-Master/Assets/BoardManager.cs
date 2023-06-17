@@ -12,6 +12,7 @@ public class BoardManager : MonoBehaviour
     public Tilemap walls;
     
     public static bool Progressing { get; set; } = false;
+    public static bool LifeSupport { get; set; } = true;
 
     private void Awake() {
         floor.CompressBounds();
@@ -25,6 +26,7 @@ public class BoardManager : MonoBehaviour
         actionLibrary.Add( Entity.Solutions.Sink, "spritesheet_197" );
         
         GameTime.OnTck += GameTime_OnTck;
+        Entity.OnBehaviourChange += Entity_OnBehaviourChange;
     }
 
     public Vector3Int FindFacility( Entity.Solutions solution ) {
@@ -47,9 +49,27 @@ public class BoardManager : MonoBehaviour
         }
     }
     
-    public void GameTime_OnTck()
-    {
-        if(Progressing == false)
+    public void GameTime_OnTck() {
+        if(Progressing == true)
             return;
+            
+        //every X minute an Event will occur
+    }
+    
+    public void Entity_OnBehaviourChange(Core.CurrentBehaviour currentBehaviour, Core.CurrentBehaviour lastBehaviour)
+    {
+        switch(lastBehaviour)
+        {
+            case Core.CurrentBehaviour.Captaining:
+                Progressing = false;
+            break;
+        }
+        
+        switch(currentBehaviour)
+        {
+            case Core.CurrentBehaviour.Captaining:
+                Progressing = true;
+            break;
+        }
     }
 }
