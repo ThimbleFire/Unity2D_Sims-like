@@ -8,7 +8,7 @@ public class Entity : MonoBehaviour
     public string Name { get; set; }
     public List<Core.Responsibility> Jobs { get; set: }
     private List<byte> impulses = new List<float>(new float[5] { ImpulseMax, ImpulseMax, ImpulseMax, ImpulseMax, ImpulseMax });
-    protected byte BodyHeat { get; set; } = 21;
+    protected byte BodyHeat { get; set; } = 37;
     public Vector3Int Coordinates { get; set; }
 
     public BoardManager boardManager;
@@ -36,7 +36,7 @@ public class Entity : MonoBehaviour
 
         impulses[( int )Impulses.Hunger] -= ( byte )( impulses[( int )Impulses.Hunger] > 5 ? 2 - impulses[( int )Impulses.Hunger] / ImpulseMax : 0 );
 
-        impulses[( int )Impulses.Water] -= ( byte )( impulses[( int )Impulses.Water] > 5 ? 1 + (BodyHeat-21)/10.0f: 0 );
+        impulses[( int )Impulses.Water] -= ( byte )( impulses[( int )Impulses.Water] > 5 ? 1 + (BodyHeat-37)/10.0f: 0 );
 
         switch( currentBehaviour ) {
             case Core.CurrentBehaviour.Eating:
