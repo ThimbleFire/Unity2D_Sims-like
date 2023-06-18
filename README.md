@@ -12,19 +12,4 @@ Fading in and out exterior, revealing interior
 
 ![sow grow demo2](https://github.com/ThimbleFire/SpaceSim/assets/14812476/05fcc560-a942-42ba-867a-2164fb1df297)
 
-* [ ] Add the engine as a point of interest
-* [ ] Add the navigation computer as a point of interest
-* [ ] Let the player select NPCs to prompt a UI
-* [ ] Add a UI to toggle NPC core resonsibilities and rename NPCs
-* [ ] Add save / load functionality so we can remember names, responsibilites, coordinates and impulse meters between sessions
-* [ ] Add a downstairs area
-* [ ] Add buttons that change the view from the hull, the top-deck, and the lower deck
-* [ ] Amend the pathfinding so NPCs can go up and downstairs
-* [ ] Add a UI panel that shows metal (currency) which will be used when building and repairing facilities and walls
-* [ ] Add a build interface for constructing facilities
-* [ ] Add a life-support point of interest
-* [ ] Add a gunnery point of interest
-* [ ] Add a UI panel for ship diagnostics
-* [ ] Give NPCs a record of interactions with their teammates so they're aware of what's going on
-* [ ] Add more NPCs
-* [ ] Have NPCs share information, making them aware of things like where the captain is taking them, who on board is sick, why Phoe keeps turning off life support
+![sow grow demo2](https://github.com/ThimbleFire/SpaceSim/assets/14812476/9a348247-4977-4cd0-a118-013fd1b2fa49)
