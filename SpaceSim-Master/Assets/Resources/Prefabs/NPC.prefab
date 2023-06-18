@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6015819401180105199}
   - component: {fileID: 6015819401180105192}
   - component: {fileID: 6015819401180105197}
+  - component: {fileID: -5726229446565001340}
   m_Layer: 0
   m_Name: NPC
   m_TagString: Player
@@ -127,6 +128,20 @@ MonoBehaviour:
   boardManager: {fileID: 0}
   impulseMeter: {fileID: 6015819401750024342}
   moveAcrossBoardSpeed: 0.24
+--- !u!114 &-5726229446565001340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6015819401180105193}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 203ba38bad74f1743abb0643b6c8592c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  floor: {fileID: 0}
+  walls: {fileID: 0}
 --- !u!1 &6015819401750024337
 GameObject:
   m_ObjectHideFlags: 0

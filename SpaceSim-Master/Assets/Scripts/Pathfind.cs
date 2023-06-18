@@ -9,7 +9,7 @@ namespace AlwaysEast
     {
         public Vector3Int coordinate { get; set; }
         public Vector3 worldPosition { get; set; }
-        public bool walkable = true;
+        public bool walkable = false;
         public Node parent;
         public byte distance = 0;
 
@@ -33,6 +33,17 @@ namespace AlwaysEast
 
         public static void Unoccupy( Vector3Int coordinates ) {
             s_nodes[coordinates.x, coordinates.y].walkable = true;
+        }
+
+        public static bool IsOccupied(Vector3Int coordinates) {
+
+            bool checkXInBounds = coordinates.x >= 0 && coordinates.x < s_nodes.GetLength(0);
+            bool checkYInBounds = coordinates.y >= 0 && coordinates.y < s_nodes.GetLength(1);
+
+            if( !checkXInBounds || !checkYInBounds || s_nodes[coordinates.x, coordinates.y] == null )
+                return true;
+
+            return !s_nodes[coordinates.x, coordinates.y].walkable;
         }
 
         public static void Setup( Tilemap floorTileMap, Tilemap wallTileMap ) {

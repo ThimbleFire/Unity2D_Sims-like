@@ -5,7 +5,7 @@ using AlwaysEast;
 
 public class Navigator : Entity
 {
-    private readonly Vector3 offset = new Vector3(0.04f, 0.04f);
+    private Vector3 offset = new Vector3(0.04f, 0.04f);
     public float moveAcrossBoardSpeed = 0.08f;
 
     private void Update() {
