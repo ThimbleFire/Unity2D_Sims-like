@@ -18,6 +18,8 @@ public class Facility : MonoBehaviour {
     public EType Type {get; set;} = EType.Undefined;
     public bool Broken { get; set; } = false;
     public Vector3Int Coordinates { get; set; } = Vector3Int.zero;
+    // temporarily removed. Use transform.position instead
+    //public Vector3 WorldPosition { get; set; } = Vector3.zero;
     
     /// <summary> When an NPC starts an interaction, roll to see whether facility breaks </summary>
     public virtual void InteractStart() => GameTime.OnTck += GameTime_OnTick;
@@ -43,7 +45,10 @@ public static class Facilities {
     
     public static void Sort()                                        =>        FacilityList.Sort();
     public static void Add(Facility f)                               =>        FacilityList.Add(f);
-    public static void Add(GameObject prefab, Vector3 worldPosition) =>        FacilityList.Add( GameObject.Instantiate(prefab, worldPosition, Quaternion.Identify).GetComponent<Facility>() );
+    public static void Add(GameObject prefab, Vector3 worldPosition, Vector3Int coordinates) {
+        Facility f = GameObject.Instantiate(prefab, worldPosition, Quaternion.Identify).GetComponent<Facility>();
+        f.Coordinates = coordinates;
+    }
     public static Facility Get(Vector3Int coordinates)               => return FacilityList.FindAll( x => x.Coordinates == coordinates) != null ? FacilityList.FindAll( x => x.Coordinates == coordinates)[0] : null;
     public static Facility Get(Facility.Type t)                      => return FacilityList.FindAll( x => x.m_type == t) != null ? FacilityList.FindAll( x=> x.m_type == t) : null;
     public static void Remove(Vector3Int coordinates)                =>        Remove( Get( coordinates ) );
