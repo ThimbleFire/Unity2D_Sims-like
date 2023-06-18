@@ -15,3 +15,5 @@ Fading in and out exterior, revealing interior
 ![sow grow demo2](https://github.com/ThimbleFire/SpaceSim/assets/14812476/9a348247-4977-4cd0-a118-013fd1b2fa49)
 
 ![sow grow demo2](https://github.com/ThimbleFire/SpaceSim/assets/14812476/8c36306f-0bdc-4788-a1cf-2c708e35e7e6)
+
+![sow grow demo2](https://github.com/ThimbleFire/SpaceSim/assets/14812476/c74fce29-045b-4383-9851-357480906167)
