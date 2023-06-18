@@ -33,8 +33,11 @@ public static class Facilities {
     public static void Sort()                                        =>        FacilityList.Sort();
     public static void Add(Facility f)                               =>        FacilityList.Add(f);
     public static void Add(GameObject prefab, Vector3 worldPosition) =>        FacilityList.Add( GameObject.Instantiate(prefab, worldPosition, Quaternion.Identify).GetComponent<Facility>() );
-    public static void Remove(Facility f)                            =>        FacilityList.Remove(f);
-    public static void Remove(Vector3Int coordinates)                =>        FacilityList.RemoveAll( x => x.Coordinates == coordinates);
     public static Facility Get(Vector3Int coordinates)               => return FacilityList.FindAll( x => x.Coordinates == coordinates) != null ? FacilityList.FindAll( x => x.Coordinates == coordinates)[0] : null;
     public static Facility Get(Facility.Type t)                      => return FacilityList.FindAll( x => x.m_type == t) != null ? FacilityList.FindAll( x=> x.m_type == t) : null;
+    public static void Remove(Vector3Int coordinates)                =>        Remove( Get( coordinates ) );
+    public static void Remove(Facility f) {
+        FacilityList.Remove(f);
+        Destroy(f.gameObject);
+    }
 }
