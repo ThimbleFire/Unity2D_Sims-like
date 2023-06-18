@@ -44,7 +44,6 @@ public static class Facilities {
     private static List<Facility> FacilityList = new List<Facility>();
     
     public static void Sort()                                        =>        FacilityList.Sort();
-    public static void Add(Facility f)                               =>        FacilityList.Add(f);
     public static void Add(GameObject prefab, Vector3 worldPosition, Vector3Int coordinates) {
         Facility f = GameObject.Instantiate(prefab, worldPosition, Quaternion.Identify).GetComponent<Facility>();
         f.Coordinates = coordinates;
