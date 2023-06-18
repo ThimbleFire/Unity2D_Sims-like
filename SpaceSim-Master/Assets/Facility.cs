@@ -2,7 +2,7 @@ using System;
 using System.Collection.Generic;
 using UnityEngine;
 
-public class Facility : MonoBehaviour {
+public class Facility : MonoBehaviour, IPointerDownHandler, IPointerUpHandler {
 
     public enum EType {
         Undefined,
@@ -37,10 +37,21 @@ public class Facility : MonoBehaviour {
         if(r <= 0)
             Broken = true;
     }
+    
+    // This should be moved to a more appropriate class
+    public void OnPointerDown(PointerEventData eventData) {
+        Debug.Log("Pointer down");
+    } 
+    // This should be moved to a more appropriate class
+    public void OnPointerUp(PointerEventData eventData) {
+        Debug.Log("Pointer up");        
+    }
 }
 
 public static class Facilities {
 
+    public static PlacementMode { get; set; } = false;
+    
     private static List<Facility> FacilityList = new List<Facility>();
     
     public static void Sort()                                        =>        FacilityList.Sort();
