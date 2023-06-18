@@ -6,10 +6,10 @@ public class GameTime : MonoBehaviour
     public delegate void OnTickHandler();
     public static event OnTickHandler OnTck;
 
-    public float timer = 0.0f;
+    private float Timer {get; set;} = 0.0f;
     
     // interval in seconds
-    private readonly float interval = /*60.0f*/ 1.0f;
+    private readonly float interval = 0.6f;
 
     private static bool active = false;
 
@@ -27,10 +27,10 @@ public class GameTime : MonoBehaviour
         if (active == false)
             return;
 
-        timer += Time.deltaTime;
+        Timer += Time.deltaTime;
 
-        if (timer >= interval) {
-            timer -= interval;
+        if (Timer >= interval) {
+            Timer -= interval;
             OnTck?.Invoke();
         }
     }
