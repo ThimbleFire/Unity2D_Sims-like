@@ -23,7 +23,19 @@ public class Facility : MonoBehaviour {
     /// <summary> When an NPC starts an interaction, roll to see whether facility breaks </summary>
     public virtual void InteractStart() => GameTime.OnTck += GameTime_OnTick;
     public virtual void InteractEnd() => GameTime.OnTck -= GameTime_OnTick;
-    protected virtual void GameTime_OnTick() { }
+    
+    protected virtual void GameTime_OnTick() {
+        if(!broken)
+            DamageRoll();
+    }
+    
+    /// <summary> While engaged, every tick there's a 1 in 256 chance the facility will break.
+    /// We might change this in the future so skilled crew damage facilities less often. </summary>
+    private void DamageRoll() {
+        byte r = Random.Range(0, 255);
+        if(r <= 0)
+            Broken = true;
+    }
 }
 
 public static class Facilities {
