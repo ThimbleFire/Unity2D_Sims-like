@@ -16,7 +16,6 @@ public class Facility : MonoBehaviour {
     };
     
     public EType Type {get; set;} = EType.Undefined;
-    public bool Engaged { get; set; } = false;
     public bool Broken { get; set; } = false;
     public Vector3Int Coordinates { get; set; } = Vector3Int.zero;
     
