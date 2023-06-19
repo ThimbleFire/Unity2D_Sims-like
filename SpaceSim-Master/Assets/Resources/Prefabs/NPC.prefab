@@ -138,7 +138,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55ede63f59fed614e977480d6af2d612, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Type: 8
+  Type: 6
   Broken: 0
   Coordinates: {x: 0, y: 0, z: 0}
   Size: {x: 1, y: 1}

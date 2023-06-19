@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using AlwaysEast;
 
 public class Navigator : Entity
 {
@@ -10,21 +7,20 @@ public class Navigator : Entity
 
     private void Update() {
 
-        if (_chain == null)
+        if( _chain == null )
             return;
 
-        if (_chain.Count == 0)
+        if( _chain.Count == 0 )
             return;
 
         StepFrame();
     }
-    
-    private void StepFrame()
-    {
+
+    private void StepFrame() {
         // Calculate position after moving
         Vector3 _stepDestination = _chain[0].worldPosition + offset;
         Vector3 positionAfterMoving = Vector3.MoveTowards(transform.position, _stepDestination, moveAcrossBoardSpeed * Time.deltaTime);
-        
+
         // Move the gameobject
         transform.position = positionAfterMoving;
         CurrentBehaviour = Behaviour.Walking; // unless we're interacting
@@ -32,24 +28,23 @@ public class Navigator : Entity
 
         // If the distance between the unit and the stepDestination is less than or equal to zero, we have arrived
         bool unitHasArrivedAtDestination = Vector2.Distance(transform.position, _stepDestination) <= 0.0f;
-        if (unitHasArrivedAtDestination) {
+        if( unitHasArrivedAtDestination ) {
             OnTileChanged();
         }
     }
-    
+
     protected virtual void OnTileChanged() {
         // Set the new coordinate at our current position
         Coordinates = _chain[0].coordinate;
         // Remove the last chain since we're not where we used to be
-        _chain.RemoveAt(0);
+        _chain.RemoveAt( 0 );
         // If we've arrived at our destination
-        if (_chain.Count <= 0)
+        if( _chain.Count <= 0 )
             OnArrival();
     }
 
     protected override void OnArrival() {
-        animator.SetBool("Moving", false);
-        CurrentBehaviour = Behaviour.WonderingWhatToDo; // This may be changed by base
+        animator.SetBool( "Moving", false );
         base.OnArrival();
     }
 

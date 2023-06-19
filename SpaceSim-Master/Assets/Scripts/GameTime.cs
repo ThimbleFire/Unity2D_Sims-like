@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class GameTime : MonoBehaviour
@@ -10,16 +9,16 @@ public class GameTime : MonoBehaviour
     public static event OnTickHandler OnTck;
 
     private static bool Active { get; set; } = false;
-    private float Timer {get; set;} = 0.0f;
+    private float Timer { get; set; } = 0.0f;
     private readonly float interval = 0.6f;
-    
+
     private void Awake() => ClockStart();
-    
+
     public void Update() {
-        if (Active == false)
+        if( Active == false )
             return;
         Timer += Time.deltaTime;
-        if (Timer >= interval) {
+        if( Timer >= interval ) {
             Timer -= interval;
             OnTck?.Invoke();
         }

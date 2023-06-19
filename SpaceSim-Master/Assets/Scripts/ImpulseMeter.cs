@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ImpulseMeter : MonoBehaviour
@@ -11,7 +9,7 @@ public class ImpulseMeter : MonoBehaviour
 
     public Sprite[] meterFrames;
 
-    public void SetMeter(float meter) {
+    public void SetMeter( float meter ) {
         spriteRenderer.enabled = true;
         int index =
             //0.1428f is 1.0 / 7

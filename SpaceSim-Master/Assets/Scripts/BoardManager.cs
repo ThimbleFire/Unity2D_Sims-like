@@ -1,9 +1,7 @@
-using UnityEngine;
-using UnityEngine.Tilemaps;
 using AlwaysEast;
-using System;
-using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Tilemaps;
 
 public class BoardManager : MonoBehaviour
 {

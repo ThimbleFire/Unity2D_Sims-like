@@ -1,22 +1,23 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
-public class Facility : MonoBehaviour {
+public class Facility : MonoBehaviour
+{
 
-    public enum EType {
-        Toilet, 
-        Fridge, 
-        Sink, 
-        Engine,
+    public enum EType
+    {
+        Toilet,
+        Fridge,
+        Sink,
         Turbine,
-        Navigations, 
-        LifeSupport, 
+        LifeSupport,
         CaptainsChair,
         NPC, //Medic associates NPCs are a facility that needs repairing
-        Gunnery
+        Gunnery,
+        Engine,
+        Navigations,
     };
-    
+
     public EType Type = EType.LifeSupport;
     public bool IsImpulse { get { return Type == EType.Fridge || Type == EType.Sink || Type == EType.Toilet; } }
     public bool Broken = false;
@@ -25,9 +26,9 @@ public class Facility : MonoBehaviour {
     public Vector2Int Size = Vector2Int.zero;
 
     /// <summary> When an NPC starts an interaction, roll to see whether facility breaks </summary>
-    public virtual void InteractStart( ) => GameTime.OnTck += GameTime_OnTick;
+    public virtual void InteractStart() => GameTime.OnTck += GameTime_OnTick;
     public virtual void InteractEnd() => GameTime.OnTck -= GameTime_OnTick;
-    
+
     protected virtual void GameTime_OnTick() {
 
         if( !Broken ) {
@@ -42,15 +43,15 @@ public class Facility : MonoBehaviour {
     /// We might change this in the future so skilled crew damage facilities less often. </summary>
     private void DamageRoll() {
         int r = Random.Range(0, 255);
-        if(r <= 0)
+        if( r <= 0 )
             Broken = true;
     }
 
-    public bool Contains(Vector3Int coordinates) {
+    public bool Contains( Vector3Int coordinates ) {
         for( int y = 0; y > -Size.y; y-- )
             for( int x = 0; x < Size.x; x++ ) {
-                if(Coordinates.x + x == coordinates.x && 
-                   Coordinates.y + y == coordinates.y)
+                if( Coordinates.x + x == coordinates.x &&
+                   Coordinates.y + y == coordinates.y )
                     return true;
             }
         return false;

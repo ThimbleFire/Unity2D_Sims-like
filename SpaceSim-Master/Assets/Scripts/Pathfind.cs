@@ -22,9 +22,9 @@ namespace AlwaysEast
     {
         public enum Report
         {
-            OK, 
-            ATTEMPTING_TO_MOVE_ON_SELF, 
-            DESTINATION_IS_OCCUPIED_AND_IS_ADJACENT_TO_PLAYER_CHARACTER, 
+            OK,
+            ATTEMPTING_TO_MOVE_ON_SELF,
+            DESTINATION_IS_OCCUPIED_AND_IS_ADJACENT_TO_PLAYER_CHARACTER,
             NO_ADJACENT_NEIGHBOURS_TO_START_NODE,
             NO_ADJACENT_NEIGHBOURS_TO_END_NODE
         };
@@ -39,7 +39,7 @@ namespace AlwaysEast
             s_nodes[coordinates.x, coordinates.y].walkable = true;
         }
 
-        public static bool IsOccupied(Vector3Int coordinates) {
+        public static bool IsOccupied( Vector3Int coordinates ) {
 
             bool checkXInBounds = coordinates.x >= 0 && coordinates.x < s_nodes.GetLength(0);
             bool checkYInBounds = coordinates.y >= 0 && coordinates.y < s_nodes.GetLength(1);
@@ -58,7 +58,7 @@ namespace AlwaysEast
                 if( floorTileMap.HasTile( cellPosition ) )
 
                     s_nodes[cellPosition.x, cellPosition.y] = new Node() {
-                        walkable = wallTileMap.HasTile(cellPosition) == false,
+                        walkable = wallTileMap.HasTile( cellPosition ) == false,
                         coordinate = cellPosition,
                         worldPosition = floorTileMap.CellToWorld( cellPosition )
                     };
@@ -73,7 +73,7 @@ namespace AlwaysEast
         /// <param name="size">The size of the destination should the default have no neighbours</param>
         /// <param name="report">Error handling</param>
         /// <returns>Returns a list of nodes that make up a path from start to finish.</returns>
-        public static List<Node> GetPath( Vector3Int start, Vector3Int destination, Vector2Int size, out Report report) {
+        public static List<Node> GetPath( Vector3Int start, ref Vector3Int destination, Vector2Int size, out Report report ) {
             Node startNode = s_nodes[start.x, start.y];
             Node endNode = s_nodes[destination.x, destination.y];
 
@@ -101,25 +101,25 @@ namespace AlwaysEast
                 return null;
             }
 
-            if( endNode.walkable == false ) 
-            {
+            if( endNode.walkable == false ) {
                 // If the end node is occupied, move it to an adjacent tile
                 for( int y = endNode.coordinate.y; y > endNode.coordinate.y - size.y; y-- )
-                for( int x = endNode.coordinate.x; x < endNode.coordinate.x + size.x; x++ ) {
+                    for( int x = endNode.coordinate.x; x < endNode.coordinate.x + size.x; x++ ) {
 
-                    endNode.coordinate = new Vector3Int( x, y, 0 );
-                    List<Node> endNodeNeighbours = GetNeighbours(endNode, false);
+                        endNode.coordinate = new Vector3Int( x, y, 0 );
+                        List<Node> endNodeNeighbours = GetNeighbours(endNode, false);
 
-                    if( endNodeNeighbours.Count > 0 ) {
-                        List<Node> neighboursSortedByDistance = SortNearest(startNode, endNodeNeighbours); // new code
-                        Node pathToNeighbour = GetPathToNeighbour(startNode, neighboursSortedByDistance);
+                        if( endNodeNeighbours.Count > 0 ) {
+                            destination = endNode.coordinate;
+                            List<Node> neighboursSortedByDistance = SortNearest(startNode, endNodeNeighbours); // new code
+                            Node pathToNeighbour = GetPathToNeighbour(startNode, neighboursSortedByDistance);
 
-                        if( pathToNeighbour != null ) {
-                            report = Report.OK;
-                            return GetPath( startNode, pathToNeighbour );
+                            if( pathToNeighbour != null ) {
+                                report = Report.OK;
+                                return GetPath( startNode, pathToNeighbour );
+                            }
                         }
                     }
-                }
             }
 
             report = Report.OK;
@@ -256,7 +256,7 @@ namespace AlwaysEast
         }
 
         // Have an entity wander to a random tile around an object
-        public static Vector3Int GetRandomTile(Vector3Int origin) {
+        public static Vector3Int GetRandomTile( Vector3Int origin ) {
             Node focalPoint = new Node() { coordinate = origin };
             var neighbours = GetNeighbours(focalPoint, false);
             return neighbours[Random.Range( 0, neighbours.Count - 1 )].coordinate;
