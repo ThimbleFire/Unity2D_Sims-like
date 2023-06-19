@@ -2832,7 +2832,6 @@ GameObject:
   - component: {fileID: 881949498}
   - component: {fileID: 881949497}
   - component: {fileID: 881949499}
-  - component: {fileID: 881949500}
   - component: {fileID: 881949501}
   - component: {fileID: 881949502}
   m_Layer: 0
@@ -2885,18 +2884,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   floor: {fileID: 1451415509}
   walls: {fileID: 1056334156}
---- !u!114 &881949500
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 881949496}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 050f65add438cfc478f436d9cc8b2deb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &881949501
 MonoBehaviour:
   m_ObjectHideFlags: 0

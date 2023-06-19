@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f390c5aa38a2a644837adf70194e16e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Type: 4
+  Type: 3
   Broken: 0
   Coordinates: {x: 0, y: 0, z: 0}
   Size: {x: 2, y: 2}

@@ -118,14 +118,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd1f168572555c84f8e26b9b3208aacc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  task: 
-  impulses:
-  - 1800
-  - 1800
-  - 1800
-  - 1800
-  - 1800
   impulseMeter: {fileID: 6015819401750024342}
+  Impulses:
+  - 700
+  - 700
+  - 700
+  CurrentBehaviour: 0
   moveAcrossBoardSpeed: 0.24
 --- !u!114 &3645418014625179651
 MonoBehaviour:
@@ -139,7 +137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55ede63f59fed614e977480d6af2d612, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Type: 9
+  Type: 8
   Broken: 0
   Coordinates: {x: 0, y: 0, z: 0}
   Size: {x: 1, y: 1}

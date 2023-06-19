@@ -5,7 +5,6 @@ using UnityEngine.EventSystems;
 public class Facility : MonoBehaviour {
 
     public enum EType {
-        Undefined,
         Toilet, 
         Fridge, 
         Sink, 
@@ -17,13 +16,13 @@ public class Facility : MonoBehaviour {
         NPC //Medic associates NPCs are a facility that needs repairing
     };
     
-    public EType Type = EType.Undefined;
+    public EType Type = EType.LifeSupport;
+    public bool IsImpulse { get { return Type == EType.Fridge || Type == EType.Sink || Type == EType.Toilet; } }
     public bool Broken = false;
     [HideInInspector]
     public Vector3Int Coordinates = Vector3Int.zero;
     public Vector2Int Size = Vector2Int.zero;
-    // temporarily removed. Use transform.position instead
-    //public Vector3 WorldPosition { get; set; } = Vector3.zero;
+    private bool beingIntactedWith = false;
     
     /// <summary> When an NPC starts an interaction, roll to see whether facility breaks </summary>
     public virtual void InteractStart() => GameTime.OnTck += GameTime_OnTick;
@@ -32,6 +31,11 @@ public class Facility : MonoBehaviour {
     protected virtual void GameTime_OnTick() {
         if(! Broken)
             DamageRoll();
+    }
+
+    public virtual float Interact(float impulse) {
+
+        return 0.0f;
     }
     
     /// <summary> While engaged, every tick there's a 1 in 256 chance the facility will break.
@@ -80,7 +84,9 @@ public class Facilities
         return FacilityList.FindAll( x => x.Coordinates == coordinates )?[0];
     }
     public static Facility Get( Facility.EType t ) {
-        return FacilityList.FindAll( x => x.Type == t )?[0];
+        Facility f = FacilityList.FindAll( x => x.Type == t )[0];
+
+        return f;
     }
     public static void Sort() => FacilityList.Sort();
 

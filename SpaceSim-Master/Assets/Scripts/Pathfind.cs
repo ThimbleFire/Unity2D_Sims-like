@@ -22,7 +22,11 @@ namespace AlwaysEast
     {
         public enum Report
         {
-            OK, ATTEMPTING_TO_MOVE_ON_SELF, DESTINATION_IS_OCCUPIED_AND_IS_ADJACENT_TO_PLAYER_CHARACTER, NO_ADJACENT_NEIGHBOURS_TO_START_NODE
+            OK, 
+            ATTEMPTING_TO_MOVE_ON_SELF, 
+            DESTINATION_IS_OCCUPIED_AND_IS_ADJACENT_TO_PLAYER_CHARACTER, 
+            NO_ADJACENT_NEIGHBOURS_TO_START_NODE,
+            NO_ADJACENT_NEIGHBOURS_TO_END_NODE
         };
 
         private static Node[,] s_nodes;
@@ -59,21 +63,17 @@ namespace AlwaysEast
                         worldPosition = floorTileMap.CellToWorld( cellPosition )
                     };
             }
-
-            List<Vector3Int> entities = Entities.GetOccupied();
-            foreach( Vector3Int coordinates in entities ) {
-                Occupy( coordinates );
-            }
         }
 
-        public static List<Node> Wander( Vector3Int coordinates ) {
-            Node startNode = s_nodes[coordinates.x, coordinates.y];
-
-            List<Node> neighbours = GetNeighbours(startNode, false);
-
-            return GetPath( coordinates, neighbours[Random.Range( 0, neighbours.Count )].coordinate, false, out Report report );
-        }
-        public static List<Node> GetPath( Vector3Int start, Vector3Int destination, bool includeUnwalkable, out Report report) {
+        /// <summary>
+        /// Gets a path from Start to Destination. If destination has no neighbours, it is adjusted by Size until a path can be found.
+        /// </summary>
+        /// <param name="start">The start point</param>
+        /// <param name="destination">The end point</param>
+        /// <param name="size">The size of the destination should the default have no neighbours</param>
+        /// <param name="report">Error handling</param>
+        /// <returns>Returns a list of nodes that make up a path from start to finish.</returns>
+        public static List<Node> GetPath( Vector3Int start, Vector3Int destination, Vector2Int size, out Report report) {
             Node startNode = s_nodes[start.x, start.y];
             Node endNode = s_nodes[destination.x, destination.y];
 
@@ -101,43 +101,34 @@ namespace AlwaysEast
                 return null;
             }
 
-            // If the end node is occupied, move it to an adjacent tile
             if( endNode.walkable == false ) 
             {
-                List<Node> endNodeNeighbours = GetNeighbours(endNode, false);
+                // If the end node is occupied, move it to an adjacent tile
+                for( int y = endNode.coordinate.y; y > endNode.coordinate.y - size.y; y-- )
+                for( int x = endNode.coordinate.x; x < endNode.coordinate.x + size.x; x++ ) {
 
-                if( endNodeNeighbours.Count > 0 ) {
-                    List<Node> neighboursSortedByDistance = SortNearest(startNode, endNodeNeighbours); // new code
-                    Node pathToNeighbour = GetPathToNeighbour(startNode, neighboursSortedByDistance);
+                    endNode.coordinate = new Vector3Int( x, y, 0 );
+                    List<Node> endNodeNeighbours = GetNeighbours(endNode, false);
 
-                    if( pathToNeighbour != null ) {
-                        report = Report.OK;
-                        return GetPath( startNode, pathToNeighbour, includeUnwalkable );
+                    if( endNodeNeighbours.Count > 0 ) {
+                        List<Node> neighboursSortedByDistance = SortNearest(startNode, endNodeNeighbours); // new code
+                        Node pathToNeighbour = GetPathToNeighbour(startNode, neighboursSortedByDistance);
+
+                        if( pathToNeighbour != null ) {
+                            report = Report.OK;
+                            return GetPath( startNode, pathToNeighbour );
+                        }
                     }
                 }
-
-                //SpeechBubble.Show( Entities.GetTurnTaker.transform, SpeechBubble.Type.Attention );
-
-                //endNodeNeighbours = GetNeighbours( endNode, true );
-                //if( endNodeNeighbours.Count > 0 ) {
-                //    List<Node> neighboursSortedByDistance = SortNearest(startNode, endNodeNeighbours); // new code
-                //    Node pathToNeighbour = GetPathToNeighbour(startNode, neighboursSortedByDistance);
-                //    if( pathToNeighbour != null )
-                //        return GetPath( startNode, pathToNeighbour, includeUnwalkable );
-                //    else {
-                //        Debug.LogWarning( "No adjacent or diagonal neighbours to move to" );
-                //        return null;
-                //    }
-                //}
             }
 
             report = Report.OK;
-            return GetPath( startNode, endNode, includeUnwalkable );
+            return GetPath( startNode, endNode );
         }
 
         private static Node GetPathToNeighbour( Node startNode, List<Node> neighboursSortedByDistance ) {
             foreach( Node node in neighboursSortedByDistance ) {
-                List<Node> path = GetPath(startNode, node, false);
+                List<Node> path = GetPath(startNode, node);
                 if( path != null )
                     return path[path.Count - 1];
             }
@@ -145,7 +136,7 @@ namespace AlwaysEast
             return null;
         }
 
-        private static List<Node> GetPath( Node startNode, Node endNode, bool includeUnwalkable ) {
+        private static List<Node> GetPath( Node startNode, Node endNode ) {
             List<Node> openSet = new List<Node>();
             HashSet<Node> closedSet = new HashSet<Node>();
 
@@ -172,7 +163,7 @@ namespace AlwaysEast
                 List<Node> neighbours = GetNeighbours(currentNode, false); // We'll want to ignore walkables
 
                 foreach( Node neighbour in neighbours ) {
-                    if( neighbour.walkable == false && includeUnwalkable || closedSet.Contains( neighbour ) ) {
+                    if( neighbour.walkable == false || closedSet.Contains( neighbour ) ) {
                         continue;
                     }
 

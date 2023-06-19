@@ -14,12 +14,13 @@ public class ImpulseMeter : MonoBehaviour
     public void SetMeter(float meter) {
         spriteRenderer.enabled = true;
         int index =
-              meter <= 257  ? 0
-            : meter <= 514  ? 1
-            : meter <= 771  ? 2
-            : meter <= 1028 ? 3
-            : meter <= 1285 ? 4
-            : meter <= 1542 ? 5
+            //0.1428f is 1.0 / 7
+              meter <= Entity.ImpulseMax * 0.1428f ? 0
+            : meter <= Entity.ImpulseMax * 0.2856f ? 1
+            : meter <= Entity.ImpulseMax * 0.4284f ? 2
+            : meter <= Entity.ImpulseMax * 0.5712f ? 3
+            : meter <= Entity.ImpulseMax * 0.7140f ? 4
+            : meter <= Entity.ImpulseMax * 0.8568f ? 5
             : 6;
         spriteRenderer.sprite = meterFrames[index];
     }

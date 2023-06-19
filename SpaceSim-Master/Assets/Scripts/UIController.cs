@@ -13,10 +13,10 @@ public class UIController : MonoBehaviour
 
     public static BuildWindow SelectedBuildWindow { get; set; } = BuildWindow.Floor;
     public static Entity SelectedEntity { get; set; }
-    private bool canPlace = false;
-
-    private Facility activeFacility = null;
     public static EnvironmentElement activeElement = null;
+    private Facility activeFacility = null;
+
+    private bool canPlace = false;
 
     public Sprite selected;
     public Sprite unselected;
@@ -32,6 +32,7 @@ public class UIController : MonoBehaviour
     public GameObject[] panels;
 
     public void ShowBuildMenu() {
+        GameTime.ClockStop();
         footerTabs.SetActive( false );
         buildInterface.SetActive( true );
     }
@@ -41,6 +42,7 @@ public class UIController : MonoBehaviour
         buildInterface.SetActive( false );
     }
     public void HideBuildMenuManual() {
+        GameTime.ClockStart();
         HideBuildMenu();
         activeElement = null;
         activeFacility = null;
@@ -54,7 +56,7 @@ public class UIController : MonoBehaviour
 
         NPCNameField.text = SelectedEntity.Name;
         for( int i = 0; i < 5; i++ )
-            NPCRoles[i].color = SelectedEntity.responsibilities[i] ? Color.yellow : Color.black;
+            NPCRoles[i].color = SelectedEntity.Responsibilities[i] ? Color.yellow : Color.black;
     }
     public void HideNPCInspector() {
         NPCInspectorInterface.SetActive( false );
@@ -85,23 +87,22 @@ public class UIController : MonoBehaviour
         if( element.prefab == null )
             return;
 
-        BoardManager.OnMouseCoordinateChange += BoardManager_OnMouseCoordinateChange;
-        BoardManager.OnMouseClick += BoardManager_OnMouseClickChange;
+        BoardManager.OnMouseCoordinateChange += OnMouseOverCoordinateChange;
+        BoardManager.OnMouseClick += PlaceObjectIntoScene;
 
         activeFacility = Facilities.Add( element.prefab );
 
         HideBuildMenu();
     }
-
-    private void BoardManager_OnMouseClickChange( Vector3Int newCoordinate ) {
+    private void PlaceObjectIntoScene( Vector3Int newCoordinate ) {
 
         if( !canPlace )
             return;
 
         ShowBuildMenu();
 
-        BoardManager.OnMouseClick -= BoardManager_OnMouseClickChange;
-        BoardManager.OnMouseCoordinateChange -= BoardManager_OnMouseCoordinateChange;
+        BoardManager.OnMouseClick -= PlaceObjectIntoScene;
+        BoardManager.OnMouseCoordinateChange -= OnMouseOverCoordinateChange;
 
         activeFacility.GetComponent<SpriteRenderer>().color = Color.white;
 
@@ -115,16 +116,14 @@ public class UIController : MonoBehaviour
         CrewBehaviour cBehaviour = activeFacility.gameObject.GetComponent<CrewBehaviour>();
         if(cBehaviour != null) {
             activeFacility.gameObject.AddComponent<BoxCollider2D>();
-            cBehaviour.OnMouseClick += Entity_OnMouseClick;
+            cBehaviour.OnMouseClick += SelectSceneObject;
         }
     }
-
-    private void Entity_OnMouseClick( ) {
+    private void SelectSceneObject( ) {
         ShowNPCInspector( );
     }
+    private void OnMouseOverCoordinateChange( Vector3Int lastCoordinate, Vector3Int newCoordinate, Vector3 worldPosition ) {
 
-    private void BoardManager_OnMouseCoordinateChange( Vector3Int lastCoordinate, Vector3Int newCoordinate, Vector3 worldPosition ) {
-        
         activeFacility.transform.position = worldPosition + new Vector3(0.04f, 0.04f);
 
         canPlace = true;
@@ -140,13 +139,11 @@ public class UIController : MonoBehaviour
         skip:
         activeFacility.GetComponent<SpriteRenderer>().color = canPlace ? Color.green : Color.red;
     }
-
     public void ToggleRank(int index) {
 
-        SelectedEntity.responsibilities[index] = !SelectedEntity.responsibilities[index];
-        NPCRoles[index].color = SelectedEntity.responsibilities[index] ? Color.yellow : Color.black;
+        SelectedEntity.Responsibilities[index] = !SelectedEntity.Responsibilities[index];
+        NPCRoles[index].color = SelectedEntity.Responsibilities[index] ? Color.yellow : Color.black;
     }
-
     public void FinishEditingName(TMPro.TMP_InputField inputField) {
         if(inputField.text != string.Empty)
             SelectedEntity.Name = inputField.text;
