@@ -39,6 +39,7 @@ public class Entity : MonoBehaviour
 
     private void Awake() {
         Name = Helper.GetRandomName;
+        gameObject.name = "NPC " + Name;
         animator = GetComponent<Animator>();
         Coordinates = new Vector3Int( 5, 4, 0 );    // Need to figure out a way to get coordinates from position on placement
         GameTime.OnTck += GameTime_OnTck;
@@ -125,6 +126,8 @@ public class Entity : MonoBehaviour
         // If they're the captain...
         if( Responsibilities[0] ) {
 
+            // The captain will occasionally visit and talk to other NPCs
+
             facilityOfInterest = Facilities.Get( Facility.EType.CaptainsChair );
             if( facilityOfInterest == null )
                 return false;
@@ -136,6 +139,8 @@ public class Entity : MonoBehaviour
             }
         }
         if( Responsibilities[1] ) {
+
+            // The medic will stand in the med bay and occasionally visit NPCs to ask about damage
 
             facilityOfInterest = Facilities.Get( Facility.EType.NPC );
             if( facilityOfInterest == null )
@@ -149,6 +154,8 @@ public class Entity : MonoBehaviour
         }
         if( Responsibilities[2] ) {
 
+            // Gunnery will reload turrets if the ship isn't using energy weapons
+
             facilityOfInterest = Facilities.Get( Facility.EType.Gunnery );
             if( facilityOfInterest == null )
                 return false;
@@ -161,6 +168,8 @@ public class Entity : MonoBehaviour
         }
         if( Responsibilities[3] ) {
 
+            // The engineer will periodically go around assessing facilities for damage and repairing them if needed
+
             facilityOfInterest = Facilities.Get( Facility.EType.Engine );
             if( facilityOfInterest == null )
                 return false;
@@ -172,6 +181,8 @@ public class Entity : MonoBehaviour
             }
         }
         if( Responsibilities[4] ) {
+
+            // The navigations officer will report information to the captain
 
             facilityOfInterest = Facilities.Get( Facility.EType.Navigations );
             if( facilityOfInterest == null )

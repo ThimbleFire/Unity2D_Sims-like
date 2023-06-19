@@ -48,10 +48,14 @@ public class Navigator : Entity
     }
 
     protected virtual void OnArrival() {
-        //_chain.Clear();
         animator.SetBool("Moving", false);
         CurrentBehaviour = Behaviour.WonderingWhatToDo;
 
         //do something
+    }
+
+    // primarily used for spawning entities
+    public void SetCoordinates( Vector3Int coordinates ) {
+        Coordinates = coordinates;
     }
 }

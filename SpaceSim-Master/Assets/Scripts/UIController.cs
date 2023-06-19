@@ -112,14 +112,14 @@ public class UIController : MonoBehaviour
 
         activeFacility.GetComponent<SpriteRenderer>().color = Color.white;
 
-
         activeFacility.Coordinates = newCoordinate;
 
         // give a box collider component to NPCs so we can select them
-        CrewBehaviour cBehaviour = activeFacility.gameObject.GetComponent<CrewBehaviour>();
-        if(cBehaviour != null) {
+        CrewBehaviour isNPC = activeFacility.gameObject.GetComponent<CrewBehaviour>();
+        if(isNPC != null) {
             activeFacility.gameObject.AddComponent<BoxCollider2D>();
-            cBehaviour.OnMouseClick += SelectSceneObject;
+            isNPC.OnMouseClick += SelectSceneObject;
+            isNPC.SetCoordinates( newCoordinate );
         }
         else {
         for( int y = 0; y > -activeFacility.Size.y; y-- )
@@ -153,7 +153,9 @@ public class UIController : MonoBehaviour
         NPCRoles[index].color = SelectedEntity.Responsibilities[index] ? Color.yellow : Color.black;
     }
     public void FinishEditingName(TMPro.TMP_InputField inputField) {
-        if(inputField.text != string.Empty)
+        if( inputField.text != string.Empty ) {
             SelectedEntity.Name = inputField.text;
+            SelectedEntity.gameObject.name = "NPC " + inputField.text;
+        }
     }
 }
