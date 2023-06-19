@@ -23,22 +23,21 @@ public class Facility : MonoBehaviour {
     [HideInInspector]
     public Vector3Int Coordinates = Vector3Int.zero;
     public Vector2Int Size = Vector2Int.zero;
-    private bool beingIntactedWith = false;
-    
+
     /// <summary> When an NPC starts an interaction, roll to see whether facility breaks </summary>
-    public virtual void InteractStart() => GameTime.OnTck += GameTime_OnTick;
+    public virtual void InteractStart( ) => GameTime.OnTck += GameTime_OnTick;
     public virtual void InteractEnd() => GameTime.OnTck -= GameTime_OnTick;
     
     protected virtual void GameTime_OnTick() {
-        if(! Broken)
+
+        if( !Broken ) {
             DamageRoll();
+        }
     }
 
-    public virtual float Interact(float impulse) {
+    public virtual bool Interact( ref List<float> impulse ) { return true; }
+    public virtual bool Interact() { return true; }
 
-        return 0.0f;
-    }
-    
     /// <summary> While engaged, every tick there's a 1 in 256 chance the facility will break.
     /// We might change this in the future so skilled crew damage facilities less often. </summary>
     private void DamageRoll() {

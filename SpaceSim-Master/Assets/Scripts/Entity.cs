@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class Entity : MonoBehaviour
 {
-    public delegate void OnBehaviourChangeHandler( Behaviour currentBehaviour, Behaviour lastBehaviour );
-    public static event OnBehaviourChangeHandler OnBehaviourChange;
-
     public enum ResponsibleDelegate {
         Captain, Medic, Gunnery, Navigator, Engineer
     };
@@ -22,7 +19,7 @@ public class Entity : MonoBehaviour
 
     public ImpulseMeter impulseMeter;
 
-    public const float ImpulseMax = 700.0f;
+    public const float ImpulseMax = 350.0f;
 
     public string Name { get; set; }
     public List<float> Impulses  = new List<float>( new float[3] { ImpulseMax, ImpulseMax, ImpulseMax } );
@@ -30,7 +27,6 @@ public class Entity : MonoBehaviour
 
     protected Vector3Int Coordinates { get; set; }
     public Behaviour CurrentBehaviour = Behaviour.WonderingWhatToDo;
-    protected Behaviour LastBehaviour { get; set; } = Behaviour.WonderingWhatToDo;
     protected byte BodyHeat { get; set; } = 37;
     protected List<Node> _chain = new List<Node>();
 
@@ -59,142 +55,75 @@ public class Entity : MonoBehaviour
 
     private void HandleBehaviours() {
 
-        if( CurrentBehaviour == Behaviour.WonderingWhatToDo || CurrentBehaviour == Behaviour.DoingJob)
-        {
-            impulseMeter.HideMeter();
+        if( CurrentBehaviour == Behaviour.Walking )
+            return;
 
-            bool result = HandleImpulses();
-
-            if( result )
-                return;
-
-            result = HandleResponsibilities();
-
-            if( result )
-                return;
+        if( CurrentBehaviour == Behaviour.WonderingWhatToDo || CurrentBehaviour == Behaviour.DoingJob) {
+            GetTask();
+            return;
         }
 
-        if( CurrentBehaviour == Behaviour.UsingFacility ) {
-            facilityOfInterest.InteractStart();
+        if( facilityOfInterest == null )
+            return;
 
-            UpdateAnimator( Coordinates - facilityOfInterest.Coordinates );
-
-            if( facilityOfInterest.IsImpulse ) {
-                Impulses[( byte )facilityOfInterest.Type] = facilityOfInterest.Interact( Impulses[( byte )facilityOfInterest.Type] );
-                impulseMeter.SetMeter( Impulses[( byte )facilityOfInterest.Type] );
-                if( Impulses[( byte )facilityOfInterest.Type] >= ImpulseMax ) {
-                    CurrentBehaviour = Behaviour.WonderingWhatToDo;
-                    facilityOfInterest.InteractEnd();
-                }
+        if( facilityOfInterest.IsImpulse ) {
+            bool full = facilityOfInterest.Interact( ref Impulses );
+            impulseMeter.SetMeter( Impulses[( byte )facilityOfInterest.Type] );
+            if( full ) {
+                CurrentBehaviour = Behaviour.WonderingWhatToDo;
+                impulseMeter.HideMeter();
             }
-        }
-        if( CurrentBehaviour == Behaviour.DoingJob ) {
-            facilityOfInterest.InteractStart();
-
-            UpdateAnimator( Coordinates - facilityOfInterest.Coordinates );
-            facilityOfInterest.Interact( 0.0f );
-        }
-
-        // not currently used...
-        if( LastBehaviour != CurrentBehaviour ) {
-            OnBehaviourChange?.Invoke( CurrentBehaviour, LastBehaviour );
-            LastBehaviour = CurrentBehaviour;
+        } else {
+            facilityOfInterest.Interact();
         }
     }
 
-    private bool HandleImpulses() {
+    protected virtual void OnArrival() {
+
+        UpdateAnimator( Coordinates - facilityOfInterest.Coordinates );
+        CurrentBehaviour = facilityOfInterest.IsImpulse ? Behaviour.UsingFacility : Behaviour.DoingJob;
+        //facilityOfInterest.InteractStart();
+    }
+
+    public void Restore() {
+
+    }
+
+    private void GetTask() {
         for( int i = 0; i < Impulses.Count; i++ ) {
             if( Impulses[i] <= ImpulseMax / 7 ) {
-                // Get the coordinates of a facility that will raise the impulse
                 facilityOfInterest = Facilities.Get( ( Facility.EType )i );
-
-                if( facilityOfInterest == null )
-                    return false;
-
-                //add a check for no facility found
                 _chain = Pathfind.GetPath( Coordinates, facilityOfInterest.Coordinates, facilityOfInterest.Size, out Pathfind.Report report );
-                if( report == Pathfind.Report.DESTINATION_IS_OCCUPIED_AND_IS_ADJACENT_TO_PLAYER_CHARACTER )
-                    CurrentBehaviour = Behaviour.UsingFacility;
-                return true;
+                return;
             }
         }
 
-        return false;
-    }
+        // I know we could use a for loop... However responsibilities entail more than just interacting with their facilities
 
-    private bool HandleResponsibilities() {
-        // If they're the captain...
         if( Responsibilities[0] ) {
-
-            // The captain will occasionally visit and talk to other NPCs
-
             facilityOfInterest = Facilities.Get( Facility.EType.CaptainsChair );
-            if( facilityOfInterest == null )
-                return false;
             _chain = Pathfind.GetPath( Coordinates, facilityOfInterest.Coordinates, facilityOfInterest.Size, out Pathfind.Report report );
-            if( report == Pathfind.Report.DESTINATION_IS_OCCUPIED_AND_IS_ADJACENT_TO_PLAYER_CHARACTER ) {
-                CurrentBehaviour = Behaviour.DoingJob;
-                UpdateAnimator( Coordinates - facilityOfInterest.Coordinates );
-                return true;
-            }
+            return;
         }
         if( Responsibilities[1] ) {
-
-            // The medic will stand in the med bay and occasionally visit NPCs to ask about damage
-
             facilityOfInterest = Facilities.Get( Facility.EType.NPC );
-            if( facilityOfInterest == null )
-                return false;
             _chain = Pathfind.GetPath( Coordinates, facilityOfInterest.Coordinates, facilityOfInterest.Size, out Pathfind.Report report );
-            if( report == Pathfind.Report.DESTINATION_IS_OCCUPIED_AND_IS_ADJACENT_TO_PLAYER_CHARACTER ) {
-                CurrentBehaviour = Behaviour.DoingJob;
-                UpdateAnimator( Coordinates - facilityOfInterest.Coordinates );
-                return true;
-            }
+            return;
         }
         if( Responsibilities[2] ) {
-
-            // Gunnery will reload turrets if the ship isn't using energy weapons
-
             facilityOfInterest = Facilities.Get( Facility.EType.Gunnery );
-            if( facilityOfInterest == null )
-                return false;
             _chain = Pathfind.GetPath( Coordinates, facilityOfInterest.Coordinates, facilityOfInterest.Size, out Pathfind.Report report );
-            if( report == Pathfind.Report.DESTINATION_IS_OCCUPIED_AND_IS_ADJACENT_TO_PLAYER_CHARACTER ) {
-                CurrentBehaviour = Behaviour.DoingJob;
-                UpdateAnimator( Coordinates - facilityOfInterest.Coordinates );
-                return true;
-            }
+            return;
         }
         if( Responsibilities[3] ) {
-
-            // The engineer will periodically go around assessing facilities for damage and repairing them if needed
-
             facilityOfInterest = Facilities.Get( Facility.EType.Engine );
-            if( facilityOfInterest == null )
-                return false;
             _chain = Pathfind.GetPath( Coordinates, facilityOfInterest.Coordinates, facilityOfInterest.Size, out Pathfind.Report report );
-            if( report == Pathfind.Report.DESTINATION_IS_OCCUPIED_AND_IS_ADJACENT_TO_PLAYER_CHARACTER ) {
-                CurrentBehaviour = Behaviour.DoingJob;
-                UpdateAnimator( Coordinates - facilityOfInterest.Coordinates );
-                return true;
-            }
         }
         if( Responsibilities[4] ) {
-
-            // The navigations officer will report information to the captain
-
             facilityOfInterest = Facilities.Get( Facility.EType.Navigations );
-            if( facilityOfInterest == null )
-                return false;
             _chain = Pathfind.GetPath( Coordinates, facilityOfInterest.Coordinates, facilityOfInterest.Size, out Pathfind.Report report );
-            if( report == Pathfind.Report.DESTINATION_IS_OCCUPIED_AND_IS_ADJACENT_TO_PLAYER_CHARACTER ) {
-                CurrentBehaviour = Behaviour.DoingJob;
-                UpdateAnimator( Coordinates - facilityOfInterest.Coordinates );
-                return true;
-            }
+            return;
         }
-        return false;
     }
 
     protected void UpdateAnimator(Vector3Int dir) {

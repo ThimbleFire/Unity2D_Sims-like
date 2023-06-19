@@ -47,11 +47,10 @@ public class Navigator : Entity
             OnArrival();
     }
 
-    protected virtual void OnArrival() {
+    protected override void OnArrival() {
         animator.SetBool("Moving", false);
-        CurrentBehaviour = Behaviour.WonderingWhatToDo;
-
-        //do something
+        CurrentBehaviour = Behaviour.WonderingWhatToDo; // This may be changed by base
+        base.OnArrival();
     }
 
     // primarily used for spawning entities

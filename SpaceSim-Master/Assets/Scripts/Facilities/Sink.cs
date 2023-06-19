@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Sink : Facility
 {
-    public override float Interact( float impulse ) {
-        return impulse + Entity.ImpulseMax / 7;
+    public override bool Interact( ref List<float> impulse ) {
+        impulse[2] += Entity.ImpulseMax / 7;
+        return impulse[2] >= Entity.ImpulseMax ? true : false;
     }
 }

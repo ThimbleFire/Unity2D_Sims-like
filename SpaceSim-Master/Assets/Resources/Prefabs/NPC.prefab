@@ -120,9 +120,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   impulseMeter: {fileID: 6015819401750024342}
   Impulses:
-  - 700
-  - 700
-  - 700
+  - 350
+  - 350
+  - 350
+  Responsibilities: 0000000000
   CurrentBehaviour: 0
   moveAcrossBoardSpeed: 0.24
 --- !u!114 &3645418014625179651
