@@ -26,7 +26,7 @@ public class Entity : MonoBehaviour
 
     public string Name { get; set; }
     public List<float> Impulses  = new List<float>( new float[3] { ImpulseMax, ImpulseMax, ImpulseMax } );
-    public bool[] Responsibilities { get; set; } = new bool[5] { false, false, false, false, false };
+    public bool[] Responsibilities = new bool[5] { false, false, false, false, false };
 
     protected Vector3Int Coordinates { get; set; }
     public Behaviour CurrentBehaviour = Behaviour.WonderingWhatToDo;
@@ -106,6 +106,10 @@ public class Entity : MonoBehaviour
             if( Impulses[i] <= ImpulseMax / 7 ) {
                 // Get the coordinates of a facility that will raise the impulse
                 facilityOfInterest = Facilities.Get( ( Facility.EType )i );
+
+                if( facilityOfInterest == null )
+                    return false;
+
                 //add a check for no facility found
                 _chain = Pathfind.GetPath( Coordinates, facilityOfInterest.Coordinates, facilityOfInterest.Size, out Pathfind.Report report );
                 if( report == Pathfind.Report.DESTINATION_IS_OCCUPIED_AND_IS_ADJACENT_TO_PLAYER_CHARACTER )
@@ -122,9 +126,60 @@ public class Entity : MonoBehaviour
         if( Responsibilities[0] ) {
 
             facilityOfInterest = Facilities.Get( Facility.EType.CaptainsChair );
+            if( facilityOfInterest == null )
+                return false;
             _chain = Pathfind.GetPath( Coordinates, facilityOfInterest.Coordinates, facilityOfInterest.Size, out Pathfind.Report report );
             if( report == Pathfind.Report.DESTINATION_IS_OCCUPIED_AND_IS_ADJACENT_TO_PLAYER_CHARACTER ) {
                 CurrentBehaviour = Behaviour.DoingJob;
+                UpdateAnimator( Coordinates - facilityOfInterest.Coordinates );
+                return true;
+            }
+        }
+        if( Responsibilities[1] ) {
+
+            facilityOfInterest = Facilities.Get( Facility.EType.NPC );
+            if( facilityOfInterest == null )
+                return false;
+            _chain = Pathfind.GetPath( Coordinates, facilityOfInterest.Coordinates, facilityOfInterest.Size, out Pathfind.Report report );
+            if( report == Pathfind.Report.DESTINATION_IS_OCCUPIED_AND_IS_ADJACENT_TO_PLAYER_CHARACTER ) {
+                CurrentBehaviour = Behaviour.DoingJob;
+                UpdateAnimator( Coordinates - facilityOfInterest.Coordinates );
+                return true;
+            }
+        }
+        if( Responsibilities[2] ) {
+
+            facilityOfInterest = Facilities.Get( Facility.EType.Gunnery );
+            if( facilityOfInterest == null )
+                return false;
+            _chain = Pathfind.GetPath( Coordinates, facilityOfInterest.Coordinates, facilityOfInterest.Size, out Pathfind.Report report );
+            if( report == Pathfind.Report.DESTINATION_IS_OCCUPIED_AND_IS_ADJACENT_TO_PLAYER_CHARACTER ) {
+                CurrentBehaviour = Behaviour.DoingJob;
+                UpdateAnimator( Coordinates - facilityOfInterest.Coordinates );
+                return true;
+            }
+        }
+        if( Responsibilities[3] ) {
+
+            facilityOfInterest = Facilities.Get( Facility.EType.Engine );
+            if( facilityOfInterest == null )
+                return false;
+            _chain = Pathfind.GetPath( Coordinates, facilityOfInterest.Coordinates, facilityOfInterest.Size, out Pathfind.Report report );
+            if( report == Pathfind.Report.DESTINATION_IS_OCCUPIED_AND_IS_ADJACENT_TO_PLAYER_CHARACTER ) {
+                CurrentBehaviour = Behaviour.DoingJob;
+                UpdateAnimator( Coordinates - facilityOfInterest.Coordinates );
+                return true;
+            }
+        }
+        if( Responsibilities[4] ) {
+
+            facilityOfInterest = Facilities.Get( Facility.EType.Navigations );
+            if( facilityOfInterest == null )
+                return false;
+            _chain = Pathfind.GetPath( Coordinates, facilityOfInterest.Coordinates, facilityOfInterest.Size, out Pathfind.Report report );
+            if( report == Pathfind.Report.DESTINATION_IS_OCCUPIED_AND_IS_ADJACENT_TO_PLAYER_CHARACTER ) {
+                CurrentBehaviour = Behaviour.DoingJob;
+                UpdateAnimator( Coordinates - facilityOfInterest.Coordinates );
                 return true;
             }
         }

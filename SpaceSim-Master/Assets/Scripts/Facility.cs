@@ -13,7 +13,8 @@ public class Facility : MonoBehaviour {
         Navigations, 
         LifeSupport, 
         CaptainsChair,
-        NPC //Medic associates NPCs are a facility that needs repairing
+        NPC, //Medic associates NPCs are a facility that needs repairing
+        Gunnery
     };
     
     public EType Type = EType.LifeSupport;
@@ -84,9 +85,14 @@ public class Facilities
         return FacilityList.FindAll( x => x.Coordinates == coordinates )?[0];
     }
     public static Facility Get( Facility.EType t ) {
-        Facility f = FacilityList.FindAll( x => x.Type == t )[0];
 
-        return f;
+        Facility[] facilities = FacilityList.FindAll( x => x.Type == t ).ToArray();
+
+        if( facilities.Length == 0 ) {
+            Debug.Log( $"No facility of type {t}" );
+            return null;
+        } else
+            return facilities[0];
     }
     public static void Sort() => FacilityList.Sort();
 

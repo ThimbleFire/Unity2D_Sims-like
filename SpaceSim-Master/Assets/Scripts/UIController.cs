@@ -8,10 +8,12 @@ public class UIController : MonoBehaviour
         Floor,
         Wall,
         Facility,
-        NPCs
+        NPCs,
+        None
     };
 
     public static BuildWindow SelectedBuildWindow { get; set; } = BuildWindow.Floor;
+    private static BuildWindow LastSelectedBuildWindow { get; set; } = BuildWindow.Floor;
     public static Entity SelectedEntity { get; set; }
     public static EnvironmentElement activeElement = null;
     private Facility activeFacility = null;
@@ -35,6 +37,7 @@ public class UIController : MonoBehaviour
         GameTime.ClockStop();
         footerTabs.SetActive( false );
         buildInterface.SetActive( true );
+        SelectedBuildWindow = LastSelectedBuildWindow;
     }
     public void HideBuildMenu() {
         canPlace = false;
@@ -46,6 +49,7 @@ public class UIController : MonoBehaviour
         HideBuildMenu();
         activeElement = null;
         activeFacility = null;
+        SelectedBuildWindow = BuildWindow.None;
     }
 
     public void ShowNPCInspector() {
@@ -53,6 +57,7 @@ public class UIController : MonoBehaviour
         NPCInspectorInterface.SetActive( true );
         footerTabs.SetActive( false );
         buildInterface.SetActive( false );
+        SelectedBuildWindow = BuildWindow.None;
 
         NPCNameField.text = SelectedEntity.Name;
         for( int i = 0; i < 5; i++ )
@@ -67,6 +72,7 @@ public class UIController : MonoBehaviour
     public void BtnPress(int index) {
 
         SelectedBuildWindow = (BuildWindow)index;
+        LastSelectedBuildWindow = ( BuildWindow )index;
 
         for( int i = 0; i < 4; i++ ) {
             if(i == index) {
@@ -106,9 +112,6 @@ public class UIController : MonoBehaviour
 
         activeFacility.GetComponent<SpriteRenderer>().color = Color.white;
 
-        for( int y = 0; y > -activeFacility.Size.y; y-- )
-            for( int x = 0; x < activeFacility.Size.x; x++ )
-                Pathfind.Occupy( newCoordinate + new Vector3Int( x, y, 0 ) );
 
         activeFacility.Coordinates = newCoordinate;
 
@@ -117,6 +120,11 @@ public class UIController : MonoBehaviour
         if(cBehaviour != null) {
             activeFacility.gameObject.AddComponent<BoxCollider2D>();
             cBehaviour.OnMouseClick += SelectSceneObject;
+        }
+        else {
+        for( int y = 0; y > -activeFacility.Size.y; y-- )
+            for( int x = 0; x < activeFacility.Size.x; x++ )
+                Pathfind.Occupy( newCoordinate + new Vector3Int( x, y, 0 ) );
         }
     }
     private void SelectSceneObject( ) {
