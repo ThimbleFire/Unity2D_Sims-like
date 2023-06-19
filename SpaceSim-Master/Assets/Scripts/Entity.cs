@@ -4,14 +4,19 @@ using UnityEngine;
 
 public class Entity : MonoBehaviour
 {
+    public enum ResponsibleDelegate
+    {
+        Captain, Medic, Gunnery, Navigator, Engineer
+    };
+
     public const float ImpulseMax = 1800.0f;
     public string Name { get; set; }
     public string task;
     public List<float> impulses = new List<float>(new float[5] { ImpulseMax, ImpulseMax, ImpulseMax, ImpulseMax, ImpulseMax });
+    public bool[] responsibilities = new bool[5] { false, false, false, false, false };
     protected byte BodyHeat { get; set; } = 37;
     public Vector3Int Coordinates { get; set; }
 
-    public BoardManager boardManager;
     public ImpulseMeter impulseMeter;
     
     protected List<Node> _chain = new List<Node>();
@@ -19,6 +24,7 @@ public class Entity : MonoBehaviour
     protected Animator animator;
 
     private void Awake() {
+        Name = Helper.GetRandomName;
         animator = GetComponent<Animator>();
         Coordinates = new Vector3Int( 5, 4, 0 );
         GameTime.OnTck += GameTime_OnTck;

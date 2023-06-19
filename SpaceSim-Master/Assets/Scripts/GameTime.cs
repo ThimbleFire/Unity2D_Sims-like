@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class GameTime : MonoBehaviour
 {
+    public UnityEngine.UI.Image pausedImage;
+    public Sprite[] pausedStatusGraphic;
+
     public delegate void OnTickHandler();
     public static event OnTickHandler OnTck;
 
@@ -23,4 +26,10 @@ public class GameTime : MonoBehaviour
     }
     public static void ClockStart() => Active = true;
     public static void ClockStop() => Active = false;
+
+    public void TogglePause() {
+        Active = !Active;
+
+        pausedImage.sprite = Active ? pausedStatusGraphic[0] : pausedStatusGraphic[1];
+    }
 }

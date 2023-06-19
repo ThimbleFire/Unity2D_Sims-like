@@ -13,7 +13,8 @@ public class Facility : MonoBehaviour {
         Turbine,
         Navigations, 
         LifeSupport, 
-        CaptainsChair
+        CaptainsChair,
+        NPC //Medic associates NPCs are a facility that needs repairing
     };
     
     public EType Type = EType.Undefined;

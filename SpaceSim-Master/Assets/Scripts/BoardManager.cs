@@ -11,7 +11,7 @@ public class BoardManager : MonoBehaviour
     public static event OnMouseCoordinateChangeHandler OnMouseCoordinateChange;
 
     public delegate void OnMouseClickHandler( Vector3Int newCoordinate );
-    public static event OnMouseClickHandler OnMouseClickChange;
+    public static event OnMouseClickHandler OnMouseClick;
 
     private Vector3Int lastCoordinates = Vector3Int.zero;
 
@@ -93,7 +93,8 @@ public class BoardManager : MonoBehaviour
                 walls.SetTile( coordinates, UIController.activeElement.tileBase );
                 break;
             case UIController.BuildWindow.Facility:
-                OnMouseClickChange?.Invoke( coordinates );
+            case UIController.BuildWindow.NPCs:
+                OnMouseClick?.Invoke( coordinates );
                 break;
         }
     }
