@@ -1,21 +1,39 @@
 public class Helper
 {
     public static string[] RandomName = new string[] {
-        "John",
-        "Riley",
-        "Reese",
         "Milad",
         "Phoe",
         "Tony",
-        "Miller",
+        "Beggsy",
+        //
         "Rorke",
         "Soloman",
         "Burk",
-        "Raegan",
+        "Charlie",
+        "Fodder",
+        //
+        "Riley",
+        "Reese",
+        "John",
         "Finch",
         "Fusco",
         "Shaw",
-        "Rodge",
+        "Root",
+        //
+        "Roger",
+        "Major",
+        "Victor"
+        //
+        "White", 
+        "Black",
+        //
+        "Raegan",
+        "Bush",
+        "Washington",
+        "Lincoln",
+        "Roosevelt",
+        //
+        "Miller",
         "Marcus",
         "Ash",
         "Old Greg",
@@ -23,7 +41,11 @@ public class Helper
         "'arry",
         "Bez",
         "Tich",
-        "Lawry"
+        "Fry",
+        "Lawry",
+        "Hunter",
+        //
+        "Thimble"
     };
 
     public static string GetRandomName { get { return RandomName[UnityEngine.Random.Range( 0, RandomName.Length )]; } }
