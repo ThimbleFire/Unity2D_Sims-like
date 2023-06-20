@@ -77,7 +77,12 @@ public class Facilities
     }
 
     public static Facility Get( Vector3Int coordinates ) {
-        return FacilityList.FindAll( x => x.Coordinates == coordinates )?[0];
+        Facility[] facilities = FacilityList.FindAll( x => x.Coordinates == coordinates ).ToArray();
+
+        if( facilities.Length == 0 ) {
+            return null;
+        } else
+            return facilities[0];
     }
     public static Facility Get( Facility.EType t ) {
 

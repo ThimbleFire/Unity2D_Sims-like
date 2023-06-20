@@ -153,6 +153,18 @@ public class UIController : MonoBehaviour
         switch( arrowKeysControlling ) {
             case ArrowKeysControlling.Cursor:
                 // it's possible to be in cursor mode while the editor is open, so have this check to ensure we're doing it right
+                Facility f = Facilities.Get( Coordinates );
+
+                if( f != null ) {
+                    // this will cause an error if we select an actual facility and not an NPC
+                    // though we'll update this later so we can move facilities instead of deleting and replacing
+                    // when we start decreasing money for purchasing facilities, this'll be useful
+                    SelectedEntity = f.GetComponent<CrewBehaviour>();
+                    ShowNPCInspector();
+                    arrowKeysControlling = ArrowKeysControlling.NPCInspector;
+                    return;
+                }
+
                 if( !buildInterface.activeSelf ) {
                     arrowKeysControlling = ArrowKeysControlling.Tabs;
                     cursor.gameObject.SetActive( false );
@@ -175,6 +187,7 @@ public class UIController : MonoBehaviour
                     return;
                 activeFacility = Facilities.Add( element.prefab, Coordinates );
                 buildMenuCursor.gameObject.SetActive( false );
+                OnMouseOverCoordinateChange( Coordinates );
                 break;
             case ArrowKeysControlling.CursorBuildMode:
                 PlaceObjectIntoScene( Coordinates );
@@ -194,13 +207,15 @@ public class UIController : MonoBehaviour
                 buildMenuCursor.gameObject.SetActive( false );
                 arrowKeysControlling = ArrowKeysControlling.Tabs;
                 break;
-            case ArrowKeysControlling.NPCInspector:
-                HideNPCInspector();
-                break;
             case ArrowKeysControlling.CursorBuildMode:
                 arrowKeysControlling = ArrowKeysControlling.Item;
                 ShowBuildMenu();
                 buildMenuCursor.gameObject.SetActive( true );
+                break;
+            case ArrowKeysControlling.NPCInspector:
+                HideNPCInspector();
+                arrowKeysControlling = ArrowKeysControlling.Cursor;
+                cursor.gameObject.SetActive( true );
                 break;
         }
     }
@@ -232,17 +247,14 @@ public class UIController : MonoBehaviour
         activeElement = null;
         activeFacility = null;
         SelectedBuildWindow = BuildWindow.None;
-        Controller.OnWDown += BtnArrowUp;
-        Controller.OnSDown += BtnArrowDown;
     }
 
     public void ShowNPCInspector() {
 
         NPCInspectorInterface.SetActive( true );
-        buildInterface.SetActive( false );
-        SelectedBuildWindow = BuildWindow.None;
 
         NPCNameField.text = SelectedEntity.Name;
+
         for( int i = 0; i < 5; i++ )
             NPCRoles[i].color = SelectedEntity.Responsibilities[i] ? Color.yellow : Color.black;
     }
