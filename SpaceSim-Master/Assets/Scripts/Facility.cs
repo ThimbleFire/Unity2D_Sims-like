@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class Facility : MonoBehaviour
 {
-
     public enum EType
     {
         Toilet,
@@ -70,17 +69,13 @@ public class Facilities
 
     private static List<Facility> FacilityList = new List<Facility>();
 
-    public static Facility Add( GameObject prefab ) {
-        Facility f = GameObject.Instantiate(prefab).GetComponent<Facility>();
+    public static Facility Add( GameObject prefab, Vector3Int coordinates ) {
+        Vector3 worldPosition = Helper.CellToWorld(coordinates) + new Vector3(0.04f, 0.04f);
+        Facility f = GameObject.Instantiate(prefab, worldPosition, Quaternion.identity).GetComponent<Facility>();
         FacilityList.Add( f );
         return f;
     }
-    public static void Add( GameObject prefab, Vector3 worldPosition, Vector3Int coordinates ) {
-        Vector3 offset = new Vector3(0.04f, 0.04f);
-        Facility f = GameObject.Instantiate(prefab, worldPosition + offset, Quaternion.identity).GetComponent<Facility>();
-        f.Coordinates = coordinates;
-        FacilityList.Add( f );
-    }
+
     public static Facility Get( Vector3Int coordinates ) {
         return FacilityList.FindAll( x => x.Coordinates == coordinates )?[0];
     }
