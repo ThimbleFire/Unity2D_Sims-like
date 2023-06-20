@@ -99,17 +99,13 @@ public class Facilities
     /// <summary> Remove the facility from the game and unoccupy the tiles it's using.</summary>
     public static void Remove( Vector3Int coordinates ) {
 
-        Facility toDestroy = null;
-
         for( int i = 0; i < FacilityList.Count; i++ ) {
             if( FacilityList[i].Contains( coordinates ) ) {
                 FacilityList[i].UnoccupyPathfind();
-                toDestroy = FacilityList[i];
+                GameObject.Destroy( FacilityList[i].gameObject );
+                FacilityList.Remove( FacilityList[i]);
                 break;
             }
         }
-
-        FacilityList.Remove( toDestroy );
-        GameObject.Destroy( toDestroy.gameObject );
     }
 }

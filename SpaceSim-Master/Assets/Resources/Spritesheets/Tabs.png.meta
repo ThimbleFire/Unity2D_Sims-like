@@ -8,6 +8,12 @@ TextureImporter:
   - first:
       213: 8110719193379804542
     second: Untitled_1
+  - first:
+      213: 3822188973802563517
+    second: Tabs_0
+  - first:
+      213: 697887440722401924
+    second: Tabs_1
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -121,13 +127,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Untitled_0
+      name: Tabs_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 32
-        height: 32
+        width: 8
+        height: 8
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -135,20 +141,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2480155e2900cd100800000000000000
-      internalID: 133982719826790466
+      spriteID: db7aaefee942b0530800000000000000
+      internalID: 3822188973802563517
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Untitled_1
+      name: Tabs_1
       rect:
         serializedVersion: 2
-        x: 32
+        x: 8
         y: 0
-        width: 32
-        height: 32
+        width: 8
+        height: 8
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -156,8 +162,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e75985a42201f8070800000000000000
-      internalID: 8110719193379804542
+      spriteID: 48a17750ee46fa900800000000000000
+      internalID: 697887440722401924
       vertices: []
       indices: 
       edges: []

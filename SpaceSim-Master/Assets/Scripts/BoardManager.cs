@@ -20,6 +20,9 @@ public class BoardManager : MonoBehaviour
     public static bool LifeSupport { get; set; } = true;
 
     private void Awake() {
+
+        Debug.LogWarning( "This games UI is only compatible with 512x512." );
+
         floor.CompressBounds();
 
         Pathfind.Setup( floor, walls );
@@ -91,6 +94,7 @@ public class BoardManager : MonoBehaviour
             switch( UIController.SelectedBuildWindow ) {
                 case UIController.BuildWindow.Wall:
                     walls.SetTile( coordinates, null );
+                    Pathfind.Unoccupy( coordinates );
                     break;
                 case UIController.BuildWindow.Facility:
                     Facilities.Remove( coordinates );
