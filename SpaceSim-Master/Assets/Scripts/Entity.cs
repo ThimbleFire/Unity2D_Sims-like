@@ -33,7 +33,7 @@ public class Entity : MonoBehaviour
     protected byte BodyHeat { get; set; } = 37;
     protected List<Node> _chain = new List<Node>();
 
-    private Facility facilityOfInterest;
+    protected Facility facilityOfInterest;
     protected Animator animator;
 
     private void Awake() {
@@ -61,10 +61,6 @@ public class Entity : MonoBehaviour
 
         if( CurrentBehaviour == Behaviour.WonderingWhatToDo || 
             CurrentBehaviour == Behaviour.DoingJob ) {
-
-            if(CurrentBehaviour == Behaviour.DoingJob)
-                OnInteractEnd();
-
             GetTask();
             return;
         }
@@ -77,46 +73,57 @@ public class Entity : MonoBehaviour
             impulseMeter.SetMeter( Impulses[( byte )facilityOfInterest.Type] );
             if( full ) {
                 CurrentBehaviour = Behaviour.WonderingWhatToDo;
-                OnInteractEnd();
+                EndInteract();
             }
         } else facilityOfInterest.Interact();
     }
 
-    protected void OnInteractEnd() {
+    private void EndInteract() {
+
         impulseMeter.HideMeter();
-        facilityOfInterest.InteractEnd();
+        if(facilityOfInterest != null)
+            facilityOfInterest.InteractEnd();
     }
 
     protected virtual void OnArrival() {
 
-        CurrentBehaviour = facilityOfInterest.IsImpulse ? Behaviour.UsingFacility : Behaviour.DoingJob;
-        UpdateAnimator( Coordinates - facilityOfInterest.Coordinates );
-        facilityOfInterest.InteractStart();
+
     }
 
     private void GetTask() {
         for( int i = 0; i < Impulses.Count; i++ ) {
-            if( Impulses[i] <= ImpulseMax / 7 ) {
-                facilityOfInterest = Facilities.Get( ( Facility.EType )i );
-                _chain = Pathfind.GetPath( Coordinates, ref facilityOfInterest.Coordinates, facilityOfInterest.Size, out Pathfind.Report report );
-                return;
-            }
+
+            // if an impulse is below 50%, ever additional percent gives a 2% chance to use the facility
+
+            if( Impulses[i] > ImpulseMax / 2 )
+                continue;
+
+            float r = UnityEngine.Random.Range(0, Impulses[i]);
+
+            if( r > ImpulseMax/100.0f && Impulses[i] > ImpulseMax / 10 )
+                continue;
+
+            facilityOfInterest = Facilities.Get( ( Facility.EType )i );
+
+            if( facilityOfInterest == null )
+                continue;
+
+            EndInteract();
+            _chain = Pathfind.GetPath( Coordinates, ref facilityOfInterest.Coordinates, facilityOfInterest.Size, out Pathfind.Report report );
+            return;
+
         }
         for( int i = 0; i < Responsibilities.Length; i++ ) {
             if( Responsibilities[i] ) {
                 facilityOfInterest = Facilities.Get( ( Facility.EType )i + 5 );
+                if( facilityOfInterest == null )
+                    continue;
                 _chain = Pathfind.GetPath( Coordinates, ref facilityOfInterest.Coordinates, facilityOfInterest.Size, out Pathfind.Report report );
                 return;
             }
         }
-    }
 
-    protected void UpdateAnimator( Vector3Int dir ) {
-        if( dir == Vector3Int.zero )
-            return;
-
-        animator.SetFloat( "x", dir.x );
-        animator.SetFloat( "y", dir.y );
-        animator.SetBool( "Moving", CurrentBehaviour == Behaviour.Walking );
+        // when unable to find a task...
+        CurrentBehaviour = Behaviour.WonderingWhatToDo;
     }
 }

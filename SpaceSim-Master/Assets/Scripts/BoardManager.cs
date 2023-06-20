@@ -21,50 +21,22 @@ public class BoardManager : MonoBehaviour
 
     private void Awake() {
         floor.CompressBounds();
-        walls.CompressBounds();
+
         Pathfind.Setup( floor, walls );
 
         GameTime.OnTck += GameTime_OnTck;
-        //Entity.OnBehaviourChange += Entity_OnBehaviourChange;
+
+        // Adjust the size of the collider so it wraps around the ship
+        BoxCollider2D collider = GetComponent<BoxCollider2D>();
+        Grid grid = GetComponent<Grid>();
+        collider.size = new Vector3( floor.size.x * grid.cellSize.x, floor.size.y * grid.cellSize.y );
+        collider.offset = new Vector2( floor.size.x * grid.cellSize.x / 2, floor.size.y * grid.cellSize.y / 2 );
     }
-
-    //public Vector3Int FindFacility( Core.Solutions solution ) {
-    //    foreach( Vector3Int cellPosition in walls.cellBounds.allPositionsWithin ) {
-    //        if( walls.GetTile( cellPosition ) != null )
-    //            if( walls.GetTile( cellPosition ).name == GetFacilityName( solution ) )
-    //                return cellPosition;
-    //    }
-    //    return Vector3Int.zero;
-    //}
-
-    //public string GetFacilityName( Core.Solutions solution) {
-    //    if( actionLibrary.ContainsKey( solution ) )
-    //        return actionLibrary[solution];
-    //    else {
-    //        Debug.Log( $"no key exists for {solution}" );
-    //        return string.Empty;
-    //    }
-    //}
 
     public void GameTime_OnTck() {
         if( Progressing == true )
             return;
     }
-
-    //public void Entity_OnBehaviourChange(Core.CurrentBehaviour currentBehaviour, Core.CurrentBehaviour lastBehaviour) {
-
-    //    switch(lastBehaviour) {
-    //        case Core.CurrentBehaviour.Captaining:
-    //            Progressing = false;
-    //        break;
-    //    }
-
-    //    switch(currentBehaviour) {
-    //        case Core.CurrentBehaviour.Captaining:
-    //            Progressing = true;
-    //        break;
-    //    }
-    //}
 
     private void OnMouseDown() {
 

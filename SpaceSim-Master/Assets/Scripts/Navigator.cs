@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class Navigator : Entity
 {
+    public SpriteRenderer spriteRenderer;
+
     private Vector3 offset = new Vector3(0.04f, 0.04f);
     public float moveAcrossBoardSpeed = 0.08f;
 
@@ -45,10 +47,24 @@ public class Navigator : Entity
 
     protected override void OnArrival() {
         animator.SetBool( "Moving", false );
+        CurrentBehaviour = facilityOfInterest.IsImpulse ? Behaviour.UsingFacility : Behaviour.DoingJob;
+        UpdateAnimator( Coordinates - facilityOfInterest.Coordinates );
+        facilityOfInterest.InteractStart();
         base.OnArrival();
     }
 
-    // primarily used for spawning entities
+    private void UpdateAnimator( Vector3Int dir ) {
+
+        if( dir == Vector3Int.zero )
+            return;
+
+        spriteRenderer.flipX = dir.x == -1 ? false : true;
+
+        animator.SetFloat( "x", dir.x );
+        animator.SetFloat( "y", dir.y );
+        animator.SetBool( "Moving", CurrentBehaviour == Behaviour.Walking );
+    }
+
     public void SetCoordinates( Vector3Int coordinates ) {
         Coordinates = coordinates;
     }
