@@ -15,6 +15,9 @@ public class Navigator : Entity
         if( _chain.Count == 0 )
             return;
 
+        if(GameTime.Active == false)
+            return;
+
         StepFrame();
     }
 
