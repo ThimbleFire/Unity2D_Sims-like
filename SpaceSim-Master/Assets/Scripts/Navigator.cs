@@ -15,7 +15,7 @@ public class Navigator : Entity
         if( _chain.Count == 0 )
             return;
 
-        if(GameTime.Active == false)
+        if( GameTime.Active == false )
             return;
 
         StepFrame();
@@ -66,9 +66,5 @@ public class Navigator : Entity
         animator.SetFloat( "x", dir.x );
         animator.SetFloat( "y", dir.y );
         animator.SetBool( "Moving", CurrentBehaviour == Behaviour.Walking );
-    }
-
-    public void SetCoordinates( Vector3Int coordinates ) {
-        Coordinates = coordinates;
     }
 }

@@ -28,7 +28,7 @@ public class Entity : MonoBehaviour
     public List<float> Impulses  = new List<float>( new float[3] { ImpulseMax, ImpulseMax, ImpulseMax } );
     public bool[] Responsibilities = new bool[5] { false, false, false, false, false };
 
-    protected Vector3Int Coordinates { get; set; }
+    public Vector3Int Coordinates { get; set; }
     public Behaviour CurrentBehaviour = Behaviour.WonderingWhatToDo;
     protected byte BodyHeat { get; set; } = 37;
     protected List<Node> _chain = new List<Node>();
@@ -42,6 +42,10 @@ public class Entity : MonoBehaviour
         animator = GetComponent<Animator>();
         Coordinates = new Vector3Int( 5, 4, 0 );    // Need to figure out a way to get coordinates from position on placement
         GameTime.OnTck += GameTime_OnTck;
+    }
+
+    private void OnDestroy() {
+        GameTime.OnTck -= GameTime_OnTck;
     }
 
     public void GameTime_OnTck() {
@@ -59,7 +63,7 @@ public class Entity : MonoBehaviour
 
     private void HandleBehaviours() {
 
-        if( CurrentBehaviour == Behaviour.WonderingWhatToDo || 
+        if( CurrentBehaviour == Behaviour.WonderingWhatToDo ||
             CurrentBehaviour == Behaviour.DoingJob ) {
             GetTask();
             return;
@@ -81,7 +85,7 @@ public class Entity : MonoBehaviour
     private void EndInteract() {
 
         impulseMeter.HideMeter();
-        if(facilityOfInterest != null)
+        if( facilityOfInterest != null )
             facilityOfInterest.InteractEnd();
     }
 
@@ -100,7 +104,7 @@ public class Entity : MonoBehaviour
 
             float r = UnityEngine.Random.Range(0, Impulses[i]);
 
-            if( r > ImpulseMax/100.0f && Impulses[i] > ImpulseMax / 10 )
+            if( r > ImpulseMax / 100.0f && Impulses[i] > ImpulseMax / 10 )
                 continue;
 
             facilityOfInterest = Facilities.Get( ( Facility.EType )i );
@@ -125,5 +129,27 @@ public class Entity : MonoBehaviour
 
         // when unable to find a task...
         CurrentBehaviour = Behaviour.WonderingWhatToDo;
+    }
+
+    public void SetCoordinates( Vector3Int coordinates ) {
+        Coordinates = coordinates;
+    }
+}
+
+public class Entities
+{
+    private static List<Entity> entities = new List<Entity>();
+
+    public static void Add( Entity entity) {
+        entities.Add( entity );
+    }
+
+    public static Entity Get( Vector3Int coordinates ) {
+        Entity[] e = entities.FindAll( x => x.Coordinates == coordinates ).ToArray();
+
+        if( e.Length == 0 ) {
+            return null;
+        } else
+            return e[0];
     }
 }

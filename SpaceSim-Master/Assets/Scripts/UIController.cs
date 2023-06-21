@@ -1,9 +1,17 @@
 using AlwaysEast;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
 {
+    private readonly Vector3 offset = new Vector3(0.04f, 0.04f);
+
+    private enum PlacementType
+    {
+        Facility, NPC, Floor, None
+    }
     private enum ArrowKeysControlling
     {
         Cursor,
@@ -20,191 +28,255 @@ public class UIController : MonoBehaviour
         NPCs,
         None
     };
+    private PlacementType placementType { get; set; } = PlacementType.None;
     private Vector3Int Coordinates { get; set; }
     private BuildWindow SelectedBuildWindow { get; set; } = BuildWindow.Floor;
-    private ArrowKeysControlling arrowKeysControlling { get; set; } = ArrowKeysControlling.Cursor; 
-    private Entity SelectedEntity { get; set; }
-    private EnvironmentElement activeElement = null;
+    private ArrowKeysControlling arrowKeysControlling { get; set; } = ArrowKeysControlling.Cursor;
+    public static Entity SelectedEntity { get; set; }
     private Facility activeFacility = null;
-    private byte selectedTabIndex = 0;
-    private byte selectedItemIndex = 0;
+    private Entity activeEntity = null;
+    private TileBase activeTileBase = null;
+    private int selectedTabIndex = 0;
+    private int[] selectedItemIndex = new int[5] { 0, 0, 0, 0, 0 };
     private bool canPlace = false;
     public GameObject buildInterface;
     public GameObject NPCInspectorInterface;
     public TMPro.TMP_InputField NPCNameField;
     public Image[] NPCRoles;
     public Image[] tabs;
-    public Sprite[] tabSprites;
     public GameObject[] panels;
-    public Transform cursor;
-    public RectTransform buildMenuCursor;
-    
-    private void Awake() {
-        Coordinates = new Vector3Int(5, 5, 0);
-        Controller.OnWDown += BtnArrowUp;
-        Controller.OnDDown += BtnArrowRight;
-        Controller.OnSDown += BtnArrowDown;
-        Controller.OnADown += BtnArrowLeft;
-        Controller.OnRDown += BtnConfirm;
-        Controller.OnFDown += BtnBack;
-    }
-    private void BtnArrowUp() => UpdateCursor(Vector3Int.up);
-    private void BtnArrowDown() => UpdateCursor(Vector3Int.down);
-    private void BtnArrowLeft() {
+
+    public Transform sceneCursor;
+    public RectTransform UICursor;
+
+    private void Awake() => Coordinates = new Vector3Int( 5, 5, 0 );
+
+    public void ArrowKeyDown( InputAction.CallbackContext context ) {
+        if( context.phase != InputActionPhase.Started )
+            return;
         switch( arrowKeysControlling ) {
             case ArrowKeysControlling.Cursor:
-            case ArrowKeysControlling.CursorBuildMode:
-                UpdateCursor(Vector3Int.left);
+                CursorSceneMove( context.ReadValue<Vector2>() );
                 break;
             case ArrowKeysControlling.Tabs:
-                UpdateTab(-1);
+                CursorTabMove( context.ReadValue<Vector2>().x );
                 break;
             case ArrowKeysControlling.Item:
-                UpdateItem(-1);
+                CursorItemMove( context.ReadValue<Vector2>().x );
                 break;
             case ArrowKeysControlling.NPCInspector:
+                CursorNPCInspectorMove( context.ReadValue<Vector2>().x );
+                break;
+            case ArrowKeysControlling.CursorBuildMode:
+                CursorSceneMove( context.ReadValue<Vector2>() );
+                UpdatePlacementMode();
                 break;
         }
     }
-    private void BtnArrowRight() {
+    public void Confirm( InputAction.CallbackContext context ) {
+        if( context.phase != InputActionPhase.Started )
+            return;
         switch( arrowKeysControlling ) {
             case ArrowKeysControlling.Cursor:
-            case ArrowKeysControlling.CursorBuildMode:
-                UpdateCursor(Vector3Int.right);
-                break;
-            case ArrowKeysControlling.Tabs:
-                UpdateTab(1);
-                break;
-            case ArrowKeysControlling.Item:
-                UpdateItem(1);
-                break;
-            case ArrowKeysControlling.NPCInspector:
-                break;
-        }
-    }    
-    private void BtnConfirm() {
-        switch( arrowKeysControlling ) {
-            case ArrowKeysControlling.Cursor:
-                // it's possible to be in cursor mode while the editor is open, so have this check to ensure we're doing it right
-                Facility f = Facilities.Get( Coordinates );
-                if( f != null ) {
-                    // this will cause an error if we select an actual facility and not an NPC
-                    // though we'll update this later so we can move facilities instead of deleting and replacing
-                    // when we start decreasing money for purchasing facilities, this'll be useful
-                    SelectedEntity = f.GetComponent<CrewBehaviour>();
-                    ShowNPCInspector();
+                if( Entities.Get( Coordinates ) ) {
                     arrowKeysControlling = ArrowKeysControlling.NPCInspector;
-                    return;
-                }
-                if( !buildInterface.activeSelf ) {
+                    SelectedEntity = Entities.Get( Coordinates );
+                    ShowNPCInspector();
+                    CursorNPCInspectorMove();
+                } else {
                     arrowKeysControlling = ArrowKeysControlling.Tabs;
-                    cursor.gameObject.SetActive( false );
-                    ShowBuildMenu();
-                    return;
+                    buildInterface.SetActive( true );
+                    CursorTabMove();
                 }
                 break;
             case ArrowKeysControlling.Tabs:
-                ShowBuildMenuCursor();
-                selectedItemIndex = 0; 
-                buildMenuCursor.position = panels[selectedTabIndex].transform.GetChild( selectedItemIndex ).position;
-                buildMenuCursor.sizeDelta = panels[selectedTabIndex].transform.GetChild( selectedItemIndex ).GetComponent<Image>().sprite.rect.size + Vector2.one * 2;
+                arrowKeysControlling = ArrowKeysControlling.Item;
+                CursorItemMove();
                 break;
             case ArrowKeysControlling.Item:
-                HideBuildMenu();
                 arrowKeysControlling = ArrowKeysControlling.CursorBuildMode;
-                EnvironmentElement element = panels[selectedTabIndex].transform.GetChild( selectedItemIndex ).GetComponent<EnvironmentElement>();
-                if( element.prefab == null )
-                    return;
-// Facility should be added to the facility list when placed, not when selected.
-// if an NPC is interacting with the facility at the time it's picked up it could cause an error.
-                activeFacility = Facilities.Add( element.prefab, Coordinates );
-                buildMenuCursor.gameObject.SetActive( false );
-                OnMouseOverCoordinateChange( Coordinates );
+                StartPlacementMode();
+                UpdatePlacementMode();
                 break;
             case ArrowKeysControlling.CursorBuildMode:
-                PlaceObjectIntoScene( Coordinates );
+                ConfirmPlacementMode();
+                break;
+            case ArrowKeysControlling.NPCInspector:
+                ToggleRank();
                 break;
         }
     }
-    private void BtnBack() {
+    public void Back( InputAction.CallbackContext context ) {
+        if( context.phase != InputActionPhase.Started )
+            return;
         switch( arrowKeysControlling ) {
-            case ArrowKeysControlling.Cursor:
-                break;
             case ArrowKeysControlling.Tabs:
                 arrowKeysControlling = ArrowKeysControlling.Cursor;
-                cursor.gameObject.SetActive( true );
-                HideBuildMenu();
-                HideBuildMenuManual();
+                buildInterface.SetActive( false );
+                UICursor.gameObject.SetActive( false );
                 break;
             case ArrowKeysControlling.Item:
-                buildMenuCursor.gameObject.SetActive( false );
                 arrowKeysControlling = ArrowKeysControlling.Tabs;
+                CursorTabMove();
                 break;
             case ArrowKeysControlling.CursorBuildMode:
-                ShowBuildMenuCursor();
-                ShowBuildMenu();
+                EndPlacementMode( true );
                 break;
             case ArrowKeysControlling.NPCInspector:
                 HideNPCInspector();
-                arrowKeysControlling = ArrowKeysControlling.Cursor;
-                cursor.gameObject.SetActive( true );
                 break;
         }
     }
-    private void UpdateCursor(Vector3Int addition) {
-        Coordinates += addition;
+
+    private void CursorSceneMove( Vector2 addition ) {
+        Coordinates += new Vector3Int( ( int )addition.x, ( int )addition.y, 0 );
         Vector3 worldPosition = Helper.CellToWorld(Coordinates);
-        Vector3 offset = new Vector3(0.04f, 0.04f);
-        cursor.position = worldPosition + offset;
-        if(arrowKeysControlling == ArrowKeysControlling.CursorBuildMode) {
-            OnMouseOverCoordinateChange( Coordinates );
-        }
+        sceneCursor.position = worldPosition + offset;
     }
-    private void UpdateTab(byte addition) {
+    private void CursorTabMove( float addition = 0 ) {
         // this if statement might cause errors
-        if(selectedTabIndex + addition < 0 || selectedTabIndex + addition > 4)
+        if( selectedTabIndex + addition < 0 || selectedTabIndex + addition >= 4 )
             return;
-            
-        selectedTabIndex += addition;
+
+        panels[selectedTabIndex].SetActive( false );
+        selectedTabIndex += ( int )addition;
         SelectedBuildWindow = ( BuildWindow )selectedTabIndex;
-        
-        for( int i = 0; i < 4; i++ ) {
-            if( i == selectedTabIndex ) {
-                tabs[i].sprite = tabSprites[0];
-                panels[i].SetActive( true );
-            } else {
-                tabs[i].sprite = tabSprites[1];
-                panels[i].SetActive( false );
+        panels[selectedTabIndex].SetActive( true );
+
+        UICursor.gameObject.SetActive( true );
+        UICursor.position = tabs[selectedTabIndex].gameObject.gameObject.transform.position;
+        UICursor.sizeDelta = tabs[selectedTabIndex].GetComponent<Image>().rectTransform.sizeDelta;
+    }
+    private void CursorItemMove( float addition = 0 ) {
+        // this if statement might cause errors
+        if( selectedItemIndex[selectedTabIndex] + addition < 0 || selectedItemIndex[selectedTabIndex] + addition > panels[selectedTabIndex].transform.childCount - 1 )
+            return;
+
+        selectedItemIndex[selectedTabIndex] += ( int )addition;
+
+        Transform panelTransform = panels[selectedTabIndex].transform.GetChild( selectedItemIndex[selectedTabIndex] );
+        Image itemImage = panelTransform.GetComponent<Image>();
+
+        UICursor.gameObject.SetActive( true );
+        UICursor.position = panelTransform.position;
+        UICursor.sizeDelta = itemImage.rectTransform.sizeDelta + Vector2.one * 4;
+    }
+    private void CursorNPCInspectorMove( float addition = 0) {
+        if( selectedItemIndex[selectedTabIndex] + addition < 0 || selectedItemIndex[selectedTabIndex] + addition > NPCInspectorInterface.transform.childCount - 1 )
+            return;
+
+        selectedItemIndex[selectedTabIndex] += ( int )addition;
+
+        Transform panelTransform = NPCInspectorInterface.transform.GetChild( selectedItemIndex[selectedTabIndex] );
+        Image itemImage = panelTransform.GetComponent<Image>();
+
+        UICursor.gameObject.SetActive( true );
+        UICursor.position = panelTransform.position;
+        UICursor.sizeDelta = itemImage.rectTransform.sizeDelta + Vector2.one * 4;
+    }
+
+    private void StartPlacementMode() {
+
+        canPlace = false;
+        UICursor.gameObject.SetActive( false );
+        buildInterface.SetActive( false );
+
+        EnvironmentElement element = panels[selectedTabIndex].transform.GetChild( selectedItemIndex[selectedTabIndex] ).GetComponent<EnvironmentElement>();
+
+        if( element.prefab != null ) {
+            // element is a facility or NPC
+
+            Facility facility = element.prefab.GetComponent<Facility>();
+
+            if( facility != null ) {
+                placementType = PlacementType.Facility;
+                activeFacility = Instantiate( element.prefab, Helper.CellToWorld( Coordinates ) + offset, Quaternion.identity ).GetComponent<Facility>();
+                return;
             }
+
+            Entity entity = element.prefab.GetComponent<Entity>();
+
+            if( entity != null ) {
+                placementType = PlacementType.NPC;
+                activeEntity = Instantiate( element.prefab, Helper.CellToWorld( Coordinates ) + offset, Quaternion.identity ).GetComponent<Entity>();
+                return;
+            }
+        } else {
+            placementType = PlacementType.Floor;
+            activeTileBase = element.tileBase;
         }
     }
-    private void UpdateItem(byte addition) {
-        // this if statement might cause errors
-        if( selectedItemIndex + addition < 0 || selectedItemIndex + addition > panels[selectedTabIndex].transform.childCount - 1 )
+    private void UpdatePlacementMode() {
+        switch( placementType ) {
+            case PlacementType.Facility:
+                activeFacility.transform.position = Helper.CellToWorld( Coordinates ) + offset;
+                activeFacility.Coordinates = Coordinates;
+                canPlace = true;
+                for( int y = 0; y > -activeFacility.Size.y; y-- )
+                    for( int x = 0; x < activeFacility.Size.x; x++ ) {
+                        Vector3Int offset = new Vector3Int( x, y, 0 );
+                        if( Pathfind.IsOccupied( Coordinates + offset ) ) {
+                            canPlace = false;
+                            goto skip;
+                        }
+                    }
+                skip:
+                activeFacility.GetComponent<SpriteRenderer>().color = canPlace ? Color.green : Color.red;
+                break;
+            case PlacementType.NPC:
+                activeEntity.transform.position = Helper.CellToWorld( Coordinates ) + offset;
+                activeEntity.Coordinates = Coordinates;
+                canPlace = true;
+                if( Pathfind.IsOccupied( Coordinates ) ) {
+                    canPlace = false;
+                }
+                activeEntity.GetComponent<SpriteRenderer>().color = canPlace ? Color.green : Color.red;
+                break;
+        }
+    }
+    private void ConfirmPlacementMode() {
+        if( !canPlace )
             return;
-            
-        selectedItemIndex += addition;
-        buildMenuCursor.position = panels[selectedTabIndex].transform.GetChild( selectedItemIndex ).position;
-        buildMenuCursor.sizeDelta = panels[selectedTabIndex].transform.GetChild(selectedItemIndex).GetComponent<Image>().sprite.rect.size + Vector2.one * 2;
+        switch( placementType ) {
+            case PlacementType.Facility:
+                activeFacility.GetComponent<SpriteRenderer>().color = Color.white;
+                for( int y = 0; y > -activeFacility.Size.y; y-- )
+                    for( int x = 0; x < activeFacility.Size.x; x++ )
+                        Pathfind.Occupy( Coordinates + new Vector3Int( x, y, 0 ) );
+                Facilities.Add( activeFacility );
+                EndPlacementMode( false );
+                break;
+            case PlacementType.NPC:
+                activeEntity.GetComponent<SpriteRenderer>().color = Color.white;
+                activeEntity.gameObject.AddComponent<BoxCollider2D>();
+                Entities.Add( activeEntity );
+                EndPlacementMode( false );
+                break;
+            case PlacementType.Floor:
+                break;
+        }
+        arrowKeysControlling = ArrowKeysControlling.Item;
     }
-    public void ShowBuildMenu() {
-        GameTime.ClockStop();
+    private void EndPlacementMode( bool abort ) {
+
+        if( abort )
+            switch( placementType ) {
+                case PlacementType.Facility:
+                    Destroy( activeFacility.gameObject );
+                    activeFacility = null;
+                    break;
+                case PlacementType.NPC:
+                    Destroy( activeEntity.gameObject );
+                    activeEntity = null;
+                    break;
+            }
+
+        UICursor.gameObject.SetActive( true );
         buildInterface.SetActive( true );
-        Controller.OnWDown -= BtnArrowUp;
-        Controller.OnSDown -= BtnArrowDown;
+        arrowKeysControlling = ArrowKeysControlling.Item;
+        placementType = PlacementType.None;
     }
-    public void HideBuildMenu() {
-        canPlace = false;
-        buildInterface.SetActive( false );
-        Controller.OnWDown += BtnArrowUp;
-        Controller.OnSDown += BtnArrowDown;
-    }
-    public void HideBuildMenuManual() {
-        GameTime.ClockStart();
-        activeElement = null;
-        activeFacility = null;
-        SelectedBuildWindow = BuildWindow.None;
-    }
+
     public void ShowNPCInspector() {
         NPCInspectorInterface.SetActive( true );
         NPCNameField.text = SelectedEntity.Name;
@@ -212,54 +284,23 @@ public class UIController : MonoBehaviour
             NPCRoles[i].color = SelectedEntity.Responsibilities[i] ? Color.yellow : Color.black;
     }
     public void HideNPCInspector() {
+        arrowKeysControlling = ArrowKeysControlling.Cursor;
         NPCInspectorInterface.SetActive( false );
+        UICursor.gameObject.SetActive( false );
         SelectedEntity = null;
     }
-    private void PlaceObjectIntoScene( Vector3Int newCoordinate ) {
-        if( !canPlace )
+    public void ToggleRank() {
+        if( selectedItemIndex[4] < 1 || selectedItemIndex[4] > NPCInspectorInterface.transform.childCount - 2 )
             return;
-        activeFacility.GetComponent<SpriteRenderer>().color = Color.white;
-        // give a box collider component to NPCs so we can select them
-        CrewBehaviour isNPC = activeFacility.gameObject.GetComponent<CrewBehaviour>();
-        if( isNPC != null ) {
-            activeFacility.gameObject.AddComponent<BoxCollider2D>();
-            isNPC.OnMouseClick += ShowNPCInspector;
-            isNPC.SetCoordinates( newCoordinate );
-        } else {
-            for( int y = 0; y > -activeFacility.Size.y; y-- )
-                for( int x = 0; x < activeFacility.Size.x; x++ )
-                    Pathfind.Occupy( newCoordinate + new Vector3Int( x, y, 0 ) );
-        }
-        ShowBuildMenuCursor();
-        ShowBuildMenu();
+
+        SelectedEntity.Responsibilities[selectedItemIndex[4] - 1] = !SelectedEntity.Responsibilities[selectedItemIndex[4] - 1];
+        NPCRoles[selectedItemIndex[4] - 1].color = SelectedEntity.Responsibilities[selectedItemIndex[4] - 1] ? Color.yellow : Color.black;
     }
-    private void ShowBuildMenuCursor(){
-        arrowKeysControlling = ArrowKeysControlling.Item;
-        buildMenuCursor.gameObject.SetActive( true );
-    }
-    private void OnMouseOverCoordinateChange( Vector3Int newCoordinate ) {
-        activeFacility.transform.position = Helper.CellToWorld(newCoordinate) + new Vector3( 0.04f, 0.04f );   
-        activeFacility.Coordinates = newCoordinate;
-        canPlace = true;
-        for( int y = 0; y > -activeFacility.Size.y; y-- )
-            for( int x = 0; x < activeFacility.Size.x; x++ ) {
-                Vector3Int offset = new Vector3Int( x, y, 0 );
-                if( Pathfind.IsOccupied( newCoordinate + offset ) ) {
-                    canPlace = false;
-                    goto skip;
-                }
-            }
-        skip:
-        activeFacility.GetComponent<SpriteRenderer>().color = canPlace ? Color.green : Color.red;
-    }
-    public void ToggleRank( int index ) {
-        SelectedEntity.Responsibilities[index] = !SelectedEntity.Responsibilities[index];
-        NPCRoles[index].color = SelectedEntity.Responsibilities[index] ? Color.yellow : Color.black;
-    }
-    public void FinishEditingName( TMPro.TMP_InputField inputField ) {
-        if( inputField.text != string.Empty ) {
-            SelectedEntity.Name = inputField.text;
-            SelectedEntity.gameObject.name = "NPC " + inputField.text;
-        }
-    }
+
+    //public void FinishEditingName( TMPro.TMP_InputField inputField ) {
+    //    if( inputField.text != string.Empty ) {
+    //        SelectedEntity.Name = inputField.text;
+    //        SelectedEntity.gameObject.name = "NPC " + inputField.text;
+    //    }
+    //}
 }

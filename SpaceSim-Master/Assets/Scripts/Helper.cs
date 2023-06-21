@@ -22,9 +22,9 @@ public class Helper
         //
         "Roger",
         "Major",
-        "Victor"
+        "Victor",
         //
-        "White", 
+        "White",
         "Black",
         //
         "Raegan",
@@ -50,7 +50,7 @@ public class Helper
 
     public static string GetRandomName { get { return RandomName[UnityEngine.Random.Range( 0, RandomName.Length )]; } }
 
-    public static UnityEngine.Vector3 CellToWorld(UnityEngine.Vector3Int coordinates) {
+    public static UnityEngine.Vector3 CellToWorld( UnityEngine.Vector3Int coordinates ) {
         return new UnityEngine.Vector3( coordinates.x * 0.08f, coordinates.y * 0.08f, 0.0f );
     }
 }

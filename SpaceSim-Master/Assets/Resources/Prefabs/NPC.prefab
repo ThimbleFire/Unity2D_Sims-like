@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 6015819401180105199}
   - component: {fileID: 6015819401180105192}
   - component: {fileID: 6015819401180105197}
-  - component: {fileID: 3645418014625179651}
   m_Layer: 0
   m_Name: NPC
   m_TagString: Player
@@ -127,22 +126,6 @@ MonoBehaviour:
   CurrentBehaviour: 0
   spriteRenderer: {fileID: 6015819401180105199}
   moveAcrossBoardSpeed: 0.24
---- !u!114 &3645418014625179651
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6015819401180105193}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55ede63f59fed614e977480d6af2d612, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Type: 6
-  Broken: 0
-  Coordinates: {x: 0, y: 0, z: 0}
-  Size: {x: 1, y: 1}
 --- !u!1 &6015819401750024337
 GameObject:
   m_ObjectHideFlags: 0

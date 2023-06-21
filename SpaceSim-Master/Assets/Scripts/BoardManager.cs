@@ -1,6 +1,5 @@
 using AlwaysEast;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
 
 public class BoardManager : MonoBehaviour

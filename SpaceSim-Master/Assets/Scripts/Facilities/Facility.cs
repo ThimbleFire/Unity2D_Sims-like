@@ -70,11 +70,8 @@ public class Facilities
 
     private static List<Facility> FacilityList = new List<Facility>();
 
-    public static Facility Add( GameObject prefab, Vector3Int coordinates ) {
-        Vector3 worldPosition = Helper.CellToWorld(coordinates) + new Vector3(0.04f, 0.04f);
-        Facility f = GameObject.Instantiate(prefab, worldPosition, Quaternion.identity).GetComponent<Facility>();
-        FacilityList.Add( f );
-        return f;
+    public static void Add( Facility facility ) {
+        FacilityList.Add( facility );
     }
 
     public static Facility Get( Vector3Int coordinates ) {
@@ -104,7 +101,7 @@ public class Facilities
             if( FacilityList[i].Contains( coordinates ) ) {
                 FacilityList[i].UnoccupyPathfind();
                 GameObject.Destroy( FacilityList[i].gameObject );
-                FacilityList.Remove( FacilityList[i]);
+                FacilityList.Remove( FacilityList[i] );
                 break;
             }
         }
