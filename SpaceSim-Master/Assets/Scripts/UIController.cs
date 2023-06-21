@@ -123,6 +123,8 @@ public class UIController : MonoBehaviour
         Coordinates += new Vector3Int( ( int )addition.x, ( int )addition.y, 0 );
         Vector3 worldPosition = Helper.CellToWorld(Coordinates);
         sceneCursor.position = worldPosition + offset;
+
+        AdjustCameraPosition();
     }
     private void CursorTabMove( float addition = 0 ) {
         // this if statement might cause errors
@@ -269,6 +271,7 @@ public class UIController : MonoBehaviour
 
     public void ShowNPCInspector() {
         NPCInspectorInterface.SetActive( true );
+        sceneCursor.gameObject.SetActive( false ); 
         NPCNameField.text = SelectedEntity.Name;
         for( int i = 0; i < 5; i++ )
             NPCRoles[i].color = SelectedEntity.Responsibilities[i] ? Color.yellow : Color.black;
@@ -277,6 +280,7 @@ public class UIController : MonoBehaviour
         arrowKeysControlling = ArrowKeysControlling.Cursor;
         NPCInspectorInterface.SetActive( false );
         UICursor.gameObject.SetActive( false );
+        sceneCursor.gameObject.SetActive( true );
         SelectedEntity = null;
     }
     public void ToggleRank() {
@@ -285,6 +289,22 @@ public class UIController : MonoBehaviour
 
         SelectedEntity.Responsibilities[selectedItemIndex[4] - 1] = !SelectedEntity.Responsibilities[selectedItemIndex[4] - 1];
         NPCRoles[selectedItemIndex[4] - 1].color = SelectedEntity.Responsibilities[selectedItemIndex[4] - 1] ? Color.yellow : Color.black;
+    }
+
+    private void AdjustCameraPosition() {
+        Vector3 cursorPositionOnScreen = Camera.main.WorldToScreenPoint( sceneCursor.position );
+
+        if( cursorPositionOnScreen.x < 32 ) {
+
+            //less than 32 to the left
+
+        }
+        if( cursorPositionOnScreen.x > 124 ) {
+
+            //more than 124 to the right
+
+        }
+
     }
 
     //public void FinishEditingName( TMPro.TMP_InputField inputField ) {
