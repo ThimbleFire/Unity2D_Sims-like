@@ -20,17 +20,8 @@ public class UIController : MonoBehaviour
         NPCInspector,
         CursorBuildMode
     };
-    private enum BuildWindow
-    {
-        Floor,
-        Wall,
-        Facility,
-        NPCs,
-        None
-    };
     private PlacementType placementType { get; set; } = PlacementType.None;
     private Vector3Int Coordinates { get; set; }
-    private BuildWindow SelectedBuildWindow { get; set; } = BuildWindow.Floor;
     private ArrowKeysControlling arrowKeysControlling { get; set; } = ArrowKeysControlling.Cursor;
     public static Entity SelectedEntity { get; set; }
     private Facility activeFacility = null;
@@ -140,7 +131,6 @@ public class UIController : MonoBehaviour
 
         panels[selectedTabIndex].SetActive( false );
         selectedTabIndex += ( int )addition;
-        SelectedBuildWindow = ( BuildWindow )selectedTabIndex;
         panels[selectedTabIndex].SetActive( true );
 
         UICursor.gameObject.SetActive( true );
@@ -162,12 +152,12 @@ public class UIController : MonoBehaviour
         UICursor.sizeDelta = itemImage.rectTransform.sizeDelta + Vector2.one * 4;
     }
     private void CursorNPCInspectorMove( float addition = 0) {
-        if( selectedItemIndex[selectedTabIndex] + addition < 0 || selectedItemIndex[selectedTabIndex] + addition > NPCInspectorInterface.transform.childCount - 1 )
+        if( selectedItemIndex[4] + addition < 0 || selectedItemIndex[4] + addition > NPCInspectorInterface.transform.childCount - 1 )
             return;
 
-        selectedItemIndex[selectedTabIndex] += ( int )addition;
+        selectedItemIndex[4] += ( int )addition;
 
-        Transform panelTransform = NPCInspectorInterface.transform.GetChild( selectedItemIndex[selectedTabIndex] );
+        Transform panelTransform = NPCInspectorInterface.transform.GetChild( selectedItemIndex[4] );
         Image itemImage = panelTransform.GetComponent<Image>();
 
         UICursor.gameObject.SetActive( true );
