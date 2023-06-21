@@ -236,7 +236,7 @@ public class UIController : MonoBehaviour
         CrewBehaviour isNPC = activeFacility.gameObject.GetComponent<CrewBehaviour>();
         if( isNPC != null ) {
             activeFacility.gameObject.AddComponent<BoxCollider2D>();
-            isNPC.OnMouseClick += SelectSceneObject;
+            isNPC.OnMouseClick += ShowNPCInspector;
             isNPC.SetCoordinates( newCoordinate );
         } else {
             for( int y = 0; y > -activeFacility.Size.y; y-- )
@@ -248,9 +248,6 @@ public class UIController : MonoBehaviour
         Controller.OnWDown -= BtnArrowUp;
         Controller.OnSDown -= BtnArrowDown;
         ShowBuildMenu();
-    }
-    private void SelectSceneObject() {
-        ShowNPCInspector();
     }
     private void OnMouseOverCoordinateChange( Vector3Int newCoordinate ) {
         activeFacility.transform.position = Helper.CellToWorld(newCoordinate) + new Vector3( 0.04f, 0.04f );   
