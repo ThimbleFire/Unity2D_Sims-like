@@ -41,22 +41,12 @@ public class UIController : MonoBehaviour
     
     private void Awake() {
         Coordinates = new Vector3Int(5, 5, 0);
-        MakeActiveController();
-    }
-    public void MakeActiveController() {
         Controller.OnWDown += BtnArrowUp;
         Controller.OnDDown += BtnArrowRight;
         Controller.OnSDown += BtnArrowDown;
         Controller.OnADown += BtnArrowLeft;
         Controller.OnRDown += BtnConfirm;
         Controller.OnFDown += BtnBack;
-    }
-    public void RelinquishController() {
-        Controller.OnDDown -= BtnArrowRight;
-        Controller.OnWDown -= BtnArrowUp;
-        Controller.OnSDown -= BtnArrowDown;
-        Controller.OnADown -= BtnArrowLeft;
-        Controller.OnRDown -= BtnConfirm;
     }
     private void BtnArrowUp() => UpdateCursor(Vector3Int.up);
     private void BtnArrowDown() => UpdateCursor(Vector3Int.down);
