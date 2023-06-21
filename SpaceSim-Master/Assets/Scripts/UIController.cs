@@ -142,6 +142,7 @@ public class UIController : MonoBehaviour
             case ArrowKeysControlling.Tabs:
                 arrowKeysControlling = ArrowKeysControlling.Cursor;
                 cursor.gameObject.SetActive( true );
+                HideBuildMenu();
                 HideBuildMenuManual();
                 break;
             case ArrowKeysControlling.Item:
@@ -209,7 +210,6 @@ public class UIController : MonoBehaviour
     }
     public void HideBuildMenuManual() {
         GameTime.ClockStart();
-        HideBuildMenu();
         activeElement = null;
         activeFacility = null;
         SelectedBuildWindow = BuildWindow.None;
