@@ -172,14 +172,31 @@ public class UIController : MonoBehaviour
         }
     }
     private void UpdateTab(byte addition) {
+        // this if statement might cause errors
+        if(selectedTabIndex + addition < 0 || selectedTabIndex + addition > 4)
+            return;
+            
         selectedTabIndex += addition;
-        BtnTab(selectedTabIndex);
+        SelectedBuildWindow = ( BuildWindow )selectedTabIndex;
+        
+        for( int i = 0; i < 4; i++ ) {
+            if( i == selectedTabIndex ) {
+                tabs[i].sprite = selected;
+                panels[i].SetActive( true );
+            } else {
+                tabs[i].sprite = unselected;
+                panels[i].SetActive( false );
+            }
+        }
     }
     private void UpdateItem(byte addition) {
-        if( selectedItemIndex > 0 && selectedItemIndex < panels[selectedTabIndex].transform.childCount - 1 ) {
-            buildMenuCursor.position = panels[selectedTabIndex].transform.GetChild( ++selectedItemIndex ).position;
-            buildMenuCursor.sizeDelta = panels[selectedTabIndex].transform.GetChild(selectedItemIndex).GetComponent<Image>().sprite.rect.size + Vector2.one * 2;
-        }
+        // this if statement might cause errors
+        if( selectedItemIndex + addition < 0 || selectedItemIndex + addition > panels[selectedTabIndex].transform.childCount - 1 )
+            return;
+            
+        selectedItemIndex += addition;
+        buildMenuCursor.position = panels[selectedTabIndex].transform.GetChild( selectedItemIndex ).position;
+        buildMenuCursor.sizeDelta = panels[selectedTabIndex].transform.GetChild(selectedItemIndex).GetComponent<Image>().sprite.rect.size + Vector2.one * 2;
     }
     public void ShowBuildMenu() {
         GameTime.ClockStop();
@@ -210,18 +227,6 @@ public class UIController : MonoBehaviour
     public void HideNPCInspector() {
         NPCInspectorInterface.SetActive( false );
         SelectedEntity = null;
-    }
-    public void BtnTab( byte index ) {
-        SelectedBuildWindow = ( BuildWindow )index;
-        for( int i = 0; i < 4; i++ ) {
-            if( i == index ) {
-                tabs[i].sprite = selected;
-                panels[i].SetActive( true );
-            } else {
-                tabs[i].sprite = unselected;
-                panels[i].SetActive( false );
-            }
-        }
     }
     private void PlaceObjectIntoScene( Vector3Int newCoordinate ) {
         if( !canPlace )
