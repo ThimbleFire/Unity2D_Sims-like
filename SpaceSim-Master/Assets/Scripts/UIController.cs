@@ -116,8 +116,7 @@ public class UIController : MonoBehaviour
                 }
                 break;
             case ArrowKeysControlling.Tabs:
-                buildMenuCursor.gameObject.SetActive( true );
-                arrowKeysControlling = ArrowKeysControlling.Item;
+                ShowBuildMenuCursor();
                 selectedItemIndex = 0; 
                 buildMenuCursor.position = panels[selectedTabIndex].transform.GetChild( selectedItemIndex ).position;
                 buildMenuCursor.sizeDelta = panels[selectedTabIndex].transform.GetChild( selectedItemIndex ).GetComponent<Image>().sprite.rect.size + Vector2.one * 2;
@@ -151,9 +150,8 @@ public class UIController : MonoBehaviour
                 arrowKeysControlling = ArrowKeysControlling.Tabs;
                 break;
             case ArrowKeysControlling.CursorBuildMode:
-                arrowKeysControlling = ArrowKeysControlling.Item;
+                ShowBuildMenuCursor();
                 ShowBuildMenu();
-                buildMenuCursor.gameObject.SetActive( true );
                 break;
             case ArrowKeysControlling.NPCInspector:
                 HideNPCInspector();
@@ -243,9 +241,12 @@ public class UIController : MonoBehaviour
                 for( int x = 0; x < activeFacility.Size.x; x++ )
                     Pathfind.Occupy( newCoordinate + new Vector3Int( x, y, 0 ) );
         }
+        ShowBuildMenuCursor();
+        ShowBuildMenu();
+    }
+    private void ShowBuildMenuCursor(){
         arrowKeysControlling = ArrowKeysControlling.Item;
         buildMenuCursor.gameObject.SetActive( true );
-        ShowBuildMenu();
     }
     private void OnMouseOverCoordinateChange( Vector3Int newCoordinate ) {
         activeFacility.transform.position = Helper.CellToWorld(newCoordinate) + new Vector3( 0.04f, 0.04f );   
