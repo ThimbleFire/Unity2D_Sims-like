@@ -285,8 +285,6 @@ public class UIController : MonoBehaviour
 
         activeFacility.GetComponent<SpriteRenderer>().color = Color.white;
 
-        activeFacility.Coordinates = newCoordinate;
-
         // give a box collider component to NPCs so we can select them
         CrewBehaviour isNPC = activeFacility.gameObject.GetComponent<CrewBehaviour>();
         if( isNPC != null ) {
@@ -310,7 +308,8 @@ public class UIController : MonoBehaviour
     }
     private void OnMouseOverCoordinateChange( Vector3Int newCoordinate ) {
 
-        activeFacility.transform.position = Helper.CellToWorld(newCoordinate) + new Vector3( 0.04f, 0.04f );
+        activeFacility.transform.position = Helper.CellToWorld(newCoordinate) + new Vector3( 0.04f, 0.04f );   
+        activeFacility.Coordinates = newCoordinate;
 
         canPlace = true;
 
