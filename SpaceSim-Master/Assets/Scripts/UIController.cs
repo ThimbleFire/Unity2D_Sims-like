@@ -12,7 +12,7 @@ public class UIController : MonoBehaviour
         NPCInspector,
         CursorBuildMode
     };
-    public enum BuildWindow
+    private enum BuildWindow
     {
         Floor,
         Wall,
