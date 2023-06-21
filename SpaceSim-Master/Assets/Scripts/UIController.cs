@@ -115,6 +115,8 @@ public class UIController : MonoBehaviour
                 EnvironmentElement element = panels[selectedTabIndex].transform.GetChild( selectedItemIndex ).GetComponent<EnvironmentElement>();
                 if( element.prefab == null )
                     return;
+// Facility should be added to the facility list when placed, not when selected.
+// if an NPC is interacting with the facility at the time it's picked up it could cause an error.
                 activeFacility = Facilities.Add( element.prefab, Coordinates );
                 buildMenuCursor.gameObject.SetActive( false );
                 OnMouseOverCoordinateChange( Coordinates );
