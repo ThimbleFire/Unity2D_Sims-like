@@ -21,7 +21,6 @@ public class UIController : MonoBehaviour
         None
     };
     public static BuildWindow SelectedBuildWindow { get; set; } = BuildWindow.Floor;
-    private static BuildWindow LastSelectedBuildWindow { get; set; } = BuildWindow.Floor;
     private ArrowKeysControlling arrowKeysControlling { get; set; } = ArrowKeysControlling.Cursor; 
     public static Entity SelectedEntity { get; set; }
     public static EnvironmentElement activeElement = null;
@@ -199,7 +198,6 @@ public class UIController : MonoBehaviour
     public void ShowBuildMenu() {
         GameTime.ClockStop();
         buildInterface.SetActive( true );
-        SelectedBuildWindow = LastSelectedBuildWindow;
         Controller.OnWDown -= BtnArrowUp;
         Controller.OnSDown -= BtnArrowDown;
     }
