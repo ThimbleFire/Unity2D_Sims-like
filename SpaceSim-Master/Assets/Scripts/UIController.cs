@@ -20,10 +20,11 @@ public class UIController : MonoBehaviour
         NPCs,
         None
     };
-    public static BuildWindow SelectedBuildWindow { get; set; } = BuildWindow.Floor;
+    private Vector3Int Coordinates { get; set; }
+    private BuildWindow SelectedBuildWindow { get; set; } = BuildWindow.Floor;
     private ArrowKeysControlling arrowKeysControlling { get; set; } = ArrowKeysControlling.Cursor; 
-    public static Entity SelectedEntity { get; set; }
-    public static EnvironmentElement activeElement = null;
+    private Entity SelectedEntity { get; set; }
+    private EnvironmentElement activeElement = null;
     private Facility activeFacility = null;
     private byte selectedTabIndex = 0;
     private byte selectedItemIndex = 0;
@@ -37,7 +38,6 @@ public class UIController : MonoBehaviour
     public GameObject[] panels;
     public Transform cursor;
     public RectTransform buildMenuCursor;
-    public static Vector3Int Coordinates { get; set; }
     
     private void Awake() {
         Coordinates = new Vector3Int(5, 5, 0);
