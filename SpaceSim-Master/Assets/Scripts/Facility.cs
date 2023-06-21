@@ -27,6 +27,7 @@ public class Facility : MonoBehaviour
     /// <summary> When an NPC starts an interaction, roll to see whether facility breaks </summary>
     public virtual void InteractStart() => GameTime.OnTck += GameTime_OnTick;
     public virtual void InteractEnd() => GameTime.OnTck -= GameTime_OnTick;
+    public void OnDestroy() => InteractEnd();
 
     protected virtual void GameTime_OnTick() {
 
