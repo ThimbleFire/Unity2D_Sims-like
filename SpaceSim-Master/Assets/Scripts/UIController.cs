@@ -245,8 +245,6 @@ public class UIController : MonoBehaviour
         }
         arrowKeysControlling = ArrowKeysControlling.Item;
         buildMenuCursor.gameObject.SetActive( true );
-        Controller.OnWDown -= BtnArrowUp;
-        Controller.OnSDown -= BtnArrowDown;
         ShowBuildMenu();
     }
     private void OnMouseOverCoordinateChange( Vector3Int newCoordinate ) {
