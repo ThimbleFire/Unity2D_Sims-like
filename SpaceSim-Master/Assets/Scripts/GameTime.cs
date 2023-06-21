@@ -8,7 +8,7 @@ public class GameTime : MonoBehaviour
     public delegate void OnTickHandler();
     public static event OnTickHandler OnTck;
 
-    private static bool Active { get; set; } = false;
+    public static bool Active { get; set; } = false;
     private float Timer { get; set; } = 0.0f;
     private readonly float interval = 0.6f;
 
