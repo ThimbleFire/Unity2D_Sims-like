@@ -28,13 +28,12 @@ public class UIController : MonoBehaviour
     private byte selectedTabIndex = 0;
     private byte selectedItemIndex = 0;
     private bool canPlace = false;
-    public Sprite selected;
-    public Sprite unselected;
     public GameObject buildInterface;
     public GameObject NPCInspectorInterface;
     public TMPro.TMP_InputField NPCNameField;
     public Image[] NPCRoles;
     public Image[] tabs;
+    public Sprite[] tabSprites;
     public GameObject[] panels;
     public Transform cursor;
     public RectTransform buildMenuCursor;
@@ -179,10 +178,10 @@ public class UIController : MonoBehaviour
         
         for( int i = 0; i < 4; i++ ) {
             if( i == selectedTabIndex ) {
-                tabs[i].sprite = selected;
+                tabs[i].sprite = tabSprites[0];
                 panels[i].SetActive( true );
             } else {
-                tabs[i].sprite = unselected;
+                tabs[i].sprite = tabSprites[1];
                 panels[i].SetActive( false );
             }
         }
