@@ -70,7 +70,11 @@ The navigations officer is responsible for calculating a path, then passing that
 57. Morbil
 58. Oreo
 59. Dak
-60. 
+60. Llano
+61. Waifun
+62. Garmot
+63. Arryatlee
+64. Reldawin
 
 
 Later...
