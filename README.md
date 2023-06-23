@@ -13,11 +13,11 @@ To do:
 
 ships can only connect facilities with compatible sizes.
 
-Shuttle - very small (12*7*1)
-Frigate - medium (8*14*1)
-Galleon - large (15*10*2)
-Battleship - very large (10*20*3)
-Goliath - giant (15*25*5)
+Shuttle - very small (12x7x1)
+Frigate - medium (8x14x1)
+Galleon - large (15x10x2)
+Battleship - very large (10x20x3)
+Goliath - giant (15x25x5)
 
 facilities need calibrating by the engineer after being installed and before they can be used.
 
