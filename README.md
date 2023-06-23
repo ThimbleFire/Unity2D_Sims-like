@@ -11,6 +11,17 @@ To do:
 * [ ] add a star map so the player can see where they are, where they're heading, and what's around
 * [ ] add a notification button to display event prompts
 
+ships can only connect facilities with compatible sizes.
+
+Shuttle - very small (12*7*1)
+Frigate - medium (8*14*1)
+Galleon - large (15*10*2)
+Battleship - very large (10*20*3)
+Goliath - giant (15*25*5)
+
+facilities need calibrating by the engineer after being installed and before they can be used.
+
+
 Space is big. There's a 4x4x4 grid of universes with the following names:
 
 1. Leon
