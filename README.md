@@ -6,6 +6,8 @@ To do:
 
 * [ ] get the game function on mobile!
 * [ ] add a starting station your NPCs can undock from, and where you can buy facilities from
+* [ ] add a facility pathfind check to make sure the destination facility isn't being used
+* [ ] add a ui for ship details, name, model
 
 Space is big. There's a 4x4x4 grid of universes with the following names:
 
