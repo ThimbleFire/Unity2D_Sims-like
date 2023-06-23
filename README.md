@@ -8,6 +8,8 @@ To do:
 * [ ] add a starting station your NPCs can undock from, and where you can buy facilities from
 * [ ] add a facility pathfind check to make sure the destination facility isn't being used
 * [ ] add a ui for ship details, name, model
+* [ ] add a star map so the player can see where they are, where they're heading, and what's around
+* [ ] add a notification button to display event prompts
 
 Space is big. There's a 4x4x4 grid of universes with the following names:
 
