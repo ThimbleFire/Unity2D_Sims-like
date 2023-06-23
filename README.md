@@ -4,8 +4,9 @@
 
 To do:
 
-* [ ] Animate UI
-* [ ] Add a 3rd dimension to walls
+* [ ] modify spritesheet to new tilemap
+* [ ] get the game function on mobile!
+* [ ] add a starting station your NPCs can undock on to get onboard
 
 Space is big. There's a 4x4x4 grid of universes, each containing between 1 and 7 planets, and many docking stations.
 Space travel is calculated just like path finding. When an event occurs, a random station, planet, wreck, etc, is selected from a random universe, and the player can choose how to respond.
