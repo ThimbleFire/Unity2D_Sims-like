@@ -26,42 +26,38 @@ namespace AlwaysEast
             ATTEMPTING_TO_MOVE_ON_SELF,
             DESTINATION_IS_OCCUPIED_AND_IS_ADJACENT_TO_PLAYER_CHARACTER,
             NO_ADJACENT_NEIGHBOURS_TO_START_NODE,
-            NO_ADJACENT_NEIGHBOURS_TO_END_NODE
+            NO_ADJACENT_NEIGHBOURS_TO_END_NODE,
+            NO_PATH_TO_FACILITY
         };
 
-        private static Node[,] s_nodes;
+        private static Node[,] nodes;
 
         public static void Occupy( Vector3Int coordinates ) {
-            s_nodes[coordinates.x, coordinates.y].walkable = false;
+            nodes[coordinates.x, coordinates.y].walkable = false;
         }
 
         public static void Unoccupy( Vector3Int coordinates ) {
-            s_nodes[coordinates.x, coordinates.y].walkable = true;
+            nodes[coordinates.x, coordinates.y].walkable = true;
         }
 
-        public static bool IsOccupied( Vector3Int coordinates ) {
+        public static bool IsWalkable( Vector3Int coordinates ) {
 
-            bool checkXInBounds = coordinates.x >= 0 && coordinates.x < s_nodes.GetLength(0);
-            bool checkYInBounds = coordinates.y >= 0 && coordinates.y < s_nodes.GetLength(1);
+            bool checkXInBounds = coordinates.x >= 0 && coordinates.x < nodes.GetLength(0);
+            bool checkYInBounds = coordinates.y >= 0 && coordinates.y < nodes.GetLength(1);
 
-            if( !checkXInBounds || !checkYInBounds || s_nodes[coordinates.x, coordinates.y] == null )
-                return true;
+            if( !checkXInBounds || !checkYInBounds || nodes[coordinates.x, coordinates.y] == null )
+                return false;
 
-            return !s_nodes[coordinates.x, coordinates.y].walkable;
+            return nodes[coordinates.x, coordinates.y].walkable;
         }
-
-        public static void Setup( Tilemap floorTileMap, Tilemap wallTileMap ) {
-
-            s_nodes = new Node[floorTileMap.size.x, floorTileMap.size.y];
-
-            foreach( Vector3Int cellPosition in floorTileMap.cellBounds.allPositionsWithin ) {
-                if( floorTileMap.HasTile( cellPosition ) )
-
-                    s_nodes[cellPosition.x, cellPosition.y] = new Node() {
-                        walkable = wallTileMap.HasTile( cellPosition ) == false,
-                        coordinate = cellPosition,
-                        worldPosition = floorTileMap.CellToWorld( cellPosition )
-                    };
+        public static void Setup( Tilemap floorTileMap ) {
+            nodes = new Node[floorTileMap.size.x + 1, floorTileMap.size.y + 1];
+            foreach( Vector3Int position in floorTileMap.cellBounds.allPositionsWithin ) {
+                nodes[position.x, position.y] = new Node() {
+                    walkable = floorTileMap.GetTile( position ) != null,
+                    coordinate = position,
+                    worldPosition = Helper.CellToWorld( position )
+                };
             }
         }
 
@@ -73,9 +69,9 @@ namespace AlwaysEast
         /// <param name="size">The size of the destination should the default have no neighbours</param>
         /// <param name="report">Error handling</param>
         /// <returns>Returns a list of nodes that make up a path from start to finish.</returns>
-        public static List<Node> GetPath( Vector3Int start, ref Vector3Int destination, Vector2Int size, out Report report ) {
-            Node startNode = s_nodes[start.x, start.y];
-            Node endNode = s_nodes[destination.x, destination.y];
+        public static List<Node> GetPath( Vector3Int start, ref Vector3Int destination, Vector2Int size, Vector3Int[] applicableNeighbours, Vector2Int[] interactiveSpace, out Report report ) {
+            Node startNode = nodes[start.x, start.y];
+            Node endNode = nodes[destination.x, destination.y];
 
             // If destination is equal to start position, forfeit turn
             if( start == destination ) {
@@ -93,7 +89,7 @@ namespace AlwaysEast
                 return null;
             }
             // Now it's established we're moving tiles, establish can we move
-            List<Node> startNodeNeighbours = GetNeighbours(startNode, false);
+            List<Node> startNodeNeighbours = GetNeighbours(startNode);
 
             // If we can't move because there are no unoccupied neighbours, forfeit turn
             if( startNodeNeighbours.Count == 0 ) {
@@ -103,23 +99,26 @@ namespace AlwaysEast
 
             if( endNode.walkable == false ) {
                 // If the end node is occupied, move it to an adjacent tile
-                for( int y = endNode.coordinate.y; y > endNode.coordinate.y - size.y; y-- )
-                    for( int x = endNode.coordinate.x; x < endNode.coordinate.x + size.x; x++ ) {
 
-                        endNode.coordinate = new Vector3Int( x, y, 0 );
-                        List<Node> endNodeNeighbours = GetNeighbours(endNode, false);
+                foreach( Vector2Int space in interactiveSpace ) {
+                    Vector3Int point = new Vector3Int(endNode.coordinate.x + space.x, endNode.coordinate.y + space.y, 0);
+                    Node eNode = new Node { coordinate = point };
+                    List<Node> endNodeNeighbours = GetNeighbours(eNode, applicableNeighbours);
 
-                        if( endNodeNeighbours.Count > 0 ) {
-                            destination = endNode.coordinate;
-                            List<Node> neighboursSortedByDistance = SortNearest(startNode, endNodeNeighbours); // new code
-                            Node pathToNeighbour = GetPathToNeighbour(startNode, neighboursSortedByDistance);
+                    if( endNodeNeighbours.Count > 0 ) {
+                        destination = eNode.coordinate;
+                        List<Node> neighboursSortedByDistance = SortNearest(startNode, endNodeNeighbours); // new code
+                        Node pathToNeighbour = GetPathToNeighbour(startNode, neighboursSortedByDistance);
 
-                            if( pathToNeighbour != null ) {
-                                report = Report.OK;
-                                return GetPath( startNode, pathToNeighbour );
-                            }
+                        if( pathToNeighbour != null ) {
+                            report = Report.OK;
+                            return GetPath( startNode, pathToNeighbour );
                         }
                     }
+                }
+
+                report = Report.NO_PATH_TO_FACILITY;
+                return null;
             }
 
             report = Report.OK;
@@ -160,7 +159,7 @@ namespace AlwaysEast
                     return RetracePath( startNode, endNode );
                 }
 
-                List<Node> neighbours = GetNeighbours(currentNode, false); // We'll want to ignore walkables
+                List<Node> neighbours = GetNeighbours(currentNode); // We'll want to ignore walkables
 
                 foreach( Node neighbour in neighbours ) {
                     if( neighbour.walkable == false || closedSet.Contains( neighbour ) ) {
@@ -187,7 +186,7 @@ namespace AlwaysEast
             int disY = Mathf.Abs(a.coordinate.y - b.coordinate.y);
             return disX > disY ? 14 * disY + 10 * ( disX - disY ) : 14 * disX + 10 * ( disY - disX );
         }
-        public static int GetDistance( Vector3Int a, Vector3Int b ) => GetDistance( s_nodes[a.x, a.y], s_nodes[b.x, b.y] );
+        public static int GetDistance( Vector3Int a, Vector3Int b ) => GetDistance( nodes[a.x, a.y], nodes[b.x, b.y] );
 
         private static List<Node> RetracePath( Node startNode, Node endNode ) {
             List<Node> path = new List<Node>();
@@ -202,44 +201,31 @@ namespace AlwaysEast
             return path;
         }
 
-        private static List<Node> GetNeighbours( Node node, bool diagonal ) {
-
+        private static List<Node> GetNeighbours( Node node, Vector3Int[] offset = null )
+        {
             List<Node> neighbours = new List<Node>();
-            Vector3Int[] offset;
+            
+            if(offset == null)
+                offset = new Vector3Int[] { Vector3Int.up, Vector3Int.right, Vector3Int.down, Vector3Int.left };
 
-            if( !diagonal ) offset = new Vector3Int[]
-           {
-            Vector3Int.up,
-            Vector3Int.right,
-            Vector3Int.down,
-            Vector3Int.left
-           };
-            else offset = new Vector3Int[]
-            {
-            Vector3Int.up + Vector3Int.left,
-            Vector3Int.up + Vector3Int.right,
-            Vector3Int.down + Vector3Int.right,
-            Vector3Int.down + Vector3Int.left
-            };
-
-            for( int i = 0; i < 4; i++ ) {
+            for( int i = 0; i < offset.Length; i++ ) {
                 int checkX = node.coordinate.x + offset[i].x;
                 int checkY = node.coordinate.y + offset[i].y;
 
-                bool checkXInBounds = checkX >= 0 && checkX < s_nodes.GetLength(0);
-                bool checkYInBounds = checkY >= 0 && checkY < s_nodes.GetLength(1);
+                bool checkXInBounds = checkX >= 0 && checkX < nodes.GetLength(0);
+                bool checkYInBounds = checkY >= 0 && checkY < nodes.GetLength(1);
 
                 if( !checkXInBounds || !checkYInBounds ) {
                     continue;
                 }
 
-                if( s_nodes[checkX, checkY] == null )
+                if( nodes[checkX, checkY] == null )
                     continue;
 
-                if( s_nodes[checkX, checkY].walkable == false )
+                if( nodes[checkX, checkY].walkable == false )
                     continue;
 
-                neighbours.Add( s_nodes[checkX, checkY] );
+                neighbours.Add( nodes[checkX, checkY] );
             }
 
             return neighbours;
@@ -258,7 +244,7 @@ namespace AlwaysEast
         // Have an entity wander to a random tile around an object
         public static Vector3Int GetRandomTile( Vector3Int origin ) {
             Node focalPoint = new Node() { coordinate = origin };
-            var neighbours = GetNeighbours(focalPoint, false);
+            var neighbours = GetNeighbours(focalPoint);
             return neighbours[Random.Range( 0, neighbours.Count - 1 )].coordinate;
         }
     }

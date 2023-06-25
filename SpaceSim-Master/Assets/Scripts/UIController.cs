@@ -69,16 +69,18 @@ public class UIController : MonoBehaviour
             return;
         switch( arrowKeysControlling ) {
             case ArrowKeysControlling.Cursor:
+                GameTime.ClockStop();
+                sceneCursor.gameObject.SetActive( false );
                 if( Entities.Get( Coordinates ) ) {
                     arrowKeysControlling = ArrowKeysControlling.NPCInspector;
                     SelectedEntity = Entities.Get( Coordinates );
                     ShowNPCInspector();
                     CursorNPCInspectorMove();
-                } else {
-                    arrowKeysControlling = ArrowKeysControlling.Tabs;
-                    buildInterface.SetActive( true );
-                    CursorTabMove();
+                    return;
                 }
+                arrowKeysControlling = ArrowKeysControlling.Tabs;
+                buildInterface.SetActive( true );
+                CursorTabMove();
                 break;
             case ArrowKeysControlling.Tabs:
                 arrowKeysControlling = ArrowKeysControlling.Item;
@@ -94,6 +96,8 @@ public class UIController : MonoBehaviour
                 break;
             case ArrowKeysControlling.NPCInspector:
                 ToggleRank();
+                sceneCursor.gameObject.SetActive( false );
+                GameTime.ClockStop();
                 break;
         }
     }
@@ -105,6 +109,8 @@ public class UIController : MonoBehaviour
                 arrowKeysControlling = ArrowKeysControlling.Cursor;
                 buildInterface.SetActive( false );
                 UICursor.gameObject.SetActive( false );
+                sceneCursor.gameObject.SetActive( true );
+                GameTime.ClockStart();
                 break;
             case ArrowKeysControlling.Item:
                 arrowKeysControlling = ArrowKeysControlling.Tabs;
@@ -115,6 +121,8 @@ public class UIController : MonoBehaviour
                 break;
             case ArrowKeysControlling.NPCInspector:
                 HideNPCInspector();
+                GameTime.ClockStart();
+                sceneCursor.gameObject.SetActive( true );
                 break;
         }
     }
@@ -204,10 +212,10 @@ public class UIController : MonoBehaviour
                 activeFacility.transform.position = Helper.CellToWorld( Coordinates ) + offset;
                 activeFacility.Coordinates = Coordinates;
                 canPlace = true;
-                for( int y = 0; y > -activeFacility.Size.y; y-- )
-                    for( int x = 0; x < activeFacility.Size.x; x++ ) {
+                for( int y = 0; y > -activeFacility.size.y; y-- )
+                    for( int x = 0; x < activeFacility.size.x; x++ ) {
                         Vector3Int offset = new Vector3Int( x, y, 0 );
-                        if( Pathfind.IsOccupied( Coordinates + offset ) ) {
+                        if( !Pathfind.IsWalkable( Coordinates + offset ) ) {
                             canPlace = false;
                             goto skip;
                         }
@@ -219,7 +227,7 @@ public class UIController : MonoBehaviour
                 activeEntity.transform.position = Helper.CellToWorld( Coordinates ) + offset;
                 activeEntity.Coordinates = Coordinates;
                 canPlace = true;
-                if( Pathfind.IsOccupied( Coordinates ) ) {
+                if( !Pathfind.IsWalkable( Coordinates ) ) {
                     canPlace = false;
                 }
                 activeEntity.GetComponent<SpriteRenderer>().color = canPlace ? Color.green : Color.red;
@@ -232,8 +240,8 @@ public class UIController : MonoBehaviour
         switch( placementType ) {
             case PlacementType.Facility:
                 activeFacility.GetComponent<SpriteRenderer>().color = Color.white;
-                for( int y = 0; y > -activeFacility.Size.y; y-- )
-                    for( int x = 0; x < activeFacility.Size.x; x++ )
+                for( int y = 0; y > -activeFacility.size.y; y-- )
+                    for( int x = 0; x < activeFacility.size.x; x++ )
                         Pathfind.Occupy( Coordinates + new Vector3Int( x, y, 0 ) );
                 Facilities.Add( activeFacility );
                 EndPlacementMode( false );
@@ -289,6 +297,7 @@ public class UIController : MonoBehaviour
 
         SelectedEntity.Responsibilities[selectedItemIndex[4] - 1] = !SelectedEntity.Responsibilities[selectedItemIndex[4] - 1];
         NPCRoles[selectedItemIndex[4] - 1].color = SelectedEntity.Responsibilities[selectedItemIndex[4] - 1] ? Color.yellow : Color.black;
+        SelectedEntity.CurrentBehaviour = Entity.Behaviour.WonderingWhatToDo; // reset NPC behaviour
     }
 
     private void AdjustCameraPosition() {

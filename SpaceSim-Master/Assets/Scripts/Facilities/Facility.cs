@@ -22,7 +22,9 @@ public class Facility : MonoBehaviour
     public bool Broken = false;
     [HideInInspector]
     public Vector3Int Coordinates = Vector3Int.zero;
-    public Vector2Int Size = Vector2Int.zero;
+    public Vector2Int size;
+    public Vector2Int[] interactiveSpace = null;
+    public Vector3Int[] PointsOfInteraction = null; // the directions the player needs to stand from the interactive point
 
     /// <summary> When an NPC starts an interaction, roll to see whether facility breaks </summary>
     public virtual void InteractStart() => GameTime.OnTck += GameTime_OnTick;
@@ -48,8 +50,8 @@ public class Facility : MonoBehaviour
     }
 
     public bool Contains( Vector3Int coordinates ) {
-        for( int y = 0; y > -Size.y; y-- )
-            for( int x = 0; x < Size.x; x++ ) {
+        for( int y = 0; y > -size.y; y-- )
+            for( int x = 0; x < size.x; x++ ) {
                 if( Coordinates.x + x == coordinates.x &&
                    Coordinates.y + y == coordinates.y )
                     return true;
@@ -58,8 +60,8 @@ public class Facility : MonoBehaviour
     }
 
     public void UnoccupyPathfind() {
-        for( int y = 0; y > -Size.y; y-- )
-            for( int x = 0; x < Size.x; x++ )
+        for( int y = 0; y > -size.y; y-- )
+            for( int x = 0; x < size.x; x++ )
                 AlwaysEast.Pathfind.Unoccupy( Coordinates + new Vector3Int( x, y, 0 ) );
     }
 }

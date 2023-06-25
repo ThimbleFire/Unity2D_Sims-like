@@ -99,4 +99,12 @@ MonoBehaviour:
   Type: 3
   Broken: 0
   Coordinates: {x: 0, y: 0, z: 0}
-  Size: {x: 1, y: 2}
+  size: {x: 1, y: 2}
+  interactiveSpace:
+  - {x: 0, y: 0}
+  - {x: 0, y: -1}
+  PointsOfInteraction:
+  - {x: 1, y: 0, z: 0}
+  - {x: 0, y: 1, z: 0}
+  - {x: -1, y: 0, z: 0}
+  - {x: 0, y: -1, z: 0}

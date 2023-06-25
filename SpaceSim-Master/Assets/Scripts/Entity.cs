@@ -113,22 +113,21 @@ public class Entity : MonoBehaviour
                 continue;
 
             EndInteract();
-            _chain = Pathfind.GetPath( Coordinates, ref facilityOfInterest.Coordinates, facilityOfInterest.Size, out Pathfind.Report report );
+            _chain = Pathfind.GetPath( Coordinates, ref facilityOfInterest.Coordinates, facilityOfInterest.size, facilityOfInterest.PointsOfInteraction, facilityOfInterest.interactiveSpace, out Pathfind.Report report );
             return;
 
         }
-        for( int i = 0; i < Responsibilities.Length; i++ ) {
-            if( Responsibilities[i] ) {
-                facilityOfInterest = Facilities.Get( ( Facility.EType )i + 5 );
-                if( facilityOfInterest == null )
-                    continue;
-                _chain = Pathfind.GetPath( Coordinates, ref facilityOfInterest.Coordinates, facilityOfInterest.Size, out Pathfind.Report report );
-                return;
+        if( CurrentBehaviour == Behaviour.WonderingWhatToDo ) {
+            for( int i = 0; i < Responsibilities.Length; i++ ) {
+                if( Responsibilities[i] ) {
+                    facilityOfInterest = Facilities.Get( ( Facility.EType )i + 5 );
+                    if( facilityOfInterest == null )
+                        continue;
+                    _chain = Pathfind.GetPath( Coordinates, ref facilityOfInterest.Coordinates, facilityOfInterest.size, facilityOfInterest.PointsOfInteraction, facilityOfInterest.interactiveSpace, out Pathfind.Report report );
+                    return;
+                }
             }
         }
-
-        // when unable to find a task...
-        CurrentBehaviour = Behaviour.WonderingWhatToDo;
     }
 
     public void SetCoordinates( Vector3Int coordinates ) {
