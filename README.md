@@ -4,8 +4,11 @@
 
 To do:
 
-* [x] get the game function on mobile!
-* [ ] redo AI from the ground up.
+* [x] get the game operational on mobile
+* [ ] move the construction button to the bottom-center of the screen, require a swipe-up to open the build window
+* [ ] replace button clicks with touches
+* [ ] 
+* [ ] redo AI from the ground up
 
 
 * [ ] add a starting station your NPCs can undock from, and where you can buy facilities from
