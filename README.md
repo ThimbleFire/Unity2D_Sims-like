@@ -4,12 +4,25 @@
 
 To do:
 
-* [ ] Animate UI
-* [ ] Add a 3rd dimension to walls
+* [ ] get the game function on mobile!
+* [ ] add a starting station your NPCs can undock from, and where you can buy facilities from
+* [ ] add a facility pathfind check to make sure the destination facility isn't being used
+* [ ] add a ui for ship details, name, model
+* [ ] add a star map so the player can see where they are, where they're heading, and what's around
+* [ ] add a notification button to display event prompts
 
-Space is big. There's a 4x4x4 grid of universes, each containing between 1 and 7 planets, and many docking stations.
-Space travel is calculated just like path finding. When an event occurs, a random station, planet, wreck, etc, is selected from a random universe, and the player can choose how to respond.
-The navigations officer is responsible for calculating a path, then passing that path on to the captain.
+ships can only connect facilities with compatible sizes.
+
+Shuttle - very small (12x7x1)
+Frigate - medium (8x14x1)
+Galleon - large (15x10x2)
+Battleship - very large (10x20x3)
+Goliath - giant (15x25x5)
+
+facilities need calibrating by the engineer after being installed and before they can be used.
+
+
+Space is big. There's a 4x4x4 grid of universes with the following names:
 
 1. Leon
 2. Sarcoph
@@ -27,6 +40,7 @@ The navigations officer is responsible for calculating a path, then passing that
 14. XN-IX
 15. XN-XIV
 16. Muertuun
+
 17. Nostralis
 18. Oasis
 19. Eclipse
@@ -43,6 +57,7 @@ The navigations officer is responsible for calculating a path, then passing that
 30. New Haven
 31. Forbiddena
 32. Sanctuary
+
 33. Calimax
 34. San Cosina
 35. Rezifarg
@@ -59,6 +74,7 @@ The navigations officer is responsible for calculating a path, then passing that
 46. Satalite
 47. XN-VII
 48. Scarbell
+
 49. Quiloyd
 50. Zenema
 51. Xandi
@@ -67,15 +83,14 @@ The navigations officer is responsible for calculating a path, then passing that
 54. We'unno
 55. They'unno
 56. Order
-57. Morbil
-58. Oreo
+57. Morbo
+58. Tsunet
 59. Dak
 60. Llano
 61. Waifun
 62. Garmot
 63. Arryatlee
 64. Reldawin
-
 
 Later...
 
