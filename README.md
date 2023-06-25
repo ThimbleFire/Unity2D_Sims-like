@@ -4,9 +4,11 @@
 
 To do:
 
-* [ ] get the game function on mobile!
+* [x] get the game function on mobile!
+* [ ] redo AI from the ground up.
+
+
 * [ ] add a starting station your NPCs can undock from, and where you can buy facilities from
-* [ ] add a facility pathfind check to make sure the destination facility isn't being used
 * [ ] add a ui for ship details, name, model
 * [ ] add a star map so the player can see where they are, where they're heading, and what's around
 * [ ] add a notification button to display event prompts
