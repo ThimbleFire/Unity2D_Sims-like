@@ -35,11 +35,11 @@ Space is big. There's a 4x4x4 grid of universes with the following names:
 
 1. Leon
 2. Sarcoph
-3. Jenova
+3. Kalvashi
 4. Numaki
 5. Rosswell
 6. Terilla
-7. Mort
+7. Moriarty
 8. Atomos
 9. Cerno
 10. Cardo
@@ -49,9 +49,8 @@ Space is big. There's a 4x4x4 grid of universes with the following names:
 14. XN-IX
 15. XN-XIV
 16. Muertuun
-
 17. Nostralis
-18. Oasis
+18. O'aki
 19. Eclipse
 20. Ruinova
 21. Ormus
@@ -66,7 +65,6 @@ Space is big. There's a 4x4x4 grid of universes with the following names:
 30. New Haven
 31. Forbiddena
 32. Sanctuary
-
 33. Calimax
 34. San Cosina
 35. Rezifarg
@@ -83,21 +81,20 @@ Space is big. There's a 4x4x4 grid of universes with the following names:
 46. Satalite
 47. XN-VII
 48. Scarbell
-
 49. Quiloyd
 50. Zenema
 51. Xandi
-52. I'unno
-53. U'unno
-54. We'unno
-55. They'unno
-56. Order
-57. Morbo
+52. I'Anna
+53. Gorgashu
+54. Meekantac
+55. Austriallah
+56. Boreallah
+57. Morbolm
 58. Tsunet
-59. Dak
+59. Inevi
 60. Llano
-61. Waifun
-62. Garmot
+61. Drunvalo
+62. Borbash
 63. Arryatlee
 64. Reldawin
 
