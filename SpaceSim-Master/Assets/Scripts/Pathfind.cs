@@ -69,12 +69,12 @@ namespace AlwaysEast
         /// <param name="size">The size of the destination should the default have no neighbours</param>
         /// <param name="report">Error handling</param>
         /// <returns>Returns a list of nodes that make up a path from start to finish.</returns>
-        public static List<Node> GetPath( Vector3Int start, ref Vector3Int destination, Vector2Int size, Vector3Int[] applicableNeighbours, Vector2Int[] interactiveSpace, out Report report ) {
+        public static List<Node> GetPath( Vector3Int start, ref BoundsInt destination, Vector3Int[] applicableNeighbours, Vector2Int[] interactiveSpace, out Report report ) {
             Node startNode = nodes[start.x, start.y];
             Node endNode = nodes[destination.x, destination.y];
 
             // If destination is equal to start position, forfeit turn
-            if( start == destination ) {
+            if( start == destination.position ) {
                 report = Report.ATTEMPTING_TO_MOVE_ON_SELF;
                 return null;
             }
@@ -106,7 +106,7 @@ namespace AlwaysEast
                     List<Node> endNodeNeighbours = GetNeighbours(eNode, applicableNeighbours);
 
                     if( endNodeNeighbours.Count > 0 ) {
-                        destination = eNode.coordinate;
+                        destination.position = eNode.coordinate;
                         List<Node> neighboursSortedByDistance = SortNearest(startNode, endNodeNeighbours); // new code
                         Node pathToNeighbour = GetPathToNeighbour(startNode, neighboursSortedByDistance);
 

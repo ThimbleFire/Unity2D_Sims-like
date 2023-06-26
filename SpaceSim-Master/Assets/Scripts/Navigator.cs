@@ -19,6 +19,7 @@ public class Navigator : Entity
             return;
 
         StepFrame();
+
     }
 
     private void StepFrame() {
@@ -51,7 +52,7 @@ public class Navigator : Entity
     protected override void OnArrival() {
         animator.SetBool( "Moving", false );
         CurrentBehaviour = facilityOfInterest.IsImpulse ? Behaviour.UsingFacility : Behaviour.DoingJob;
-        UpdateAnimator( Coordinates - facilityOfInterest.Coordinates );
+        UpdateAnimator( Coordinates - facilityOfInterest.CoordinateSize.position );
         facilityOfInterest.InteractStart();
         base.OnArrival();
     }

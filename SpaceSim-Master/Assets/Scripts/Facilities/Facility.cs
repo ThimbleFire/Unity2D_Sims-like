@@ -20,9 +20,7 @@ public class Facility : MonoBehaviour
     public EType Type = EType.LifeSupport;
     public bool IsImpulse { get { return Type == EType.Fridge || Type == EType.Sink || Type == EType.Toilet; } }
     public bool Broken = false;
-    [HideInInspector]
-    public Vector3Int Coordinates = Vector3Int.zero;
-    public Vector2Int size;
+    public BoundsInt CoordinateSize;
     public Vector2Int[] interactiveSpace = null;
     public Vector3Int[] PointsOfInteraction = null; // the directions the player needs to stand from the interactive point
 
@@ -50,19 +48,19 @@ public class Facility : MonoBehaviour
     }
 
     public bool Contains( Vector3Int coordinates ) {
-        for( int y = 0; y > -size.y; y-- )
-            for( int x = 0; x < size.x; x++ ) {
-                if( Coordinates.x + x == coordinates.x &&
-                   Coordinates.y + y == coordinates.y )
+        for( int y = 0; y > -CoordinateSize.size.y; y-- )
+            for( int x = 0; x < CoordinateSize.size.x; x++ ) {
+                if( CoordinateSize.x + x == coordinates.x &&
+                   CoordinateSize.y + y == coordinates.y )
                     return true;
             }
         return false;
     }
 
     public void UnoccupyPathfind() {
-        for( int y = 0; y > -size.y; y-- )
-            for( int x = 0; x < size.x; x++ )
-                AlwaysEast.Pathfind.Unoccupy( Coordinates + new Vector3Int( x, y, 0 ) );
+        for( int y = 0; y > -CoordinateSize.size.y; y-- )
+            for( int x = 0; x < CoordinateSize.size.x; x++ )
+                AlwaysEast.Pathfind.Unoccupy( CoordinateSize.position + new Vector3Int( x, y, 0 ) );
     }
 }
 
@@ -77,7 +75,7 @@ public class Facilities
     }
 
     public static Facility Get( Vector3Int coordinates ) {
-        Facility[] facilities = FacilityList.FindAll( x => x.Coordinates == coordinates ).ToArray();
+        Facility[] facilities = FacilityList.FindAll( x => x.Contains(coordinates)).ToArray();
 
         if( facilities.Length == 0 ) {
             return null;
@@ -97,12 +95,13 @@ public class Facilities
     public static void Sort() => FacilityList.Sort();
 
     /// <summary> Remove the facility from the game and unoccupy the tiles it's using.</summary>
-    public static void Remove( Vector3Int coordinates ) {
+    public static void Remove( Vector3Int coordinates, bool destroyObject ) {
 
         for( int i = 0; i < FacilityList.Count; i++ ) {
             if( FacilityList[i].Contains( coordinates ) ) {
                 FacilityList[i].UnoccupyPathfind();
-                GameObject.Destroy( FacilityList[i].gameObject );
+                if(destroyObject)
+                    GameObject.Destroy( FacilityList[i].gameObject );
                 FacilityList.Remove( FacilityList[i] );
                 break;
             }

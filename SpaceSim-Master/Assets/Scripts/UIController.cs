@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
+using Image = UnityEngine.UI.Image;
 
 public class UIController : MonoBehaviour
 {
@@ -30,18 +32,80 @@ public class UIController : MonoBehaviour
     private int selectedTabIndex = 0;
     private int[] selectedItemIndex = new int[5] { 0, 0, 0, 0, 0 };
     private bool canPlace = false;
-    public GameObject buildInterface;
     public GameObject NPCInspectorInterface;
     public TMPro.TMP_InputField NPCNameField;
     public Image[] NPCRoles;
     public Image[] tabs;
     public GameObject[] panels;
+    public UIToggle buildWindowController;
 
     public Transform sceneCursor;
     public RectTransform UICursor;
 
     private void Awake() => Coordinates = new Vector3Int( 5, 5, 0 );
 
+    public void MobileL() {
+        switch( arrowKeysControlling ) {
+            case ArrowKeysControlling.Cursor:
+                CursorSceneMove( Vector2Int.left );
+                break;
+            case ArrowKeysControlling.Tabs:
+                CursorTabMove( -1 );
+                break;
+            case ArrowKeysControlling.Item:
+                CursorItemMove( -1 );
+                break;
+            case ArrowKeysControlling.NPCInspector:
+                CursorNPCInspectorMove( -1 );
+                break;
+            case ArrowKeysControlling.CursorBuildMode:
+                CursorSceneMove( Vector2Int.left );
+                UpdatePlacementMode();
+                break;
+        }
+    }
+    public void MobileR() {
+        switch( arrowKeysControlling ) {
+            case ArrowKeysControlling.Cursor:
+                CursorSceneMove( Vector2Int.right );
+                break;
+            case ArrowKeysControlling.Tabs:
+                CursorTabMove( 1 );
+                break;
+            case ArrowKeysControlling.Item:
+                CursorItemMove( 1 );
+                break;
+            case ArrowKeysControlling.NPCInspector:
+                CursorNPCInspectorMove( 1 );
+                break;
+            case ArrowKeysControlling.CursorBuildMode:
+                CursorSceneMove( Vector2Int.right );
+                UpdatePlacementMode();
+                break;
+        }
+    }
+    public void MobileU() {
+        switch( arrowKeysControlling ) {
+            case ArrowKeysControlling.Cursor:
+                CursorSceneMove( Vector2Int.up );
+                break;
+            case ArrowKeysControlling.CursorBuildMode:
+                CursorSceneMove( Vector2Int.up );
+                UpdatePlacementMode();
+                break;
+        }
+    }
+    public void MobileD() {
+        switch( arrowKeysControlling ) {
+            case ArrowKeysControlling.Cursor:
+                CursorSceneMove( Vector2Int.down );
+                break;
+            case ArrowKeysControlling.CursorBuildMode:
+                CursorSceneMove( Vector2Int.down );
+                UpdatePlacementMode();
+                break;
+        }
+    }
     public void ArrowKeyDown( InputAction.CallbackContext context ) {
         if( context.phase != InputActionPhase.Started )
             return;
@@ -64,9 +128,8 @@ public class UIController : MonoBehaviour
                 break;
         }
     }
-    public void Confirm( InputAction.CallbackContext context ) {
-        if( context.phase != InputActionPhase.Started )
-            return;
+    public void Confirm_Mobile() {
+
         switch( arrowKeysControlling ) {
             case ArrowKeysControlling.Cursor:
                 GameTime.ClockStop();
@@ -78,8 +141,16 @@ public class UIController : MonoBehaviour
                     CursorNPCInspectorMove();
                     return;
                 }
+                if( Facilities.Get(Coordinates) ) {
+                    activeFacility = Facilities.Get( Coordinates );
+                    Facilities.Remove( Coordinates, false );
+                    arrowKeysControlling = ArrowKeysControlling.CursorBuildMode;
+                    placementType = PlacementType.Facility;
+                    UpdatePlacementMode();
+                    return;
+                }
                 arrowKeysControlling = ArrowKeysControlling.Tabs;
-                buildInterface.SetActive( true );
+                buildWindowController.Enable();
                 CursorTabMove();
                 break;
             case ArrowKeysControlling.Tabs:
@@ -100,14 +171,20 @@ public class UIController : MonoBehaviour
                 GameTime.ClockStop();
                 break;
         }
+
     }
-    public void Back( InputAction.CallbackContext context ) {
+    public void Confirm( InputAction.CallbackContext context ) {
+
         if( context.phase != InputActionPhase.Started )
             return;
+
+        Confirm_Mobile();
+    }
+    public void Back_Mobile() {
         switch( arrowKeysControlling ) {
             case ArrowKeysControlling.Tabs:
                 arrowKeysControlling = ArrowKeysControlling.Cursor;
-                buildInterface.SetActive( false );
+                buildWindowController.Disable();
                 UICursor.gameObject.SetActive( false );
                 sceneCursor.gameObject.SetActive( true );
                 GameTime.ClockStart();
@@ -125,6 +202,11 @@ public class UIController : MonoBehaviour
                 sceneCursor.gameObject.SetActive( true );
                 break;
         }
+    }
+    public void Back( InputAction.CallbackContext context ) {
+        if( context.phase != InputActionPhase.Started )
+            return;
+        Back_Mobile();
     }
 
     private void CursorSceneMove( Vector2 addition ) {
@@ -179,7 +261,7 @@ public class UIController : MonoBehaviour
 
         canPlace = false;
         UICursor.gameObject.SetActive( false );
-        buildInterface.SetActive( false );
+        buildWindowController.Disable();
 
         EnvironmentElement element = panels[selectedTabIndex].transform.GetChild( selectedItemIndex[selectedTabIndex] ).GetComponent<EnvironmentElement>();
 
@@ -210,10 +292,10 @@ public class UIController : MonoBehaviour
         switch( placementType ) {
             case PlacementType.Facility:
                 activeFacility.transform.position = Helper.CellToWorld( Coordinates ) + offset;
-                activeFacility.Coordinates = Coordinates;
+                activeFacility.CoordinateSize.position = Coordinates;
                 canPlace = true;
-                for( int y = 0; y > -activeFacility.size.y; y-- )
-                    for( int x = 0; x < activeFacility.size.x; x++ ) {
+                for( int y = 0; y > -activeFacility.CoordinateSize.size.y; y-- )
+                    for( int x = 0; x < activeFacility.CoordinateSize.size.x; x++ ) {
                         Vector3Int offset = new Vector3Int( x, y, 0 );
                         if( !Pathfind.IsWalkable( Coordinates + offset ) ) {
                             canPlace = false;
@@ -240,11 +322,17 @@ public class UIController : MonoBehaviour
         switch( placementType ) {
             case PlacementType.Facility:
                 activeFacility.GetComponent<SpriteRenderer>().color = Color.white;
-                for( int y = 0; y > -activeFacility.size.y; y-- )
-                    for( int x = 0; x < activeFacility.size.x; x++ )
+                for( int y = 0; y > -activeFacility.CoordinateSize.size.y; y-- )
+                    for( int x = 0; x < activeFacility.CoordinateSize.size.x; x++ )
                         Pathfind.Occupy( Coordinates + new Vector3Int( x, y, 0 ) );
                 Facilities.Add( activeFacility );
                 EndPlacementMode( false );
+
+                // Reset AI behaviour in case we changed the position of a facility they were interacting with
+                foreach( Entity item in Entities.Get()) {
+                    item.CurrentBehaviour = Entity.Behaviour.WonderingWhatToDo;
+                }
+
                 break;
             case PlacementType.NPC:
                 activeEntity.GetComponent<SpriteRenderer>().color = Color.white;
@@ -272,7 +360,7 @@ public class UIController : MonoBehaviour
             }
 
         UICursor.gameObject.SetActive( true );
-        buildInterface.SetActive( true );
+        buildWindowController.Enable();
         arrowKeysControlling = ArrowKeysControlling.Item;
         placementType = PlacementType.None;
     }

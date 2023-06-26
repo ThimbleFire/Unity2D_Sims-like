@@ -91,10 +91,10 @@ public class Entity : MonoBehaviour
 
     protected virtual void OnArrival() {
 
-
     }
 
     private void GetTask() {
+
         for( int i = 0; i < Impulses.Count; i++ ) {
 
             // if an impulse is below 50%, ever additional percent gives a 2% chance to use the facility
@@ -113,7 +113,7 @@ public class Entity : MonoBehaviour
                 continue;
 
             EndInteract();
-            _chain = Pathfind.GetPath( Coordinates, ref facilityOfInterest.Coordinates, facilityOfInterest.size, facilityOfInterest.PointsOfInteraction, facilityOfInterest.interactiveSpace, out Pathfind.Report report );
+            _chain = Pathfind.GetPath( Coordinates, ref facilityOfInterest.CoordinateSize, facilityOfInterest.PointsOfInteraction, facilityOfInterest.interactiveSpace, out Pathfind.Report report );
             return;
 
         }
@@ -123,7 +123,8 @@ public class Entity : MonoBehaviour
                     facilityOfInterest = Facilities.Get( ( Facility.EType )i + 5 );
                     if( facilityOfInterest == null )
                         continue;
-                    _chain = Pathfind.GetPath( Coordinates, ref facilityOfInterest.Coordinates, facilityOfInterest.size, facilityOfInterest.PointsOfInteraction, facilityOfInterest.interactiveSpace, out Pathfind.Report report );
+                    _chain = Pathfind.GetPath( Coordinates, ref facilityOfInterest.CoordinateSize, facilityOfInterest.PointsOfInteraction, facilityOfInterest.interactiveSpace, out Pathfind.Report report );
+
                     return;
                 }
             }
@@ -143,6 +144,7 @@ public class Entities
         entities.Add( entity );
     }
 
+    public static List<Entity> Get() { return entities; }
     public static Entity Get( Vector3Int coordinates ) {
         Entity[] e = entities.FindAll( x => x.Coordinates == coordinates ).ToArray();
 

@@ -98,8 +98,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 5
   Broken: 0
-  Coordinates: {x: 0, y: 0, z: 0}
-  size: {x: 1, y: 2}
+  CoordinateSize:
+    m_Position: {x: 0, y: 0, z: 0}
+    m_Size: {x: 1, y: 2, z: 0}
   interactiveSpace:
   - {x: 0, y: 0}
   PointsOfInteraction:
