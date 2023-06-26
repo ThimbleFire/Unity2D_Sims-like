@@ -8,8 +8,9 @@ To do:
 * [ ] fridge height appears to be 2 when it should be 1
 * [ ] move the construction button to the bottom-center of the screen, require a swipe-up to open the build window
 * [ ] replace button clicks with touches
-* [ ] 
+* [ ] change tab icons to text and make a tab for each class (floor, walls, captain, medic, gunnery, navigation, engineering)
 * [ ] redo AI from the ground up
+* [ ] make AI facilities offer knowledge
 
 
 * [ ] add a starting station your NPCs can undock from, and where you can buy facilities from
