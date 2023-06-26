@@ -11,7 +11,9 @@ To do:
 * [ ] change tab icons to text and make a tab for each class (floor, walls, captain, medic, gunnery, navigation, engineering)
 * [ ] redo AI from the ground up
 * [ ] make AI facilities offer knowledge
-
+* [ ] add a get function on entities that returns entities who have specific jobs
+* [ ] have the navigation computer over destination knowledge if neither the captain, nor the navigations officer has a destination path
+* [ ] have the navigations officer walk to and share the destination knowledge
 
 * [ ] add a starting station your NPCs can undock from, and where you can buy facilities from
 * [ ] add a ui for ship details, name, model
