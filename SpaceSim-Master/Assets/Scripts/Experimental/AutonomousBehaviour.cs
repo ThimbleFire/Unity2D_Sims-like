@@ -19,7 +19,7 @@ namespace AlwaysEast
 
         private void HandleState( string nodeGUID )
         {
-            string instruction = entityStateMachine.NodeData.Find( x => x.NodeGUID == nodeGUID).Instruction;
+            string instruction = entityStateMachine.InstructionNodeData.Find( x => x.NodeGUID == nodeGUID).Instruction;
             //IEnumerable<NodeLinkData> solutions = entityStateMachine.NodeLinks.Where( x => x.BaseNodeGUID == nodeGUID );
 
             // perform instruction
