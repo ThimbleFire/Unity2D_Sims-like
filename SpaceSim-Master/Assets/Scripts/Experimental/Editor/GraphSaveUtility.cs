@@ -8,7 +8,6 @@ using System.Text;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using Subtegral.DialogueSystem.DataContainers;
 using UnityEngine.UIElements;
 
 namespace AlwaysEast
@@ -83,7 +82,7 @@ namespace AlwaysEast
                 EntityStateMachineObject.InstructionNodeData.Add(new InstructionNodeData
                 {
                     NodeGUID = node.GUID,
-                    DialogueText = node.DialogueText,
+                    Instruction = node.Instruction,
                     Position = node.GetPosition().position
                 });
             }
@@ -118,7 +117,7 @@ namespace AlwaysEast
             _EntityStateMachine = Resources.Load<EntityStateMachine>(fileName);
             if (_EntityStateMachine == null)
             {
-                EditorUtility.DisplayDialog("File Not Found", "Target Narrative Data does not exist!", "OK");
+                EditorUtility.Display("File Not Found", "Target Narrative Data does not exist!", "OK");
                 return;
             }
 
@@ -145,13 +144,13 @@ namespace AlwaysEast
         }
 
         /// <summary>
-        /// Create All serialized nodes and assign their guid and dialogue text to them
+        /// Create All serialized nodes and assign their guid and ue text to them
         /// </summary>
         private void GenerateInstructionNodes()
         {
             foreach (var perNode in _EntityStateMachine.InstructionNodeData)
             {
-                var tempNode = _graphView.CreateNode(perNode.DialogueText, Vector2.zero);
+                var tempNode = _graphView.CreateNode(perNode.Instruction, Vector2.zero);
                 tempNode.GUID = perNode.NodeGUID;
                 _graphView.AddElement(tempNode);
 
