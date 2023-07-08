@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -35,5 +36,11 @@ namespace AlwaysEast
         public List<string> ChildNodes = new List<string>();
         public Vector2 Position;
         public string Title = "Comment Block";
+    }
+    [Serializable]
+    public class NodeLinkData {
+        public string BaseNodeGUID;
+        public string PortName;
+        public string TargetNodeGUID;
     }
 }
