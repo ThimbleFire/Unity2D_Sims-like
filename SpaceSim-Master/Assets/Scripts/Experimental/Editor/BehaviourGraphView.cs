@@ -23,7 +23,7 @@ namespace AlwaysEast
 
         public BehaviourGraphView(BehaviourGraph editorWindow)
         {
-            styleSheets.Add(Resources.Load<StyleSheet>("NarrativeGraph"));
+            styleSheets.Add(Resources.Load<StyleSheet>("LogicGraph"));
             SetupZoom(ContentZoomer.DefaultMinScale, ContentZoomer.DefaultMaxScale);
 
             this.AddManipulator(new ContentDragger());
