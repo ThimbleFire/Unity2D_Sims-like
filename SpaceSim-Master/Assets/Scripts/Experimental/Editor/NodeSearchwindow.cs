@@ -30,10 +30,10 @@ namespace AlwaysEast
             var tree = new List<SearchTreeEntry>
             {
                 new SearchTreeGroupEntry(new GUIContent("Create Node"), 0),
-                new SearchTreeGroupEntry(new GUIContent("Dialogue"), 1),
-                new SearchTreeEntry(new GUIContent("Dialogue Node", _indentationIcon))
+                new SearchTreeGroupEntry(new GUIContent("Instruction"), 1),
+                new SearchTreeEntry(new GUIContent("Instruction Node", _indentationIcon))
                 {
-                    level = 2, userData = new DialogueNode()
+                    level = 2, userData = new InstructionNode()
                 },
                 new SearchTreeEntry(new GUIContent("Comment Block",_indentationIcon))
                 {
@@ -53,8 +53,8 @@ namespace AlwaysEast
             var graphMousePosition = _graphView.contentViewContainer.WorldToLocal(mousePosition);
             switch (SearchTreeEntry.userData)
             {
-                case DialogueNode dialogueNode:
-                    _graphView.CreateNewDialogueNode("Dialogue Node",graphMousePosition);
+                case InstructionNode instructionNode:
+                    _graphView.CreateNewInstructionNode("Instruction Node",graphMousePosition);
                     return true;
                 case Group group:
                     var rect = new Rect(graphMousePosition, _graphView.DefaultCommentBlockSize);
