@@ -13,14 +13,13 @@ namespace AlwaysEast
         private void Start()
         {
             entityStateMachine = Resources.Load("LogicGraph") as EntityStateMachine;
-            string instruction = entityStateMachine.NodeLink.First();
+            string instruction = entityStateMachine.NodeLinks.First();
             HandleState( instruction );
         }
 
         private void HandleState( string nodeGUID )
         {
-            string instruction = entityStateMachine.InstructionNodeData.Find( x => x.NodeGUID == nodeGUID).Instruction;
-            //IEnumerable<NodeLinkData> solutions = entityStateMachine.NodeLinks.Where( x => x.BaseNodeGUID == nodeGUID );
+            string instruction = entityStateMachine.Advance(nodeGUID, out List<NodeLinkData> nodeLinkData);
 
             // perform instruction
         }
