@@ -128,7 +128,7 @@ namespace AlwaysEast
             var tempInstructionNode = new InstructionNode()
             {
                 title = nodeName,
-                DialogueText = nodeName,
+                Instruction = nodeName,
                 GUID = Guid.NewGuid().ToString()
             };
             tempInstructionNode.styleSheets.Add(Resources.Load<StyleSheet>("Node"));
@@ -143,7 +143,7 @@ namespace AlwaysEast
             var textField = new TextField("");
             textField.RegisterValueChangedCallback(evt =>
             {
-                tempInstructionNode.DialogueText = evt.newValue;
+                tempInstructionNode.Instruction = evt.newValue;
                 tempInstructionNode.title = evt.newValue;
             });
             textField.SetValueWithoutNotify(tempInstructionNode.title);
@@ -218,7 +218,7 @@ namespace AlwaysEast
             {
                 title = "START",
                 GUID = Guid.NewGuid().ToString(),
-                DialogueText = "ENTRYPOINT",
+                Instruction = "ENTRYPOINT",
                 EntyPoint = true
             };
 
