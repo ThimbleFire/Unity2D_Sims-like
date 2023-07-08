@@ -15,7 +15,6 @@ namespace AlwaysEast
         private string _fileName = "New Behaviour";
 
         private BehaviourGraphView _graphView;
-        private DialogueContainer _dialogueContainer;
 
         [MenuItem("Graph/Behaviour Graph")]
         public static void CreateGraphViewWindow()
