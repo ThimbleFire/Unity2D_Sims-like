@@ -8,7 +8,7 @@ namespace AlwaysEast
 {
     public class InstructionNode : Node
     {
-        public string DialogueText;
+        public string Instruction;
         public string GUID;
         public bool EntyPoint = false;
     }
