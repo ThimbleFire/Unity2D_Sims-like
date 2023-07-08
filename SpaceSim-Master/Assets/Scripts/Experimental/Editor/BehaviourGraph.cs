@@ -8,7 +8,7 @@ using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace AlwaysEast;
+namespace AlwaysEast
 {
     public class BehaviourGraph : EditorWindow
     {
