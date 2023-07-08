@@ -16,7 +16,7 @@ namespace AlwaysEast
     {
         public readonly Vector2 DefaultNodeSize = new Vector2(200, 150);
         public readonly Vector2 DefaultCommentBlockSize = new Vector2(300, 200);
-        public DialogueNode EntryPointNode;
+        public InstructionNode EntryPointNode;
         public Blackboard Blackboard = new Blackboard();
         public List<ExposedProperty> ExposedProperties { get; private set; } = new List<ExposedProperty>();
         private NodeSearchWindow _searchWindow;
@@ -118,47 +118,47 @@ namespace AlwaysEast
             return compatiblePorts;
         }
 
-        public void CreateNewDialogueNode(string nodeName, Vector2 position)
+        public void CreateNewInstructionNode(string nodeName, Vector2 position)
         {
             AddElement(CreateNode(nodeName, position));
         }
 
-        public DialogueNode CreateNode(string nodeName, Vector2 position)
+        public InstructionNode CreateNode(string nodeName, Vector2 position)
         {
-            var tempDialogueNode = new DialogueNode()
+            var tempInstructionNode = new InstructionNode()
             {
                 title = nodeName,
                 DialogueText = nodeName,
                 GUID = Guid.NewGuid().ToString()
             };
-            tempDialogueNode.styleSheets.Add(Resources.Load<StyleSheet>("Node"));
-            var inputPort = GetPortInstance(tempDialogueNode, Direction.Input, Port.Capacity.Multi);
+            tempInstructionNode.styleSheets.Add(Resources.Load<StyleSheet>("Node"));
+            var inputPort = GetPortInstance(tempInstructionNode, Direction.Input, Port.Capacity.Multi);
             inputPort.portName = "Input";
-            tempDialogueNode.inputContainer.Add(inputPort);
-            tempDialogueNode.RefreshExpandedState();
-            tempDialogueNode.RefreshPorts();
-            tempDialogueNode.SetPosition(new Rect(position,
+            tempInstructionNode.inputContainer.Add(inputPort);
+            tempInstructionNode.RefreshExpandedState();
+            tempInstructionNode.RefreshPorts();
+            tempInstructionNode.SetPosition(new Rect(position,
                 DefaultNodeSize)); //To-Do: implement screen center instantiation positioning
 
             var textField = new TextField("");
             textField.RegisterValueChangedCallback(evt =>
             {
-                tempDialogueNode.DialogueText = evt.newValue;
-                tempDialogueNode.title = evt.newValue;
+                tempInstructionNode.DialogueText = evt.newValue;
+                tempInstructionNode.title = evt.newValue;
             });
-            textField.SetValueWithoutNotify(tempDialogueNode.title);
-            tempDialogueNode.mainContainer.Add(textField);
+            textField.SetValueWithoutNotify(tempInstructionNode.title);
+            tempInstructionNode.mainContainer.Add(textField);
 
-            var button = new Button(() => { AddChoicePort(tempDialogueNode); })
+            var button = new Button(() => { AddChoicePort(tempInstructionNode); })
             {
                 text = "Add Choice"
             };
-            tempDialogueNode.titleButtonContainer.Add(button);
-            return tempDialogueNode;
+            tempInstructionNode.titleButtonContainer.Add(button);
+            return tempInstructionNode;
         }
 
 
-        public void AddChoicePort(DialogueNode nodeCache, string overriddenPortName = "")
+        public void AddChoicePort(InstructionNode nodeCache, string overriddenPortName = "")
         {
             var generatedPort = GetPortInstance(nodeCache, Direction.Output);
             var oldLabel = generatedPort.contentContainer.Q<Label>( "type" );
@@ -206,15 +206,15 @@ namespace AlwaysEast
             node.RefreshExpandedState();
         }
 
-        private Port GetPortInstance(DialogueNode node, Direction nodeDirection,
+        private Port GetPortInstance(InstructionNode node, Direction nodeDirection,
             Port.Capacity capacity = Port.Capacity.Single)
         {
             return node.InstantiatePort(Orientation.Horizontal, nodeDirection, capacity, typeof(float));
         }
 
-        private DialogueNode GetEntryPointNodeInstance()
+        private InstructionNode GetEntryPointNodeInstance()
         {
-            var nodeCache = new DialogueNode()
+            var nodeCache = new InstructionNode()
             {
                 title = "START",
                 GUID = Guid.NewGuid().ToString(),
