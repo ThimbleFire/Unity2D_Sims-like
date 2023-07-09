@@ -5,7 +5,7 @@
 To do:
 
 * [x] get the game operational on mobile
-* [ ] fridge height appears to be 2 when it should be 1
+* [x] fridge height appears to be 2 when it should be 1
 * [ ] move the construction button to the bottom-center of the screen, require a swipe-up to open the build window
 * [ ] replace button clicks with touches
 * [ ] change tab icons to text and make a tab for each class (floor, walls, captain, medic, gunnery, navigation, engineering)

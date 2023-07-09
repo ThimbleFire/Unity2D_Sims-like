@@ -15,7 +15,7 @@ C:/Users/Retri/Documents/GitHub/SpaceSim/SpaceSim-Master
 -logFile
 Logs/AssetImportWorker2.log
 -srvPort
-55547
+64788
 Successfully changed project path to: C:/Users/Retri/Documents/GitHub/SpaceSim/SpaceSim-Master
 C:/Users/Retri/Documents/GitHub/SpaceSim/SpaceSim-Master
 [UnityMemory] Configuration Parameters - Can be set up in boot.config
@@ -49,11 +49,11 @@ C:/Users/Retri/Documents/GitHub/SpaceSim/SpaceSim-Master
     "memorysetup-temp-allocator-size-cloud-worker=32768"
     "memorysetup-temp-allocator-size-gi-baking-worker=262144"
     "memorysetup-temp-allocator-size-gfx=262144"
-Player connection [17672] Host "[IP] 192.168.1.15 [Port] 0 [Flags] 2 [Guid] 145631926 [EditorId] 145631926 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-VENDCLO) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined multi-casting on [225.0.0.222:54997]...
+Player connection [4532] Host "[IP] 192.168.1.15 [Port] 0 [Flags] 2 [Guid] 1621285892 [EditorId] 1621285892 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-VENDCLO) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined multi-casting on [225.0.0.222:54997]...
 
-Player connection [17672] Host "[IP] 192.168.1.15 [Port] 0 [Flags] 2 [Guid] 145631926 [EditorId] 145631926 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-VENDCLO) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined alternative multi-casting on [225.0.0.222:34997]...
+Player connection [4532] Host "[IP] 192.168.1.15 [Port] 0 [Flags] 2 [Guid] 1621285892 [EditorId] 1621285892 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-VENDCLO) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined alternative multi-casting on [225.0.0.222:34997]...
 
-Refreshing native plugins compatible for Editor in 122.13 ms, found 4 plugins.
+Refreshing native plugins compatible for Editor in 10.40 ms, found 4 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Initialize engine version: 2022.3.3f1 (7cdc2969a641)
 [Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/2022.3.3f1/Editor/Data/Resources/UnitySubsystems
@@ -69,49 +69,49 @@ Initialize mono
 Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/2022.3.3f1/Editor/Data/Managed'
 Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/2022.3.3f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
 Mono config path = 'C:/Program Files/Unity/Hub/Editor/2022.3.3f1/Editor/Data/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56004
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56440
 Begin MonoManager ReloadAssembly
 Registering precompiled unity dll's ...
 Register platform support module: C:/Program Files/Unity/Hub/Editor/2022.3.3f1/Editor/Data/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll
 Register platform support module: C:/Program Files/Unity/Hub/Editor/2022.3.3f1/Editor/Data/PlaybackEngines/AndroidPlayer/UnityEditor.Android.Extensions.dll
 Register platform support module: C:/Program Files/Unity/Hub/Editor/2022.3.3f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
-Registered in 0.013404 seconds.
-- Loaded All Assemblies, in  0.563 seconds
+Registered in 0.010736 seconds.
+- Loaded All Assemblies, in  0.320 seconds
 Native extension for WindowsStandalone target not found
 Native extension for Android target not found
-Android Extension - Scanning For ADB Devices 267 ms
+Android Extension - Scanning For ADB Devices 320 ms
 Native extension for WebGL target not found
 Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.568 seconds
-Domain Reload Profiling: 1129ms
-	BeginReloadAssembly (85ms)
+- Finished resetting the current domain, in  0.642 seconds
+Domain Reload Profiling: 961ms
+	BeginReloadAssembly (78ms)
 		ExecutionOrderSort (0ms)
 		DisableScriptedObjects (0ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
 		CreateAndSetChildDomain (1ms)
-	RebuildCommonClasses (139ms)
-	RebuildNativeTypeToScriptingClass (10ms)
+	RebuildCommonClasses (36ms)
+	RebuildNativeTypeToScriptingClass (11ms)
 	initialDomainReloadingComplete (60ms)
-	LoadAllAssembliesAndSetupDomain (267ms)
-		LoadAssemblies (83ms)
+	LoadAllAssembliesAndSetupDomain (134ms)
+		LoadAssemblies (76ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (261ms)
-			TypeCache.Refresh (260ms)
-				TypeCache.ScanAssembly (251ms)
+		AnalyzeDomain (129ms)
+			TypeCache.Refresh (128ms)
+				TypeCache.ScanAssembly (118ms)
 			ScanForSourceGeneratedMonoScriptInfo (0ms)
 			ResolveRequiredComponents (0ms)
-	FinalizeReload (568ms)
+	FinalizeReload (642ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (513ms)
+		SetupLoadedEditorAssemblies (583ms)
 			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (374ms)
-			SetLoadedEditorAssemblies (4ms)
+			InitializePlatformSupportModulesInManaged (437ms)
+			SetLoadedEditorAssemblies (5ms)
 			RefreshPlugins (0ms)
-			BeforeProcessingInitializeOnLoad (2ms)
-			ProcessInitializeOnLoadAttributes (88ms)
-			ProcessInitializeOnLoadMethodAttributes (45ms)
+			BeforeProcessingInitializeOnLoad (3ms)
+			ProcessInitializeOnLoadAttributes (96ms)
+			ProcessInitializeOnLoadMethodAttributes (43ms)
 			AfterProcessingInitializeOnLoad (0ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
@@ -121,53 +121,53 @@ Worker process is ready to serve import requests
 Begin MonoManager ReloadAssembly
 Symbol file LoadedFromMemory doesn't match image C:\Users\Retri\Documents\GitHub\SpaceSim\SpaceSim-Master\Library\PackageCache\com.unity.visualscripting@1.8.0\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll
 Symbol file LoadedFromMemory doesn't match image C:\Users\Retri\Documents\GitHub\SpaceSim\SpaceSim-Master\Library\PackageCache\com.unity.visualscripting@1.8.0\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll
-- Loaded All Assemblies, in  0.707 seconds
-Refreshing native plugins compatible for Editor in 3.64 ms, found 4 plugins.
+- Loaded All Assemblies, in  0.784 seconds
+Refreshing native plugins compatible for Editor in 3.77 ms, found 4 plugins.
 Native extension for WindowsStandalone target not found
 Native extension for Android target not found
 Native extension for WebGL target not found
 Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.604 seconds
-Domain Reload Profiling: 1308ms
-	BeginReloadAssembly (118ms)
+- Finished resetting the current domain, in  0.675 seconds
+Domain Reload Profiling: 1455ms
+	BeginReloadAssembly (139ms)
 		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (5ms)
+		DisableScriptedObjects (7ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (23ms)
-	RebuildCommonClasses (29ms)
-	RebuildNativeTypeToScriptingClass (10ms)
-	initialDomainReloadingComplete (37ms)
-	LoadAllAssembliesAndSetupDomain (510ms)
-		LoadAssemblies (307ms)
+		CreateAndSetChildDomain (26ms)
+	RebuildCommonClasses (32ms)
+	RebuildNativeTypeToScriptingClass (11ms)
+	initialDomainReloadingComplete (44ms)
+	LoadAllAssembliesAndSetupDomain (554ms)
+		LoadAssemblies (343ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (257ms)
-			TypeCache.Refresh (235ms)
-				TypeCache.ScanAssembly (222ms)
+		AnalyzeDomain (268ms)
+			TypeCache.Refresh (246ms)
+				TypeCache.ScanAssembly (231ms)
 			ScanForSourceGeneratedMonoScriptInfo (18ms)
 			ResolveRequiredComponents (4ms)
-	FinalizeReload (605ms)
+	FinalizeReload (676ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (452ms)
+		SetupLoadedEditorAssemblies (499ms)
 			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (22ms)
+			InitializePlatformSupportModulesInManaged (26ms)
 			SetLoadedEditorAssemblies (5ms)
 			RefreshPlugins (0ms)
-			BeforeProcessingInitializeOnLoad (112ms)
-			ProcessInitializeOnLoadAttributes (280ms)
-			ProcessInitializeOnLoadMethodAttributes (27ms)
-			AfterProcessingInitializeOnLoad (6ms)
+			BeforeProcessingInitializeOnLoad (122ms)
+			ProcessInitializeOnLoadAttributes (305ms)
+			ProcessInitializeOnLoadMethodAttributes (34ms)
+			AfterProcessingInitializeOnLoad (7ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (5ms)
-Launched and connected shader compiler UnityShaderCompiler.exe after 0.08 seconds
-Refreshing native plugins compatible for Editor in 5.32 ms, found 4 plugins.
+		AwakeInstancesAfterBackupRestoration (6ms)
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.04 seconds
+Refreshing native plugins compatible for Editor in 5.66 ms, found 4 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 4008 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 68 unused Assets / (61.5 KB). Loaded Objects now: 4478.
-Memory consumption went from 148.7 MB to 148.6 MB.
-Total: 3.928900 ms (FindLiveObjects: 0.406400 ms CreateObjectMapping: 0.113800 ms MarkObjects: 3.257300 ms  DeleteObjects: 0.150400 ms)
+Unloading 4011 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 68 unused Assets / (61.5 KB). Loaded Objects now: 4481.
+Memory consumption went from 148.7 MB to 148.7 MB.
+Total: 3.913500 ms (FindLiveObjects: 0.514900 ms CreateObjectMapping: 0.147700 ms MarkObjects: 3.080300 ms  DeleteObjects: 0.169600 ms)
 
 AssetImportParameters requested are different than current active one (requested -> active):
   custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
@@ -182,54 +182,37 @@ AssetImportParameters requested are different than current active one (requested
   custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
 ========================================================================
 Received Import Request.
-  Time since last request: 649457.420355 seconds.
-  path: Assets/Resources/Spritesheets/MobileControls/shadedDark12.png
-  artifactKey: Guid(b03b05338df1a86409c0aa8ba3486fbe) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Spritesheets/MobileControls/shadedDark12.png using Guid(b03b05338df1a86409c0aa8ba3486fbe) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0ba01014545e85344a14c86fca94c5d4') in 0.072247 seconds
+  Time since last request: 694547.525385 seconds.
+  path: Assets/Resources/Prefabs/Sink.prefab
+  artifactKey: Guid(c9f2139a2b5065140b240afd07d29caf) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Prefabs/Sink.prefab using Guid(c9f2139a2b5065140b240afd07d29caf) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '10bec1b203fc2fa27763f57811f55f1f') in 0.086663 seconds
 Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
+Number of asset objects unloaded after import = 8
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000030 seconds.
-  path: Assets/Resources/Spritesheets/MobileControls/shadedDark14.png
-  artifactKey: Guid(3e2817eaa895f624b835e8acc4a89104) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Spritesheets/MobileControls/shadedDark14.png using Guid(3e2817eaa895f624b835e8acc4a89104) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '32f192a603acc97ebd15199cb8e0da65') in 0.008322 seconds
+  Time since last request: 0.000038 seconds.
+  path: Assets/Resources/Prefabs/Toilet.prefab
+  artifactKey: Guid(f7a455b929eb4d445be07ec1eb7bd7bd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Prefabs/Toilet.prefab using Guid(f7a455b929eb4d445be07ec1eb7bd7bd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '96bb62dc6575a1a8128f72ccb7a0c9ef') in 0.016237 seconds
 Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
+Number of asset objects unloaded after import = 8
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000031 seconds.
-  path: Assets/Resources/Spritesheets/MobileControls/shadedDark16.png
-  artifactKey: Guid(9a3ad592cd5017744ab563f4f39f088c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Spritesheets/MobileControls/shadedDark16.png using Guid(9a3ad592cd5017744ab563f4f39f088c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'df0ad6bebb16d11d52e740d259b78625') in 0.008215 seconds
+  Time since last request: 0.000022 seconds.
+  path: Assets/Resources/Prefabs/NPC.prefab
+  artifactKey: Guid(11e531d161b724d4a9468cc4632367c3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Prefabs/NPC.prefab using Guid(11e531d161b724d4a9468cc4632367c3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1ebaf4b637e3852f7850fbd4fc84092c') in 0.022746 seconds
+Internal: There are remaining Allocations on the JobTempAlloc. This is a leak, and will impact performance
+To Debug, run app with -diag-job-temp-memory-leak-validation cmd line argument. This will output the callstacks of the leaked allocations.
 Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
+Number of asset objects unloaded after import = 46
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000021 seconds.
-  path: Assets/Resources/Spritesheets/MobileControls/shadedDark21.png
-  artifactKey: Guid(80887892a4c04b3448d8d29571cc1302) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Spritesheets/MobileControls/shadedDark21.png using Guid(80887892a4c04b3448d8d29571cc1302) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'df7279a2885b8aa4bf3b500131cc57da') in 0.007684 seconds
+  Time since last request: 1.931315 seconds.
+  path: Assets/Resources/Prefabs/Fridge.prefab
+  artifactKey: Guid(c493f5414982f6042a7c1716640296c0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Prefabs/Fridge.prefab using Guid(c493f5414982f6042a7c1716640296c0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'da6020ea49cddb168db7db2d7c645c1a') in 0.008880 seconds
+Internal: There are remaining Allocations on the JobTempAlloc. This is a leak, and will impact performance
+To Debug, run app with -diag-job-temp-memory-leak-validation cmd line argument. This will output the callstacks of the leaked allocations.
 Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000020 seconds.
-  path: Assets/Resources/Spritesheets/MobileControls/shadedDark22.png
-  artifactKey: Guid(4ae17eea0b80ff84595e0ba26392989a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Spritesheets/MobileControls/shadedDark22.png using Guid(4ae17eea0b80ff84595e0ba26392989a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0cc7322ce5c77073f20de72efa5fe22b') in 0.008169 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000021 seconds.
-  path: Assets/Resources/Spritesheets/MobileControls/shadedDark20.png
-  artifactKey: Guid(90d154c8d07f33e4aa569c906d2bc0f5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Resources/Spritesheets/MobileControls/shadedDark20.png using Guid(90d154c8d07f33e4aa569c906d2bc0f5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '108088c016d25f43c16350942d321261') in 0.007852 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-Editor requested this worker to shutdown with reason: Scaling down because of idle timeout
-TcpMessagingSession - receive error: operation aborted. errorcode: 995, details: The I/O operation has been aborted because of either a thread exit or an application request.
-AssetImportWorker is now disconnected from the server
-Process exiting
-Exiting without the bug reporter. Application will terminate with return code 0
+Number of asset objects unloaded after import = 8
