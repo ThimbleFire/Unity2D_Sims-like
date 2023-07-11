@@ -12,9 +12,9 @@ namespace AlwaysEast
         public List<ExposedProperty> ExposedProperties = new List<ExposedProperty>();
         public List<CommentBlockData> CommentBlockData = new List<CommentBlockData>();
 
-        public string Advance(string nodeGUID, out List<NodeLinkData> nodeLinks) {
-            nodeLinks = NodeLinks.Where(x=>x.NodeGUID == nodeGUID);
-            return InstructionNodeData.Find(x=>x.NodeGUID == nodeGUID);
+        public string Advance( string nodeGUID, out IEnumerable<NodeLinkData> nodeLinks ) {
+            nodeLinks = NodeLinks.Where( x => x.BaseNodeGUID == nodeGUID );
+            return InstructionNodeData.Find( x => x.NodeGUID == nodeGUID ).Instruction;
         }
     }
     [Serializable]

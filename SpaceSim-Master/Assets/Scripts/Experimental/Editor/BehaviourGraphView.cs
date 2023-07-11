@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Subtegral.DialogueSystem.DataContainers;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -127,7 +126,6 @@ namespace AlwaysEast
         {
             var tempInstructionNode = new InstructionNode()
             {
-                title = nodeName,
                 Instruction = nodeName,
                 GUID = Guid.NewGuid().ToString()
             };

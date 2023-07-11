@@ -11,11 +11,11 @@ namespace AlwaysEast
     public class NodeSearchWindow : ScriptableObject,ISearchWindowProvider
     {
         private EditorWindow _window;
-        private StoryGraphView _graphView;
+        private BehaviourGraphView _graphView;
 
         private Texture2D _indentationIcon;
         
-        public void Configure(EditorWindow window,StoryGraphView graphView)
+        public void Configure(EditorWindow window,BehaviourGraphView graphView)
         {
             _window = window;
             _graphView = graphView;

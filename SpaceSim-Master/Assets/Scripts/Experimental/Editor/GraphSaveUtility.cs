@@ -24,7 +24,7 @@ namespace AlwaysEast
             _graphView.graphElements.ToList().Where(x => x is Group).Cast<Group>().ToList();
 
 
-        public static GraphSaveUtility GetInstance(StoryGraphView graphView)
+        public static GraphSaveUtility GetInstance(BehaviourGraphView graphView)
         {
             return new GraphSaveUtility
             {
