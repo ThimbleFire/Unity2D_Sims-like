@@ -3,22 +3,23 @@
 ![image](https://github.com/ThimbleFire/SpaceSim/assets/14812476/5d4e8c44-1746-4a81-b76a-d7b391440576)
 
 To do:
+Currently making a state machine from Unity Graphs to make the AI better.
 
-* [x] get the game operational on mobile
-* [x] fridge height appears to be 2 when it should be 1
-* [ ] move the construction button to the bottom-center of the screen, require a swipe-up to open the build window
-* [ ] replace button clicks with touches
-* [ ] change tab icons to text and make a tab for each class (floor, walls, captain, medic, gunnery, navigation, engineering)
-* [ ] redo AI from the ground up
-* [ ] make AI facilities offer knowledge
-* [ ] add a get function on entities that returns entities who have specific jobs
-* [ ] have the navigation computer over destination knowledge if neither the captain, nor the navigations officer has a destination path
-* [ ] have the navigations officer walk to and share the destination knowledge
+This will include nodes like
+* Exposed properties (behaviours, jobs, impulses)
+* Facility filters (isOperational, isInOperation)
+* Boolean operations
+* Pathfinding
+* Math operations (shortestDistance)
+* Facility interact (maybe)
 
-* [ ] add a starting station your NPCs can undock from, and where you can buy facilities from
-* [ ] add a ui for ship details, name, model
-* [ ] add a star map so the player can see where they are, where they're heading, and what's around
-* [ ] add a notification button to display event prompts
+
+
+
+
+
+
+
 
 ships can only connect facilities with compatible sizes.
 
