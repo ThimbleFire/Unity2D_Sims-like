@@ -8,13 +8,17 @@ Currently making a state machine from Unity Graphs to make the AI better.
 This will include nodes like
 * Exposed properties (behaviours, jobs, impulses)
 * Facility filters (isOperational, isInOperation)
-* Boolean operations
+* Exposed Property boolean operations (greaterThan, greaterThanEqualTo, equalTo, lessThanEqualTo, lessThan)
 * Pathfinding
 * Math operations (shortestDistance)
 * Facility interact (maybe)
-* Invoke action
+* Invoke action (maybe)
+* Log (print)
+* End Node
+* Switch Statements
+Can we design nodes around specific exposed properties?
 
-
+Make Nodes (like InstructionNode) inherit from BaseNode. BaseNode includes its name, GUID, and a method that serves its purpose and calls its appropriate option. If this is even possible.
 
 
 
