@@ -109,5 +109,3 @@ Later...
       While perfoming jobs there's a <rank>/256 chance they'll aquire knowledge.
       The knowledge that facilities offers change according to event circumstance.
 * [ ] Add List<Knowledge> to Entities, where Knowledge is type enum { Destination, DamagedFacility, GunneryTarget, Sickness 
-
-https://media.discordapp.net/attachments/1131020351292317716/1131020393004675102/download.gif
