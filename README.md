@@ -3,6 +3,13 @@
 ![image](https://github.com/ThimbleFire/SpaceSim/assets/14812476/5d4e8c44-1746-4a81-b76a-d7b391440576)
 
 To do:
+* Prototype the Star Map
+* Planet-side design
+* Dialog
+* Changing from 2D to 3D
+    * Model NPCs
+    * Model ships
+
 Currently making a state machine from Unity Graphs to make the AI better.
 
 This will include nodes like
@@ -19,11 +26,6 @@ This will include nodes like
 Can we design nodes around specific exposed properties?
 
 Make Nodes (like InstructionNode) inherit from BaseNode. BaseNode includes its name, GUID, and a method that serves its purpose and calls its appropriate option. If this is even possible.
-
-
-
-
-
 
 ships can only connect facilities with compatible sizes.
 
